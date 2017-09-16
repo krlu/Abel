@@ -10,7 +10,7 @@ object GCD extends ((Int, Int) => (Int, List[(Int, Int)])){
   }
 }
 
-object ExtendedEuclideanAlgorithm extends ((Int, Int) =>(Int,Int)){
+object ExtendedGCD extends ((Int, Int) =>(Int,Int)){
   override def apply(x: Int, y: Int): (Int, Int) = {
     val(_, list) = GCD(x,y)
     val reversedList = list.reverse
