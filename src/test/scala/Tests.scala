@@ -76,7 +76,10 @@ class Tests extends FlatSpec with Matchers {
   "Diffie Hellman" should "compute same key for alice and bob" in {
     val alice = User(4,1, Seq())
     val bob = User(3,1, Seq())
+    DiffieHellman(5, 9511)(alice, bob)
+    assert(alice.sharedKey == 2766 && bob.sharedKey == 2766)
     DiffieHellman(5, 23)(alice, bob)
     assert(alice.sharedKey == 18 && bob.sharedKey == 18)
+
   }
 }
