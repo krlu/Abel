@@ -1,4 +1,4 @@
-package org.bu.metcs789
+package org.bu.metcs789.Basics
 
 object FastExp extends ((Double, Long) => Double){
   override def apply(base: Double, exp: Long): Double = expBySquaring(1, base, exp)

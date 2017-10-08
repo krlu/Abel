@@ -1,3 +1,4 @@
+import org.bu.metcs789.Basics._
 import org.bu.metcs789._
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -69,6 +70,13 @@ class Tests extends FlatSpec with Matchers {
     assert(DiscreteLog(19)(3,729).get == 6)
     assert(DiscreteLog(19)(2,2048).get == 11)
     assert(DiscreteLog(19)(3,6).get == 8)
-    assert(DiscreteLog(18)(3,6) == None)
+    assert(DiscreteLog(18)(3,6).isEmpty)
+  }
+
+  "Diffie Hellman" should "compute same key for alice and bob" in {
+    val alice = User(4,1, Seq())
+    val bob = User(3,1, Seq())
+    DiffieHellman(5, 23)(alice, bob)
+    assert(alice.sharedKey == 18 && bob.sharedKey == 18)
   }
 }

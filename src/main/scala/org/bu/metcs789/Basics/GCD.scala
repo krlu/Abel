@@ -1,5 +1,4 @@
-package org.bu.metcs789
-
+package org.bu.metcs789.Basics
 
 object GCD extends ((Long, Long) => (Long, List[(Long, Long)])){
   override def apply(m: Long, n: Long): (Long, List[(Long, Long)]) = euclideanAlgo(m, n)

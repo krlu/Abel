@@ -1,4 +1,4 @@
-package org.bu.metcs789
+package org.bu.metcs789.Basics
 
 object ModInverse extends ((Long, Long) => Long) {
   override def apply(value: Long, modulus: Long): Long = {

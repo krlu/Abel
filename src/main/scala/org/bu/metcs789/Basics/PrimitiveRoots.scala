@@ -1,4 +1,4 @@
-package org.bu.metcs789
+package org.bu.metcs789.Basics
 
 /**
   * Finds all G < P such that for all A co-prime to P we have:
@@ -6,6 +6,7 @@ package org.bu.metcs789
   */
 object PrimitiveRoots extends (Int => Seq[Int]) {
   override def apply(p: Int): Seq[Int] = {
+    require(p > 0)
     var pRoots = Seq.empty[Int]
     val relPRimes = RelPrimesLessThanN(p)
     for(n <- 1 to p){

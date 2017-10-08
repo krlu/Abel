@@ -1,4 +1,4 @@
-package org.bu.metcs789
+package org.bu.metcs789.Basics
 
 /**
   * Using Sieve of Eratosthenes
