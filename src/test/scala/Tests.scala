@@ -39,7 +39,7 @@ class Tests extends FlatSpec with Matchers {
     assert(Math.abs(FastExp(Math.sqrt(2), 2) - 2) < 0.00000004)
   }
 
-  "Prime Finder" should "Finder Correct Primes" in {
+  "Prime Finder" should "Finder Primes" in {
     assert(PrimesLessThanN(4) == List(2,3))
     assert(PrimesLessThanN(6) == List(2,3,5))
     assert(PrimesLessThanN(30) == List(2, 3, 5, 7, 11, 13, 17, 19, 23, 29))
@@ -47,14 +47,28 @@ class Tests extends FlatSpec with Matchers {
       List(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97))
   }
 
-  "Primitive Root Finder" should "Find Correct Primitive Roots module P" in {
+  "Primitive Root Finder" should "find primitive roots modulo P" in {
     assert(PrimitiveRoots(2) == List(1))
     assert(PrimitiveRoots(3) == List(2))
+    assert(PrimitiveRoots(4) == List(3))
     assert(PrimitiveRoots(5) == List(2,3))
     assert(PrimitiveRoots(11) == List(2,6,7,8))
     assert(PrimitiveRoots(54) == List(5, 11, 23, 29, 41, 47))
     assert(PrimitiveRoots(71) ==
       List(7, 11, 13, 21, 22, 28, 31, 33, 35, 42, 44, 47, 52, 53, 55, 56, 59, 61, 62, 63, 65, 67, 68, 69))
 
+  }
+
+  "Mod Inverse" should "compute mod inverse" in {
+    assert(ModInverse(5,8) == 5)
+    assert(ModInverse(2,3) == 2)
+    assert(ModInverse(3,11) == 4)
+  }
+
+  "Baby Step Giant Step" should "compute discrete Log" in {
+    assert(DiscreteLog(19)(3,729).get == 6)
+    assert(DiscreteLog(19)(2,2048).get == 11)
+    assert(DiscreteLog(19)(3,6).get == 8)
+    assert(DiscreteLog(18)(3,6) == None)
   }
 }

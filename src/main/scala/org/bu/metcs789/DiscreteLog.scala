@@ -1,0 +1,26 @@
+package org.bu.metcs789
+
+
+/**Computes Discrete Log using Baby Step Giant step algorithm*/
+protected class DiscreteLog(modulus: Int) extends ((Long, Long) => Option[Long]){
+  require(modulus > 0)
+  override def apply(base: Long, value: Long): Option[Long] = {
+    val m = Math.ceil(Math.sqrt(modulus)).toLong
+    val powerOf: Map[Int, Long] = (0 to m.toInt).map(i => i -> FastExp(base, i).toLong % modulus).toMap
+    val C = FastExp(ModInverse(base, modulus), m).toLong // (b ^-1)^m
+    var testValue = value
+    for(i <- 0 to m.toInt) {
+      for(j <- powerOf.keys){
+        if(powerOf(j) == testValue){
+          return Some((i*m + j) % modulus)
+        }
+      }
+      testValue = (testValue * C) % modulus
+    }
+    None
+  }
+}
+
+object DiscreteLog{
+  def apply(modulus: Int): DiscreteLog = new DiscreteLog(modulus)
+}

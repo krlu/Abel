@@ -1,5 +1,9 @@
 package org.bu.metcs789
 
+/**
+  * Finds all G < P such that for all A co-prime to P we have:
+  *   exists K such that Math.pow(G,K) = A
+  */
 object PrimitiveRoots extends (Int => Seq[Int]) {
   override def apply(p: Int): Seq[Int] = {
     var pRoots = Seq.empty[Int]

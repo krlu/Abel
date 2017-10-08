@@ -1,21 +1,21 @@
 package org.bu.metcs789
 
 
-object GCD extends ((Int, Int) => (Int, List[(Int, Int)])){
-  override def apply(m: Int, n: Int): (Int, List[(Int, Int)]) = euclideanAlgo(m, n)
-  private def euclideanAlgo(m: Int, n: Int): (Int, List[(Int, Int)]) = {
+object GCD extends ((Long, Long) => (Long, List[(Long, Long)])){
+  override def apply(m: Long, n: Long): (Long, List[(Long, Long)]) = euclideanAlgo(m, n)
+  private def euclideanAlgo(m: Long, n: Long): (Long, List[(Long, Long)]) = {
     if(m%n == 0) return (n, List((m/n, m%n)))
     val(gcd, list) = euclideanAlgo(n, m%n)
     (gcd, (List((m/n, m%n)) ++ list).filter{case (_, b) => b != 0})
   }
 }
 
-object ExtendedGCD extends ((Int, Int) =>(Int,Int)){
-  override def apply(x: Int, y: Int): (Int, Int) = {
+object ExtendedGCD extends ((Long, Long) =>(Long,Long)){
+  override def apply(x: Long, y: Long): (Long, Long) = {
     val(_, list) = GCD(x,y)
     val reversedList = list.reverse
     val (b0, _) = reversedList.head
-    var A =  1
+    var A = 1.toLong
     var B = -b0
     val remainingList = reversedList.drop(1)
     for(i <- remainingList.indices){
