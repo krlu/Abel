@@ -11,3 +11,16 @@ object FastExp extends ((Double, Long) => Double){
     case _ => expBySquaring(currentVal*base, base, exp - 1)
   }
 }
+
+protected class FastExpWithMod(modulus: Long)extends ((Double, Long) => Double){
+  override def apply(base: Double, exp: Long): Double = {
+    var x = 1
+    for(i <- 0 until exp.toInt)
+      x = (x * 3) % modulus.toInt
+    x
+  }
+}
+
+object FastExpWithMod{
+  def apply(modulus: Long): FastExpWithMod = new FastExpWithMod(modulus)
+}

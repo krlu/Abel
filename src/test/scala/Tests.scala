@@ -38,6 +38,8 @@ class Tests extends FlatSpec with Matchers {
     assert(FastExp(2,-2) == 0.25)
     assert(FastExp(2,-3) == 0.125)
     assert(Math.abs(FastExp(Math.sqrt(2), 2) - 2) < 0.00000004)
+
+    assert(FastExpWithMod(15688)(3, Totient(15688) -1) == 10459)
   }
 
   "Prime Finder" should "Finder Primes" in {
@@ -71,6 +73,7 @@ class Tests extends FlatSpec with Matchers {
     assert(DiscreteLog(19)(2,2048).get == 11)
     assert(DiscreteLog(19)(3,6).get == 8)
     assert(DiscreteLog(18)(3,6).isEmpty)
+    assert(DiscreteLog(15)(2,5).isEmpty)
   }
 
   "Diffie Hellman" should "compute same key for alice and bob" in {
@@ -80,6 +83,5 @@ class Tests extends FlatSpec with Matchers {
     assert(alice.sharedKey == 2766 && bob.sharedKey == 2766)
     DiffieHellman(5, 23)(alice, bob)
     assert(alice.sharedKey == 18 && bob.sharedKey == 18)
-
   }
 }
