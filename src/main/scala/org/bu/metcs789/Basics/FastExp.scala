@@ -16,7 +16,7 @@ protected class FastExpWithMod(modulus: Long)extends ((Double, Long) => Double){
   override def apply(base: Double, exp: Long): Double = {
     var x = 1
     for(i <- 0 until exp.toInt)
-      x = (x * 3) % modulus.toInt
+      x = (x * base.toInt) % modulus.toInt
     x
   }
 }
