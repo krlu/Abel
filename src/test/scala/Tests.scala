@@ -84,4 +84,9 @@ class Tests extends FlatSpec with Matchers {
     DiffieHellman(5, 23)(alice, bob)
     assert(alice.sharedKey == 18 && bob.sharedKey == 18)
   }
+
+  "Square root finder" should "compute square roots" in {
+    assert(NthRoot(11)(5,2) == Seq(4,7))
+    assert(NthRoot(161)(2,2) == Seq(18, 74, 87, 143))
+  }
 }

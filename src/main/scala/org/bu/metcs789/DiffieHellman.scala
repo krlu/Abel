@@ -2,8 +2,16 @@ package org.bu.metcs789
 
 import org.bu.metcs789.Basics.{FastExp, IsPrime}
 
+/**
+  * @param g - generator
+  * @param p - prime modulus
+  */
 class DiffieHellman(g: Long, p: Long) extends ((User, User) => Unit){
   require(IsPrime(p) && g < p && p > 0 && g > 0)
+  /**
+    * @param alice - User to send a key
+    * @param bob - User to receive a Key
+    */
   override def apply(alice: User, bob: User): Unit = {
     bob.intermediateKeys = bob.intermediateKeys :+ FastExp(g, alice.privateKey).toLong % p
     alice.intermediateKeys = alice.intermediateKeys :+ FastExp(g, bob.privateKey).toLong % p
