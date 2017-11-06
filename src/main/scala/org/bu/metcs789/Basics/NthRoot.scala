@@ -1,14 +1,14 @@
 package org.bu.metcs789.Basics
 
 
-protected class NthRoot(modulus: Int) extends ((Int, Int) => Seq[Int]){
+protected class NthRoot(modulus: Long) extends ((Long, Long) => Seq[Long]){
   val elements = RelPrimesLessThanN(modulus)
-  override def apply(v1: Int, root: Int): Seq[Int] = {
+  override def apply(v1: Long, root: Long): Seq[Long] = {
     elements.filter(x => {
-       FastExpWithMod(modulus)(x, root) == v1
-    }).map(_.toInt)
+       FastExpWithMod(modulus)(x, root).toLong == v1
+    })
   }
 }
 object NthRoot{
-  def apply(modulus: Int): NthRoot = new NthRoot(modulus)
+  def apply(modulus: Long): NthRoot = new NthRoot(modulus)
 }

@@ -14,9 +14,8 @@ protected class DiscreteLog(modulus: Long) extends ((Long, Long) => Option[Long]
     var testValue = value
     for(i <- 0 to m.toInt) {
       for(j <- powerOf.keys){
-        if(powerOf(j) == testValue){
+        if(powerOf(j) == testValue)
           return Some((i*m + j) % modulus)
-        }
       }
       testValue = (testValue * C) % modulus
     }

@@ -77,8 +77,8 @@ class Tests extends FlatSpec with Matchers {
   }
 
   "Diffie Hellman" should "compute same key for alice and bob" in {
-    val alice = User(4,1, Seq())
-    val bob = User(3,1, Seq())
+    val alice = DHUser(4,1, Seq())
+    val bob = DHUser(3,1, Seq())
     DiffieHellman(5, 9511)(alice, bob)
     assert(alice.sharedKey == 2766 && bob.sharedKey == 2766)
     DiffieHellman(5, 23)(alice, bob)
@@ -88,5 +88,22 @@ class Tests extends FlatSpec with Matchers {
   "Square root finder" should "compute square roots" in {
     assert(NthRoot(11)(5,2) == Seq(4,7))
     assert(NthRoot(161)(2,2) == Seq(18, 74, 87, 143))
+  }
+
+  "Find P Q " should "find factorization" in {
+    assert(FindPQ(15)(4) == (5,3))
+  }
+
+  "Oblivious Transfer with Factorization" should "compute same key for alice and bob" in {
+    for(_ <- 1 to 10) {
+      val alice = OTPUser(Some(31), Some(103))
+      var bob = OTPUser(None, None)
+      bob = ObliviousTransferWithFactorization(alice, bob)
+      assert(Set(bob.s0, bob.s1) == Set(alice.s0, alice.s1))
+//
+      bob = OTPUser(None, None)
+      bob = ObliviousTransferWithDiscreteLog(103)(alice, bob)
+      println(bob)
+    }
   }
 }
