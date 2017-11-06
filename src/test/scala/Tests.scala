@@ -100,10 +100,9 @@ class Tests extends FlatSpec with Matchers {
       var bob = OTPUser(None, None)
       bob = ObliviousTransferWithFactorization(alice, bob)
       assert(Set(bob.s0, bob.s1) == Set(alice.s0, alice.s1))
-//
       bob = OTPUser(None, None)
       bob = ObliviousTransferWithDiscreteLog(103)(alice, bob)
-      println(bob)
+      assert(Set(bob.s0, bob.s1).intersect(Set(alice.s0, alice.s1)).nonEmpty)
     }
   }
 }

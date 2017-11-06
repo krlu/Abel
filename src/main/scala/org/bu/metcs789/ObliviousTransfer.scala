@@ -59,7 +59,6 @@ protected class ObliviousTransferWithDiscreteLog(modulus: Int) extends Oblivious
     // alice
     val g = PrimitiveRoots(modulus).head
     val c = (Math.random() * (modulus - 1)).toLong
-    println(c)
     // bob
     val i = if(Math.random() < 0.5) 0 else 1
     val x = (Math.random() * (modulus - 1)).toLong
@@ -72,7 +71,7 @@ protected class ObliviousTransferWithDiscreteLog(modulus: Int) extends Oblivious
     val a0 = fastExpWithMod(g, y0).toLong
     val a1 = fastExpWithMod(g, y1).toLong
     val t0 = fastExpWithMod(B(0), y0).toLong
-    val t1 = fastExpWithMod(B(0), y1).toLong
+    val t1 = fastExpWithMod(B(1), y1).toLong
     val m0 = bitwiseAdd(alice.s0.get, t0)
     val m1 = bitwiseAdd(alice.s1.get, t1)
     // bob
