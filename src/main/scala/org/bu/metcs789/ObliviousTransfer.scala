@@ -2,17 +2,7 @@ package org.bu.metcs789
 
 import org.bu.metcs789.Basics._
 
-trait ObliviousTransfer  extends ((OTPUser, OTPUser) => OTPUser){
-  /**
-    * @param n - the modulus
-    */
-  protected def generateRandomRelPrime(n: Long): Long ={
-    var number = ((Math.random() * n).toLong + 1) % n
-    while(GCD(number, n)._1 != 1)
-      number = ((Math.random() * n).toLong + 1) % n
-    number
-  }
-}
+trait ObliviousTransfer  extends ((OTPUser, OTPUser) => OTPUser)
 
 /**
   * Implementation of Oblivious transfer protocol with factorization
@@ -26,30 +16,29 @@ object ObliviousTransferWithFactorization extends ObliviousTransfer{
       case (Some(p), Some(q)) =>
         val n = p*q
         val bobNumber = generateRandomRelPrime(n)
-        val bobNumSq = FastExpWithMod(n)(bobNumber, 2)
-        val roots: Seq[Long] = NthRoot(n)(bobNumSq.toInt, 2)
-        require(roots.size == 4)
-        for(root <- roots){
-          if(root != bobNumber && bobNumber + root != n){
-            val x1 = bobNumber
-            val y1 = root
-            val prod1 = ((x1 - y1) % n + n ) % n
-            val prod2 = ((x1 + y1) % n + n ) % n
-            val factor1 = GCD(prod1, n)._1
-            val factor2 = GCD(prod2, n)._1
-            // bob now knows p and q
-            return bob.copy(s0 = Some(factor1), s1 = Some(factor2))
-          }
+        val bobNumSq: Double = FastExpWithMod(n)(bobNumber, 2)
+        val optPQPair = FindPQ(n)(bobNumSq.toLong)
+        optPQPair match {
+          // don't know which is P or Q
+          case Some((factor1, factor2)) => bob.copy(s0 = Some(factor1), s1 = Some(factor2))
+          case None => bob
         }
-        bob
       case _ => bob
     }
+  }
+  /**
+    * @param n - the modulus
+    */
+  private def generateRandomRelPrime(n: Long): Long ={
+    var number = ((Math.random() * n).toLong + 1) % n
+    while(GCD(number, n)._1 != 1)
+      number = ((Math.random() * n).toLong + 1) % n
+    number
   }
 }
 
 /**
   * Implementation of Oblivious transfer protocol with discrete logarithm
- *
   * @param modulus - some large prime
   */
 protected class ObliviousTransferWithDiscreteLog(modulus: Int) extends ObliviousTransfer{
@@ -93,15 +82,20 @@ case class OTPUser(s0: Option[Long], s1: Option[Long])
 /**
   * @param n - the modulus, and n = pq for some primes p and q
   */
-protected class FindPQ(n: Long) extends (Long => (Long, Long)){
-  override def apply(v1: Long): (Long, Long) = {
+protected class FindPQ(n: Long) extends (Long => Option[(Long, Long)]){
+  override def apply(v1: Long): Option[(Long, Long)] = {
     val roots: Seq[Long] = NthRoot(n)(v1, 2)
     require(roots.size == 4)
-    val x1 = roots.head
-    val y1 = roots(1)
-    val prod1 = ((x1 - y1) % n + n ) % n
-    val prod2 = ((x1 + y1) % n + n ) % n
-    (GCD(prod1, n)._1,GCD(prod2, n)._1)
+    for(root <- roots) {
+      if (root != v1 && v1 + root != n) {
+        val x1 = roots.head
+        val y1 = roots(1)
+        val prod1 = ((x1 - y1) % n + n ) % n
+        val prod2 = ((x1 + y1) % n + n ) % n
+        return Some((GCD(prod1, n)._1,GCD(prod2, n)._1))
+      }
+    }
+    None
   }
 }
 

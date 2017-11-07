@@ -91,7 +91,7 @@ class Tests extends FlatSpec with Matchers {
   }
 
   "Find P Q " should "find factorization" in {
-    assert(FindPQ(15)(4) == (5,3))
+    assert(FindPQ(15)(4).get == (5,3))
   }
 
   "Oblivious Transfer with Factorization" should "compute same key for alice and bob" in {
