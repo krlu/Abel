@@ -72,27 +72,12 @@ protected class ObliviousTransferWithDiscreteLog(modulus: Int) extends Oblivious
     val a1 = fastExpWithMod(g, y1).toLong
     val t0 = fastExpWithMod(B(0), y0).toLong
     val t1 = fastExpWithMod(B(1), y1).toLong
-    val m0 = bitwiseAdd(alice.s0.get, t0)
-    val m1 = bitwiseAdd(alice.s1.get, t1)
+    val m0 = alice.s0.get ^ t0
+    val m1 = alice.s1.get ^ t1
     // bob
     val t0Copy = fastExpWithMod(a0, x).toLong
     val t1Copy = fastExpWithMod(a1, x).toLong
-    bob.copy(s0 = Some(bitwiseAdd(m0,t0Copy)), s1 = Some(bitwiseAdd(m1,t1Copy)))
-  }
-  private def bitwiseAdd(a: Long, b: Long): Long ={
-    val s1 = a.toBinaryString
-    val s2 = b.toBinaryString
-    var str = ""
-    val length = Math.min(s1.length, s2.length)
-    val longestStr = if(s1.length > s2.length) s1 else s2
-    for(i <- 1 to length){
-      val c1 = s1.charAt(s1.length - i).asDigit
-      val c2 = s2.charAt(s2.length - i).asDigit
-      val c3 = (c1 + c2) % 2
-      str = c3 + str
-    }
-    str = longestStr.substring(0, longestStr.length - length) + str
-    Integer.parseInt(str, 2).toLong
+    bob.copy(s0 = Some(m0 ^ t0Copy), s1 = Some(m1 ^ t1Copy))
   }
 }
 
