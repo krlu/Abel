@@ -95,14 +95,14 @@ class Tests extends FlatSpec with Matchers {
   }
 
   "Oblivious Transfer with Factorization" should "compute same key for alice and bob" in {
-    for(_ <- 1 to 10) {
+    for(_ <- 1 to 50) {
       val alice = OTPUser(Some(31), Some(103))
       var bob = OTPUser(None, None)
       bob = ObliviousTransferWithFactorization(alice, bob)
       assert(Set(bob.s0, bob.s1) == Set(alice.s0, alice.s1))
       bob = OTPUser(None, None)
       bob = ObliviousTransferWithDiscreteLog(103)(alice, bob)
-      assert(Set(bob.s0, bob.s1).intersect(Set(alice.s0, alice.s1)).nonEmpty)
+      assert(Set(bob.s0, bob.s1).intersect(Set(alice.s0, alice.s1)).size == 1)
     }
   }
 }

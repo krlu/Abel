@@ -39,35 +39,55 @@ object ObliviousTransferWithFactorization extends ObliviousTransfer{
 
 /**
   * Implementation of Oblivious transfer protocol with discrete logarithm
+  *
   * @param modulus - some large prime
   */
 protected class ObliviousTransferWithDiscreteLog(modulus: Int) extends ObliviousTransfer{
   require(modulus > 1)
   val fastExpWithMod = FastExpWithMod(modulus)
   override def apply(alice: OTPUser, bob: OTPUser): OTPUser = {
-    // alice
-    val g = PrimitiveRoots(modulus).head
-    val c = (Math.random() * (modulus - 1)).toLong
-    // bob
-    val i = if(Math.random() < 0.5) 0 else 1
-    val x = (Math.random() * (modulus - 1)).toLong
-    val bi = fastExpWithMod(g, x).toLong
-    val biInv = (ModInverse(bi, modulus) * c) % modulus
-    val B = Map(i -> bi, (1-i) -> biInv)
-    // alice
-    val y0 = (Math.random() * (modulus - 1)).toLong
-    val y1 = (Math.random() * (modulus - 1)).toLong
-    val a0 = fastExpWithMod(g, y0).toLong
-    val a1 = fastExpWithMod(g, y1).toLong
-    val t0 = fastExpWithMod(B(0), y0).toLong
-    val t1 = fastExpWithMod(B(1), y1).toLong
-    val m0 = alice.s0.get ^ t0
-    val m1 = alice.s1.get ^ t1
-    // bob
-    val t0Copy = fastExpWithMod(a0, x).toLong
-    val t1Copy = fastExpWithMod(a1, x).toLong
+    var biInvXY0, biInvXY1, t0Copy, t1Copy, m0, m1 = -1L
+    do {
+      val elements = 2 until modulus - 1
+      // alice
+      val g = choose(PrimitiveRoots(modulus).iterator)
+      val c = choose(elements.iterator)
+
+      // bob
+      val i = choose(Set(0, 1).iterator)
+      val x = choose(elements.iterator)
+      val bi = fastExpWithMod(g, x).toLong
+      val biInv = (c * ModInverse(bi, modulus)) % modulus
+      val B = Map(i -> bi, (1 - i) -> biInv)
+
+      // alice
+      val y0 = choose(elements.iterator)
+      val y1 = choose(elements.iterator)
+      if (y0 == Totient(modulus) || y1 == Totient(modulus))
+        println("hi")
+      val a0 = fastExpWithMod(g, y0).toLong
+      val t0 = fastExpWithMod(B(0), y0).toLong
+      val a1 = fastExpWithMod(g, y1).toLong
+      val t1 = fastExpWithMod(B(1), y1).toLong
+      m0 = alice.s0.get ^ t0
+      m1 = alice.s1.get ^ t1
+
+      // bob
+      t0Copy = fastExpWithMod(a0, x).toLong
+      t1Copy = fastExpWithMod(a1, x).toLong
+      biInvXY0 = fastExpWithMod(biInv, y0).toLong
+      biInvXY1 = fastExpWithMod(biInv, y1).toLong
+      if (Set(m0 ^ t0Copy, m1 ^ t1Copy) == Set(alice.s0.get, alice.s1.get))
+        println(s"c =$c, g=$g, x=$x, B=$B, y0=$y0, i=$i, y1=$y1, t0=$t0, " +
+          s"t1=$t1, a0^x=$t0Copy, a1^x=$t1Copy, a0=$a0, a1=$a1")
+    }while(t0Copy == biInvXY0 || t1Copy == biInvXY1)
     bob.copy(s0 = Some(m0 ^ t0Copy), s1 = Some(m1 ^ t1Copy))
   }
+
+  private def choose[A](it: Iterator[A]): A =
+    it.zip(Iterator.iterate(1)(_ + 1)).reduceLeft((row, col) =>
+      if (util.Random.nextInt(col._2) == 0) col else row
+    )._1
 }
 
 object ObliviousTransferWithDiscreteLog{
@@ -101,4 +121,8 @@ protected class FindPQ(n: Long) extends (Long => Option[(Long, Long)]){
 
 object FindPQ {
   def apply(n: Long): FindPQ = new FindPQ(n)
+
+  def main(args: Array[String]) {
+    println(FastExpWithMod(103)(35, 34 * 38), FastExpWithMod(103)(88, 34))
+  }
 }
