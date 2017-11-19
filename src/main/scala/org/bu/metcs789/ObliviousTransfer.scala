@@ -1,8 +1,7 @@
 package org.bu.metcs789
 
 import org.bu.metcs789.Basics._
-
-trait ObliviousTransfer  extends ((OTPUser, OTPUser) => OTPUser)
+trait ObliviousTransfer extends ((OTPUser, OTPUser) => OTPUser)
 
 /**
   * Implementation of Oblivious transfer protocol with factorization
@@ -63,8 +62,6 @@ protected class ObliviousTransferWithDiscreteLog(modulus: Int) extends Oblivious
       // alice
       val y0 = choose(elements.iterator)
       val y1 = choose(elements.iterator)
-      if (y0 == Totient(modulus) || y1 == Totient(modulus))
-        println("hi")
       val a0 = fastExpWithMod(g, y0).toLong
       val t0 = fastExpWithMod(B(0), y0).toLong
       val a1 = fastExpWithMod(g, y1).toLong
@@ -83,11 +80,6 @@ protected class ObliviousTransferWithDiscreteLog(modulus: Int) extends Oblivious
     }while(t0Copy == biInvXY0 || t1Copy == biInvXY1)
     bob.copy(s0 = Some(m0 ^ t0Copy), s1 = Some(m1 ^ t1Copy))
   }
-
-  private def choose[A](it: Iterator[A]): A =
-    it.zip(Iterator.iterate(1)(_ + 1)).reduceLeft((row, col) =>
-      if (util.Random.nextInt(col._2) == 0) col else row
-    )._1
 }
 
 object ObliviousTransferWithDiscreteLog{
@@ -121,8 +113,4 @@ protected class FindPQ(n: Long) extends (Long => Option[(Long, Long)]){
 
 object FindPQ {
   def apply(n: Long): FindPQ = new FindPQ(n)
-
-  def main(args: Array[String]) {
-    println(FastExpWithMod(103)(35, 34 * 38), FastExpWithMod(103)(88, 34))
-  }
 }

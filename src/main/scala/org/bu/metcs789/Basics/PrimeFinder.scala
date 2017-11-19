@@ -1,4 +1,5 @@
 package org.bu.metcs789.Basics
+import org.bu.metcs789._
 
 /**
   * Using Sieve of Eratosthenes
@@ -41,5 +42,56 @@ object IsPrime extends (Long => Boolean){
     for(i <- 2 to Math.floor(Math.sqrt(n.toInt)).toInt)
       if(n % i == 0) return false
     true
+  }
+}
+
+object MillerRabin extends ((Long, Int) => Boolean){
+  /**
+    * Probability MillerRabin test is correct
+    *
+    * @param n - we want to determine if this is prime
+    * @param repetitions - probability MillerRabin is correct = Math.pow((1/4),repetitions)
+    * @return true if and only if if MillerRabin test deems value is prime
+    */
+  override def apply(n: Long, repetitions: Int): Boolean = {
+    require(n > 3 && repetitions < n-1 && repetitions > 0)
+    n % 2 == 0 match {
+      case true => false
+      case false =>
+        val r: Long = factorOut2s(n-1)
+        val d: Long = (n-1)/ Math.pow(2, r).toLong
+        var possibleAs = List.range(2, n.toInt - 2)
+        for(_ <- 1 to repetitions){
+          val a = choose(possibleAs.iterator)
+          possibleAs = possibleAs.filter(_ != a)
+          val x = FastExpWithMod(n)(a, d).toLong
+          if(x!=1 && x!= n-1) {
+            println(a,d,r,x)
+            if(!millerRabinHelper(x, r, n))
+              return false
+          }
+        }
+        true
+    }
+  }
+  private def millerRabinHelper(x: Long, r: Long, n: Long): Boolean = {
+    var temp = x
+    for (_ <- 0 until r.toInt) {
+      temp = FastExpWithMod(n)(temp, 2).toLong
+      println(temp)
+      if(temp == 1) return false
+      if(temp == n-1) return true
+    }
+    false
+  }
+
+  private def factorOut2s(n: Long): Long ={
+    var exp = 0L
+    var nTemp = n
+    while(nTemp % 2 == 0){
+      nTemp = nTemp/2
+      exp +=1
+    }
+    exp
   }
 }

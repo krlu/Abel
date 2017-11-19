@@ -105,4 +105,10 @@ class Tests extends FlatSpec with Matchers {
       assert(Set(bob.s0, bob.s1).intersect(Set(alice.s0, alice.s1)).size == 1)
     }
   }
+  "Miller Rabin" should "correctly verify primes" in {
+    Set(31051, 31063, 31069, 31079, 31081, 31091, 31121, 31123, 35251).foreach{ p => assert(MillerRabin(p, 10))}
+    Set(31053, 31065, 31067, 31077, 31083, 31093, 31127, 31127, 35259).foreach{ p => assert(!MillerRabin(p, 10))}
+    assert(!MillerRabin(1027485, 1))
+
+  }
 }

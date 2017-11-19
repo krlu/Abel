@@ -23,23 +23,4 @@ protected class FastExpWithMod(modulus: Long)extends ((Double, Long) => Double){
 
 object FastExpWithMod{
   def apply(modulus: Long): FastExpWithMod = new FastExpWithMod(modulus)
-
-  def main(args: Array[String]) {
-    val (mod, target) = (13, 12)
-    for(i <- 0 until mod){
-      val result = FastExpWithMod(mod)(i, 2)
-      if(result == target)
-        println(result, i)
-    }
-    println(ExtendedGCD(13,36))
-    println(FastExpWithMod(1039)(892,260))
-//    val mod = 13
-//    val exp = 2
-//    val x = ModInverse(exp,12)
-//    println(x)
-//    val y = FastExpWithMod(mod)(12,x.toInt)
-//    println(y)
-//    val result = FastExp(y, exp) % mod
-//    println(result)
-  }
 }
