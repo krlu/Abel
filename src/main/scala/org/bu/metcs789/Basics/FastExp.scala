@@ -1,9 +1,9 @@
-package org.bu.metcs789.Basics
+package org.bu.metcs789.basics
 
-object FastExp extends ((Double, Long) => Double){
-  override def apply(base: Double, exp: Long): Double = expBySquaring(1, base, exp)
+object FastExp extends ((Long, Long) => Long){
+  override def apply(base: Long, exp: Long): Long = expBySquaring(1, base, exp)
 
-  private def expBySquaring(currentVal: Double, base: Double, exp: Long): Double = exp match {
+  private def expBySquaring(currentVal: Long, base: Long, exp: Long): Long = exp match {
     case 0 => currentVal
     case 1 => currentVal*base
     case y if y < 0 => expBySquaring(currentVal, 1/base, -exp)
@@ -12,8 +12,8 @@ object FastExp extends ((Double, Long) => Double){
   }
 }
 
-protected class FastExpWithMod(modulus: Long)extends ((Double, Long) => Double){
-  override def apply(base: Double, exp: Long): Double = {
+protected class FastExpWithMod(modulus: Long)extends ((Long, Long) => Long){
+  override def apply(base: Long, exp: Long): Long = {
     var x = 1
     for(i <- 0 until exp.toInt)
       x = (x * base.toInt) % modulus.toInt

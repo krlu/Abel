@@ -1,6 +1,6 @@
 package org.bu.metcs789
 
-import org.bu.metcs789.Basics.{FastExp, IsPrime}
+import org.bu.metcs789.basics.{FastExp, IsPrime}
 
 /**
   * @param g - generator

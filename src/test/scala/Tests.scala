@@ -1,5 +1,6 @@
-import org.bu.metcs789.Basics._
+import org.bu.metcs789.basics._
 import org.bu.metcs789._
+import org.bu.metcs789.rng.{BlumBlumShub, NaorReingold}
 import org.scalatest.{FlatSpec, Matchers}
 
 class Tests extends FlatSpec with Matchers {
@@ -34,10 +35,10 @@ class Tests extends FlatSpec with Matchers {
     assert(FastExp(2,0) == 1)
     assert(FastExp(3,0) == 1)
 
-    assert(FastExp(2,-1) == 0.5)
-    assert(FastExp(2,-2) == 0.25)
-    assert(FastExp(2,-3) == 0.125)
-    assert(Math.abs(FastExp(Math.sqrt(2), 2) - 2) < 0.00000004)
+//    assert(FastExp(2,-1) == 0.5)
+//    assert(FastExp(2,-2) == 0.25)
+//    assert(FastExp(2,-3) == 0.125)
+//    assert(Math.abs(FastExp(Math.sqrt(2).toLong, 2) - 2) < 0.00000004)
 
     assert(FastExpWithMod(15688)(3, Totient(15688) -1) == 10459)
   }
@@ -105,10 +106,32 @@ class Tests extends FlatSpec with Matchers {
       assert(Set(bob.s0, bob.s1).intersect(Set(alice.s0, alice.s1)).size == 1)
     }
   }
+
   "Miller Rabin" should "correctly verify primes" in {
-    Set(31051, 31063, 31069, 31079, 31081, 31091, 31121, 31123, 35251).foreach{ p => assert(MillerRabin(p, 10))}
+    for(_ <- 1 to 10){
+      Seq(30949, 30983, 31013, 31019, 31039, 31051, 31063, 43541).foreach{ p => assert(MillerRabin(p, 10))}
+    }
     Set(31053, 31065, 31067, 31077, 31083, 31093, 31127, 31127, 35259).foreach{ p => assert(!MillerRabin(p, 10))}
     assert(!MillerRabin(1027485, 1))
+  }
 
+  "Naor Reingold" should "randomly generate binary bits" in {
+    val generator = NaorReingold(10)
+    var ones = 0
+    var zeroes = 0
+    for(i <- 0 until Math.pow(2, 10).toInt)
+      if(generator(i) == 1) ones+=1 else zeroes +=1
+    assert(Math.abs(ones -zeroes) < 100)
+  }
+  "Blum Blum Shub" should "randomly generate binary bits" in {
+    val generator = BlumBlumShub(7, 11)
+    var ones = 0
+    var zeroes = 0
+    for(_ <- 1 to 1000){
+      if(generator.generateBit == 1) ones+=1 else zeroes +=1
+      generator.resetSeed()
+    }
+    println(zeroes, ones)
+    assert(Math.abs(ones -zeroes) < 100)
   }
 }

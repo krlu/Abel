@@ -1,4 +1,4 @@
-package org.bu.metcs789.Basics
+package org.bu.metcs789.basics
 
 /**
   * Finds all G < P such that for all A co-prime to P we have:

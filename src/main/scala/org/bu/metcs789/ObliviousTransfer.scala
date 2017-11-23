@@ -1,6 +1,6 @@
 package org.bu.metcs789
 
-import org.bu.metcs789.Basics._
+import org.bu.metcs789.basics._
 trait ObliviousTransfer extends ((OTPUser, OTPUser) => OTPUser)
 
 /**

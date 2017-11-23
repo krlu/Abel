@@ -1,4 +1,4 @@
-package org.bu.metcs789.Basics
+package org.bu.metcs789.basics
 
 
 protected class NthRoot(modulus: Long) extends ((Long, Long) => Seq[Long]){

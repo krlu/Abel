@@ -1,6 +1,6 @@
 package org.bu.metcs789
 
-import org.bu.metcs789.Basics.{FastExp, ModInverse}
+import org.bu.metcs789.basics.{FastExp, ModInverse}
 
 
 /**Computes Discrete Log using Baby Step Giant step algorithm*/
