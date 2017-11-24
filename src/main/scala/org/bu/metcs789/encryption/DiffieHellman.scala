@@ -1,4 +1,4 @@
-package org.bu.metcs789
+package org.bu.metcs789.encryption
 
 import org.bu.metcs789.basics.{FastExp, IsPrime}
 

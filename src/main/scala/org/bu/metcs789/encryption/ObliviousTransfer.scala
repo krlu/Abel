@@ -1,6 +1,8 @@
-package org.bu.metcs789
+package org.bu.metcs789.encryption
 
 import org.bu.metcs789.basics._
+import org.bu.metcs789._
+
 trait ObliviousTransfer extends ((OTPUser, OTPUser) => OTPUser)
 
 /**
@@ -55,25 +57,25 @@ protected class ObliviousTransferWithDiscreteLog(modulus: Int) extends Oblivious
       // bob
       val i = choose(Set(0, 1).iterator)
       val x = choose(elements.iterator)
-      val bi = fastExpWithMod(g, x).toLong
+      val bi = fastExpWithMod(g, x)
       val biInv = (c * ModInverse(bi, modulus)) % modulus
       val B = Map(i -> bi, (1 - i) -> biInv)
 
       // alice
       val y0 = choose(elements.iterator)
       val y1 = choose(elements.iterator)
-      val a0 = fastExpWithMod(g, y0).toLong
-      val t0 = fastExpWithMod(B(0), y0).toLong
-      val a1 = fastExpWithMod(g, y1).toLong
-      val t1 = fastExpWithMod(B(1), y1).toLong
+      val a0 = fastExpWithMod(g, y0)
+      val t0 = fastExpWithMod(B(0), y0)
+      val a1 = fastExpWithMod(g, y1)
+      val t1 = fastExpWithMod(B(1), y1)
       m0 = alice.s0.get ^ t0
       m1 = alice.s1.get ^ t1
 
       // bob
-      t0Copy = fastExpWithMod(a0, x).toLong
-      t1Copy = fastExpWithMod(a1, x).toLong
-      biInvXY0 = fastExpWithMod(biInv, y0).toLong
-      biInvXY1 = fastExpWithMod(biInv, y1).toLong
+      t0Copy = fastExpWithMod(a0, x)
+      t1Copy = fastExpWithMod(a1, x)
+      biInvXY0 = fastExpWithMod(biInv, y0)
+      biInvXY1 = fastExpWithMod(biInv, y1)
       if (Set(m0 ^ t0Copy, m1 ^ t1Copy) == Set(alice.s0.get, alice.s1.get))
         println(s"c =$c, g=$g, x=$x, B=$B, y0=$y0, i=$i, y1=$y1, t0=$t0, " +
           s"t1=$t1, a0^x=$t0Copy, a1^x=$t1Copy, a0=$a0, a1=$a1")

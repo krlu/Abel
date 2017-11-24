@@ -1,5 +1,6 @@
 import org.bu.metcs789.basics._
-import org.bu.metcs789._
+import org.bu.metcs789.encryption._
+import org.bu.metcs789.factorization.PollardRho
 import org.bu.metcs789.rng.{BlumBlumShub, NaorReingold}
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -133,5 +134,12 @@ class Tests extends FlatSpec with Matchers {
     }
     println(zeroes, ones)
     assert(Math.abs(ones -zeroes) < 100)
+  }
+
+  "Pollard Rho" should "find factor of N" in {
+    assert(Set[Long](73, 41).contains(PollardRho(2993).get))
+    assert(Set[Long](2,5).contains(PollardRho(10).get))
+    Seq(30949, 30983, 31013, 31019, 31039, 31051, 31063, 43541).foreach{ p => assert(PollardRho(p).isEmpty)}
+    Set(31053, 31065, 31067, 31077, 31083, 31093, 31127, 31127, 35259).foreach{ p => assert(PollardRho(p).nonEmpty)}
   }
 }
