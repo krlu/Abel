@@ -12,7 +12,7 @@ object PollardP1 extends ((Long, Long, Int) => Option[Long]){
     var lowerBound = 0L
     var upperBound = Long.MaxValue
     while((g >= n || g <= 1) && attempts <= maxAttempts){
-      val M: Long = PrimesLessThanN(beta).map{ q => FastExp(q,smallestExpLessThan(q,n))}.product
+      val M: Long = PrimesLessThanN(beta).map{ q => FastExp(q,largestExpLessThan(q,n))}.product
       val a = choose(RelPrimesLessThanN(n).iterator)
       g = GCD(FastExpWithMod(n)(a, M)-1, n)._1
       if(g >= n)
@@ -30,7 +30,7 @@ object PollardP1 extends ((Long, Long, Int) => Option[Long]){
     * @param value - n
     * @return floor(log_q(n))
     */
-  def smallestExpLessThan(base: Long, value: Long): Long = {
+  private def largestExpLessThan(base: Long, value: Long): Long = {
     var exp = 0
     var currentValue = Math.pow(base, 0).toLong
     while((currentValue * base) < value){

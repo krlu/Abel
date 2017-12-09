@@ -41,7 +41,7 @@ class Tests extends FlatSpec with Matchers {
 //    assert(FastExp(2,-3) == 0.125)
 //    assert(Math.abs(FastExp(Math.sqrt(2).toLong, 2) - 2) < 0.00000004)
 
-    assert(FastExpWithMod(15688)(3, Totient(15688) -1) == 10459)
+    assert(FastExpWithMod(15688)(3, Phi(15688) -1) == 10459)
   }
 
   "Prime Finder" should "Finder Primes" in {
@@ -141,7 +141,7 @@ class Tests extends FlatSpec with Matchers {
     assert(Set[Long](2,5).contains(PollardRho(10).get))
     Seq(30949, 30983, 31013, 31019, 31039, 31051, 31063, 43541).foreach{ p => assert(PollardRho(p).isEmpty)}
     Set(31053, 31065, 31067, 31077, 31083, 31093, 31127, 31127, 35259).foreach{ p => assert(PollardRho(p).nonEmpty)}
-    println(Set[Long](41, 73).contains(PollardP1(2993, 30).get))
+//    println(Set[Long](41, 73).contains(PollardP1(2993, 30).get))
   }
   "Pollard P-1" should  "find factor of N" in {
     assert(Set[Long](73, 41).contains(PollardP1(2993,30).get))

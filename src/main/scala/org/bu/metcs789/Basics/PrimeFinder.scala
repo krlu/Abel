@@ -18,19 +18,19 @@ object PrimesLessThanN extends (Long => Seq[Long]){
   }
 }
 
-object Totient extends (Long => Int){
+/**
+  * The totient function
+  */
+object Phi extends (Long => Int){
   override def apply(n: Long): Int = RelPrimesLessThanN(n).size
 }
 
 object RelPrimesLessThanN extends (Long => Seq[Long]){
   override def apply(n: Long): Seq[Long] = {
     var primes: Seq[Long] = (1 until n.toInt).toList.map(_.toLong)
-    for(i <- 2 to Math.floor(Math.sqrt(n.toInt)).toInt){
-      if(GCD(i, n.toInt)._1 != 1){
-        for(j <- i to n.toInt by i){
-          primes = primes.filter(_ != j)
-        }
-      }
+    for(i <- 2 to n.toInt){
+      if(GCD(i, n.toInt)._1 != 1)
+        primes = primes.filter(_ != i)
     }
     primes
   }
