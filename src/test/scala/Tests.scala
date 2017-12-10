@@ -68,6 +68,13 @@ class Tests extends FlatSpec with Matchers {
     assert(ModInverse(5,8) == 5)
     assert(ModInverse(2,3) == 2)
     assert(ModInverse(3,11) == 4)
+
+    val inv = ModInverse(3313, Phi(4817))
+    for(i <- RelPrimesLessThanN(4817)) {
+      val power = FastExpWithMod(4817)(i, 3313)
+      val original = FastExpWithMod(4817)(power, inv)
+      assert(original == i)
+    }
   }
 
   "Baby Step Giant Step" should "compute discrete Log" in {
@@ -76,6 +83,12 @@ class Tests extends FlatSpec with Matchers {
     assert(DiscreteLog(19)(3,6).get == 8)
     assert(DiscreteLog(18)(3,6).isEmpty)
     assert(DiscreteLog(15)(2,5).isEmpty)
+
+    for(i <- RelPrimesLessThanN(4817)) {
+      val power = FastExpWithMod(4817)(i, 3313)
+      val logs = AllDiscreteLogs(4817)(i, power)
+      assert(logs.contains(3313))
+    }
   }
 
   "Diffie Hellman" should "compute same key for alice and bob" in {

@@ -6,15 +6,17 @@ import org.bu.metcs789.factorization.PollardRho
 object FinalProjectExperiment{
 
   def main(args: Array[String]) {
-
     println("************************************ RSA Experiment******************************************")
 
     println("Encrypting Message as Alice")
-    RSAAlice(4187, 3313, 2)
+    println("Let n = 4187, g = 3313, message = 321")
+    RSAAlice(4187, 3313, 321)
     println()
 
     println("Sending Public Key as Bob")
     RSABob(73, 79, 5)
+    println()
+
     println("Decrypting Message from Alice")
     RSADecrypt(73 * 79, 5, 3560, 72 * 78, Bob)
     println()
