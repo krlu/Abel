@@ -69,10 +69,10 @@ class Tests extends FlatSpec with Matchers {
     assert(ModInverse(2,3) == 2)
     assert(ModInverse(3,11) == 4)
 
-    val inv = ModInverse(3313, Phi(4817))
-    for(i <- RelPrimesLessThanN(4817)) {
-      val power = FastExpWithMod(4817)(i, 3313)
-      val original = FastExpWithMod(4817)(power, inv)
+    val inv = ModInverse(3313, Phi(4187))
+    for(i <- RelPrimesLessThanN(4187)) {
+      val power = FastExpWithMod(4187)(i, 3313)
+      val original = FastExpWithMod(4187)(power, inv)
       assert(original == i)
     }
   }
@@ -84,10 +84,18 @@ class Tests extends FlatSpec with Matchers {
     assert(DiscreteLog(18)(3,6).isEmpty)
     assert(DiscreteLog(15)(2,5).isEmpty)
 
-    for(i <- RelPrimesLessThanN(4817)) {
-      val power = FastExpWithMod(4817)(i, 3313)
-      val logs = AllDiscreteLogs(4817)(i, power)
+    for(i <- RelPrimesLessThanN(4187)) {
+      val power = FastExpWithMod(4187)(i, 3313)
+      val logs = AllDiscreteLogs(4187)(i, power)
       assert(logs.contains(3313))
+    }
+    val p = 857
+    val pRoots = PrimitiveRoots(p)
+    for(i <- RelPrimesLessThanN(p)){
+      val power = FastExpWithMod(p)(i, 33)
+      val logs = AllDiscreteLogs(p)(2, power)
+      if(logs.size > 1)
+        assert(!pRoots.contains(i))
     }
   }
 
