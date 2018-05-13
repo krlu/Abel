@@ -1,0 +1,43 @@
+import org.bu.metcs789.basics.Polynomial
+import org.scalatest.{FlatSpec, Matchers}
+
+class PolynomialTest extends FlatSpec with Matchers{
+  "A Polynomial" should "support binary addition" in {
+    val p1 = Polynomial(1,1)
+    val p2 = Polynomial(1,2,4)
+    val p3 = p1 + p2
+    assert(p3.coefficients == Seq(2,3,4))
+  }
+  "A Polynomial" should "support binary subtraction" in {
+    val p1 = Polynomial(1,1)
+    val p2 = Polynomial(1,2,4)
+    val p3 = p1 - p2
+    assert(p3.coefficients == Seq(0,-1,-4))
+  }
+
+  "A Polynomial" should "support binary multiplication" in {
+    val p1 = Polynomial(3,1)
+    val p2 = Polynomial(9,-3,1)
+    val p3 = p1 * p2
+    assert(p3.coefficients == Seq(27,0,0,1))
+  }
+
+  "A Polynomial" should "support exponentiation" in {
+    val p1 = Polynomial(1,1)
+    val p2 = p1 ^ 3
+    assert(p2.coefficients == Seq(1,3,3,1))
+  }
+
+  "A Polynomial" should "support differentiation and antiderivation" in {
+    val p1 = Polynomial(1,2,1)
+    val p2 = p1.derivative
+    assert(p2.coefficients == Seq(2,2))
+    assert(p2.antiDerivative.coefficients == Seq(0,2,1))
+  }
+
+  "A Polynomial" should "support toString" in {
+    val p1 = Polynomial(1,-1)
+    val p2 = p1 ^ 3
+    assert(p2.toString() == "(-1.0)x^3 + 3.0x^2 + (-3.0)x + 1.0")
+  }
+}
