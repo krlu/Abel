@@ -25,6 +25,8 @@ class PolynomialTest extends FlatSpec with Matchers{
   "A Polynomial" should "support exponentiation" in {
     val p1 = Polynomial(1,1)
     val p2 = p1 ^ 3
+    val p3 = p1 ^ 1
+    assert(p3.coefficients == Seq(1,1))
     assert(p2.coefficients == Seq(1,3,3,1))
   }
 
@@ -35,9 +37,21 @@ class PolynomialTest extends FlatSpec with Matchers{
     assert(p2.antiDerivative.coefficients == Seq(0,2,1))
   }
 
+  "A Polynomial" should "support division and mod operations" in {
+    val x = Polynomial(-1,0,0,0,1)
+    val y = Polynomial(1,1)
+    val (quotient, remainder) = x / y
+    val modY = x%y
+    assert(quotient == Polynomial(-1,1,-1,1))
+    assert(quotient.toString() == "x^3 + (-1.0)x^2 + x + (-1.0)")
+    assert(quotient*y == x)
+    assert(remainder == modY)
+    assert(remainder == Polynomial.zero)
+  }
+
   "A Polynomial" should "support toString" in {
     val p1 = Polynomial(1,-1)
     val p2 = p1 ^ 3
-    assert(p2.toString() == "(-1.0)x^3 + 3.0x^2 + (-3.0)x + 1.0")
+    assert(p2.toString == "(-1.0)x^3 + 3.0x^2 + (-3.0)x + 1.0")
   }
 }
