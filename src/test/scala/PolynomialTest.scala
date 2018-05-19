@@ -54,4 +54,10 @@ class PolynomialTest extends FlatSpec with Matchers{
     val p2 = p1 ^ 3
     assert(p2.toString == "(-1.0)x^3 + 3.0x^2 + (-3.0)x + 1.0")
   }
+
+  "Polynomial Util" should "compute GCD between polynomials" in {
+    val p1 = Polynomial(1,2) * Polynomial(1,1)
+    val p2 = Polynomial(2,3) * Polynomial(1,1)
+    println(Polynomial.GCD(p1, p2))
+  }
 }
