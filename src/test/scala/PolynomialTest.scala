@@ -56,8 +56,8 @@ class PolynomialTest extends FlatSpec with Matchers{
   }
 
   "Polynomial Util" should "compute GCD between polynomials" in {
-    val p1 = Polynomial(1,2) * Polynomial(1,1)
-    val p2 = Polynomial(2,3) * Polynomial(1,1)
-    println(Polynomial.GCD(p1, p2))
+    val p1 = Polynomial(0,1) * Polynomial(1,1)
+    val p2 = Polynomial(1,0,1) * Polynomial(1,1)
+    assert(Polynomial.GCD(p1, p2) == Polynomial(1,1))
   }
 }

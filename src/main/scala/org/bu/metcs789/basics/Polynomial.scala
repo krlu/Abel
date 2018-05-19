@@ -9,7 +9,7 @@ class Polynomial(coeffs: Double*) extends (Double => Double){
 
   lazy val coefficients: Seq[Double] = if(coeffs.isEmpty) Seq(0) else if(coeffs.forall(_ == 0)) Seq(0) else coeffs.reverse.dropWhile(_ == 0).reverse
   lazy val degree: Int = if(this == Polynomial.zero) 0 else Math.max(0, coefficients.size - 1)
-  lazy val sign: Boolean = if(coefficients.reverse.head > 0) true else false
+
   /**
     * Factors a polynomial into a set of irreducible polynomials whose product equals this polynomial
     * If this polynomial is irreducible, this function returns a singleton set containing this polynomial
@@ -39,19 +39,12 @@ class Polynomial(coeffs: Double*) extends (Double => Double){
     while(remainder.degree >= other.degree) {
       val rLeadCoeff = remainder.coefficients.reverse.head
       val otherLeadCoeff = other.coefficients.reverse.head
-      val tempVal = (Polynomial(0, 1) ^ (remainder.degree - other.degree)) * Polynomial(rLeadCoeff/otherLeadCoeff)
-      println(remainder, tempVal, tempVal*other)
+      val tempVal = (Polynomial(0, 1) ^ (remainder.degree - other.degree)) * Polynomial(rLeadCoeff / otherLeadCoeff)
+//      println(remainder, tempVal, tempVal*other)
 //      Thread.sleep(1000)
-      (remainder.sign, (tempVal*other).sign) match {
-        case (false, false) =>
-          remainder -= tempVal * other
-        case (false, true) =>
-          remainder += tempVal * other
-        case (true, false) =>
-          remainder += tempVal * other
-        case (true, true) =>
-          remainder -= tempVal * other
-      }
+      if(tempVal == Polynomial.zero)
+        return(quotient, remainder)
+      remainder -= tempVal * other
       quotient += tempVal
     }
     (quotient, remainder)
