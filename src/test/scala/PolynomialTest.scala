@@ -60,4 +60,9 @@ class PolynomialTest extends FlatSpec with Matchers{
     val p2 = Polynomial(1,0,1) * Polynomial(1,1)
     assert(PolyUtil.GCD(p1, p2) == Polynomial(1,1))
   }
+
+  "Kronecker's Method" should "Factor Polynomials" in {
+    val p1 = Polynomial(-1,0,1)
+    println(PolyUtil.kroneckerFactorization(p1))
+  }
 }
