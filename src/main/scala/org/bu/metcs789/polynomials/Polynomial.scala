@@ -8,13 +8,8 @@ package org.bu.metcs789.polynomials
 class Polynomial(coeffs: Double*) extends (Double => Double){
 
   lazy val coefficients: Seq[Double] = if(coeffs.isEmpty) Seq(0) else if(coeffs.forall(_ == 0)) Seq(0) else coeffs.reverse.dropWhile(_ == 0).reverse
+  val leadingCoeff: Double = coefficients.head
   lazy val degree: Int = if(this == Polynomial.zero) 0 else Math.max(0, coefficients.size - 1)
-
-  /**
-    * Factors a polynomial into a set of irreducible polynomials whose product equals this polynomial
-    * If this polynomial is irreducible, this function returns a singleton set containing this polynomial
-    * @return Seq[Polynomial]
-    */
   lazy val factors: Seq[Polynomial] = PolyUtil.kroneckerFactorization(this)
   lazy val isSquareFree: Boolean = factors.size == factors.toSet.size
   lazy val isReducible: Boolean = factors.size > 1
@@ -28,11 +23,6 @@ class Polynomial(coeffs: Double*) extends (Double => Double){
       Polynomial(newCoeffs:_*)
     }.reduce((p1, p2) => p1 + p2)
   }
-
-  def == (other: Polynomial): Boolean = this.equals(other)
-
-  def != (other: Polynomial): Boolean = !this.equals(other)
-
   def - (other: Polynomial) = Polynomial(this.coefficients.zipAll(other.coefficients, 0.0, 0.0).map{case(a,b) => a-b}:_*)
   def + (other: Polynomial) = Polynomial(this.coefficients.zipAll(other.coefficients, 0.0, 0.0).map{case(a,b) => a+b}:_*)
   def / (other: Polynomial): (Polynomial, Polynomial) = {
@@ -50,8 +40,9 @@ class Polynomial(coeffs: Double*) extends (Double => Double){
     }
     (quotient, remainder)
   }
-
   def % (other: Polynomial): Polynomial = (this/other)._2
+  def == (other: Polynomial): Boolean = this.equals(other)
+  def != (other: Polynomial): Boolean = !this.equals(other)
   def integral(lowerBound: Double, upperBound: Double): Double = antiDerivative(upperBound) - antiDerivative(lowerBound)
 
   override def apply(v1: Double): Double = coefficients.indices.map{ i => coefficients(i) * Math.pow(v1, i)}.sum

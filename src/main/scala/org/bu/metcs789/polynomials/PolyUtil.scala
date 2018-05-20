@@ -7,6 +7,11 @@ import scala.collection.immutable
 
 object PolyUtil {
 
+  /**
+    * Factors a polynomial into a set of irreducible polynomials whose product equals this polynomial
+    * If this polynomial is irreducible, this function returns a singleton set containing this polynomial
+    * @return Seq[Polynomial]
+    */
   def kroneckerFactorization(p: Polynomial): Seq[Polynomial] = {
     if(p == Polynomial.zero || p == Polynomial.one || p == Polynomial(-1.0)) return Seq(p)
     val range = 0 to p.degree/2
@@ -18,9 +23,10 @@ object PolyUtil {
     var combos = combinationList(factorSets)
     while((remainder != Polynomial.zero || factor == Polynomial(-1)) && combos.nonEmpty){
       // left hand side vector
-      val coeffs = range.map{ i => range.map { j =>
-        Math.pow(i, j)
-      }.toArray
+      val coeffs = range.map{ i =>
+        range.map { j =>
+         Math.pow(i, j)
+        }.toArray
       }.toArray
       val coefficients = new Array2DRowRealMatrix(coeffs, false)
       val solver = new LUDecomposition(coefficients).getSolver
