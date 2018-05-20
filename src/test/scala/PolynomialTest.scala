@@ -62,7 +62,7 @@ class PolynomialTest extends FlatSpec with Matchers{
   }
 
   "Kronecker's Method" should "Factor Polynomials" in {
-    val p1 = Polynomial(-1,0,1)
-    println(PolyUtil.kroneckerFactorization(p1))
+    val p1 = Polynomial(-1,0,0,0,1)
+    assert(PolyUtil.kroneckerFactorization(p1).toSet == Set(Polynomial(1,1), Polynomial(-1,1), Polynomial(1,0,1)))
   }
 }

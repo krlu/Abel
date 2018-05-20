@@ -15,7 +15,8 @@ class Polynomial(coeffs: Double*) extends (Double => Double){
     * If this polynomial is irreducible, this function returns a singleton set containing this polynomial
     * @return Seq[Polynomial]
     */
-  lazy val factors: Set[Polynomial] = PolyUtil.kroneckerFactorization(this)
+  lazy val factors: Seq[Polynomial] = PolyUtil.kroneckerFactorization(this)
+  lazy val isSquareFree: Boolean = factors.size == factors.toSet.size
   lazy val isReducible: Boolean = factors.size > 1
   lazy val derivative = Polynomial(coefficients.indices.map{ i =>coefficients(i) * i}.drop(1):_*)
   lazy val antiDerivative = Polynomial(Array.fill(1)(0.0).toSeq ++ coefficients.indices.map{ i => coefficients(i) * 1.0/(i+1)}:_*)
@@ -28,12 +29,9 @@ class Polynomial(coeffs: Double*) extends (Double => Double){
     }.reduce((p1, p2) => p1 + p2)
   }
 
-  def == (other: Polynomial): Boolean = {
-    if(this.coefficients.size != other.coefficients.size) false
-    else {
-      (this.coefficients zip other.coefficients) forall { case (a, b) => a == b }
-    }
-  }
+  def == (other: Polynomial): Boolean = this.equals(other)
+
+  def != (other: Polynomial): Boolean = !this.equals(other)
 
   def - (other: Polynomial) = Polynomial(this.coefficients.zipAll(other.coefficients, 0.0, 0.0).map{case(a,b) => a-b}:_*)
   def + (other: Polynomial) = Polynomial(this.coefficients.zipAll(other.coefficients, 0.0, 0.0).map{case(a,b) => a+b}:_*)
@@ -57,6 +55,14 @@ class Polynomial(coeffs: Double*) extends (Double => Double){
   def integral(lowerBound: Double, upperBound: Double): Double = antiDerivative(upperBound) - antiDerivative(lowerBound)
 
   override def apply(v1: Double): Double = coefficients.indices.map{ i => coefficients(i) * Math.pow(v1, i)}.sum
+
+  override def equals(obj: scala.Any): Boolean = obj match {
+    case other: Polynomial =>
+      if(this.coefficients.size != other.coefficients.size) false
+      else (this.coefficients zip other.coefficients) forall { case (a, b) => a == b }
+    case _ => false
+  }
+
   override def toString(): String =
     if(this == Polynomial.zero) "0.0"
     else {
