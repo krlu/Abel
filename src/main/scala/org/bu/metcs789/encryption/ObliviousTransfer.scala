@@ -76,9 +76,8 @@ protected class ObliviousTransferWithDiscreteLog(modulus: Int) extends Oblivious
       t1Copy = fastExpWithMod(a1, x)
       biInvXY0 = fastExpWithMod(biInv, y0)
       biInvXY1 = fastExpWithMod(biInv, y1)
-      if (Set(m0 ^ t0Copy, m1 ^ t1Copy) == Set(alice.s0.get, alice.s1.get))
-        println(s"c =$c, g=$g, x=$x, B=$B, y0=$y0, i=$i, y1=$y1, t0=$t0, " +
-          s"t1=$t1, a0^x=$t0Copy, a1^x=$t1Copy, a0=$a0, a1=$a1")
+//      if (Set(m0 ^ t0Copy, m1 ^ t1Copy) == Set(alice.s0.get, alice.s1.get))
+//        println(s"c =$c, g=$g, x=$x, B=$B, y0=$y0, i=$i, y1=$y1, t0=$t0, " + s"t1=$t1, a0^x=$t0Copy, a1^x=$t1Copy, a0=$a0, a1=$a1")
     }while(t0Copy == biInvXY0 || t1Copy == biInvXY1)
     bob.copy(s0 = Some(m0 ^ t0Copy), s1 = Some(m1 ^ t1Copy))
   }

@@ -1,4 +1,4 @@
-import org.bu.metcs789.basics.Polynomial
+import org.bu.metcs789.polynomials.{PolyUtil, Polynomial}
 import org.scalatest.{FlatSpec, Matchers}
 
 class PolynomialTest extends FlatSpec with Matchers{
@@ -58,6 +58,6 @@ class PolynomialTest extends FlatSpec with Matchers{
   "Polynomial Util" should "compute GCD between polynomials" in {
     val p1 = Polynomial(0,1) * Polynomial(1,1)
     val p2 = Polynomial(1,0,1) * Polynomial(1,1)
-    assert(Polynomial.GCD(p1, p2) == Polynomial(1,1))
+    assert(PolyUtil.GCD(p1, p2) == Polynomial(1,1))
   }
 }

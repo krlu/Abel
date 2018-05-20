@@ -62,7 +62,7 @@ object FinalProjectExperiment{
   }
 
   private def RSADecryptEve(n: Int, g: Int, y: Int): Unit ={
-    val p = PollardRho(n).get.toInt
+    val p = PollardRho(n).toInt
     val q = n/p
     println(s"Eve finds p = $p and q = $q")
     RSADecrypt(n, g, y, (p-1)*(q-1), Eve)

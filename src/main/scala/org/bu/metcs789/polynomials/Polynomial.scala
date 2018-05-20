@@ -1,8 +1,8 @@
-package org.bu.metcs789.basics
-
+package org.bu.metcs789.polynomials
 
 /**
   * Finite polynomial
+  *
   * @param coeffs - input coefficients
   */
 class Polynomial(coeffs: Double*) extends (Double => Double){
@@ -15,7 +15,9 @@ class Polynomial(coeffs: Double*) extends (Double => Double){
     * If this polynomial is irreducible, this function returns a singleton set containing this polynomial
     * @return Seq[Polynomial]
     */
-  lazy val factors: Set[Polynomial] = Set()
+  lazy val factors: Set[Polynomial] = {
+    Set()
+  }
   lazy val isReducible: Boolean = factors.size > 1
   lazy val derivative = Polynomial(coefficients.indices.map{ i =>coefficients(i) * i}.drop(1):_*)
   lazy val antiDerivative = Polynomial(Array.fill(1)(0.0).toSeq ++ coefficients.indices.map{ i => coefficients(i) * 1.0/(i+1)}:_*)
@@ -40,8 +42,6 @@ class Polynomial(coeffs: Double*) extends (Double => Double){
       val rLeadCoeff = remainder.coefficients.reverse.head
       val otherLeadCoeff = other.coefficients.reverse.head
       val tempVal = (Polynomial(0, 1) ^ (remainder.degree - other.degree)) * Polynomial(rLeadCoeff / otherLeadCoeff)
-//      println(remainder, tempVal, tempVal*other)
-//      Thread.sleep(1000)
       if(tempVal == Polynomial.zero)
         return(quotient, remainder)
       remainder -= tempVal * other
@@ -49,6 +49,7 @@ class Polynomial(coeffs: Double*) extends (Double => Double){
     }
     (quotient, remainder)
   }
+
   def % (other: Polynomial): Polynomial = (this/other)._2
   def integral(lowerBound: Double, upperBound: Double): Double = antiDerivative(upperBound) - antiDerivative(lowerBound)
 
@@ -76,10 +77,4 @@ object Polynomial{
   def apply(coefficients: Double*): Polynomial = new Polynomial(coefficients:_*)
   def zero = new Polynomial(0)
   def one = new Polynomial(1)
-  def GCD(p1: Polynomial, p2: Polynomial): Polynomial = {
-    if(p2 == zero) p1
-    else {
-      GCD(p2, p1 % p2)
-    }
-  }
 }

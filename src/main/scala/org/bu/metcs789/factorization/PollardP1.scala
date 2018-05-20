@@ -3,9 +3,9 @@ package org.bu.metcs789.factorization
 import org.bu.metcs789.basics._
 import org.bu.metcs789._
 
-object PollardP1 extends ((Long, Long, Int) => Option[Long]){
+object PollardP1 extends ((Long, Long, Int) => Long){
   private var beta = 1L
-  override def apply(n: Long, initBeta: Long, maxAttempts: Int = 10): Option[Long] = {
+  override def apply(n: Long, initBeta: Long, maxAttempts: Int = 10): Long = {
     var g: Long = 1
     beta = initBeta
     var attempts = 0
@@ -22,7 +22,7 @@ object PollardP1 extends ((Long, Long, Int) => Option[Long]){
       beta = if(upperBound == Long.MaxValue) beta*2 else (upperBound + lowerBound)/2
       attempts += 1
     }
-    if(attempts > maxAttempts) None else Some(g)
+    if(attempts > maxAttempts) 1 else g
   }
 
   /**

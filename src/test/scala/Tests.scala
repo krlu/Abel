@@ -1,6 +1,6 @@
 import org.bu.metcs789.basics._
 import org.bu.metcs789.encryption._
-import org.bu.metcs789.factorization.{PollardP1, PollardRho}
+import org.bu.metcs789.factorization.{PollardP1, PollardRho, PrimeFactorization}
 import org.bu.metcs789.rng.{BlumBlumShub, NaorReingold}
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -153,21 +153,25 @@ class Tests extends FlatSpec with Matchers {
       if(generator.generateBit == 1) ones+=1 else zeroes +=1
       generator.resetSeed()
     }
-    println(zeroes, ones)
+//    println(zeroes, ones)
     assert(Math.abs(ones - zeroes) < 100)
   }
 
+  "Prime Facotrization" should "Find all prime factors of N" in {
+    assert(Set[Long](2,3,5) == PrimeFactorization(30).toSet)
+  }
+
   "Pollard Rho" should "find factor of N" in {
-    assert(Set[Long](73, 41).contains(PollardRho(2993).get))
-    assert(Set[Long](2,5).contains(PollardRho(10).get))
-    Seq(30949, 30983, 31013, 31019, 31039, 31051, 31063, 43541).foreach{ p => assert(PollardRho(p).isEmpty)}
-    Set(31053, 31065, 31067, 31077, 31083, 31093, 31127, 31127, 35259).foreach{ p => assert(PollardRho(p).nonEmpty)}
-//    println(Set[Long](41, 73).contains(PollardP1(2993, 30).get))
+    assert(Set[Long](73, 41).contains(PollardRho(2993)))
+    assert(Set[Long](2,5).contains(PollardRho(10)))
+    Seq(30949, 30983, 31013, 31019, 31039, 31051, 31063, 43541).foreach{ p => assert(PollardRho(p) == 1L)}
+    Set(31053, 31065, 31067, 31077, 31083, 31093, 31127, 31127, 35259).foreach{ p => assert(PollardRho(p) == 1L)}
+    assert(Set[Long](41, 73).contains(PollardP1(2993, 30)))
   }
   "Pollard P-1" should  "find factor of N" in {
-    assert(Set[Long](73, 41).contains(PollardP1(2993,30).get))
-    assert(Set[Long](2,5).contains(PollardP1(10,30).get))
-    Seq(30949, 30983, 31013, 31019, 31039, 31051, 31063, 43541).foreach{ p => assert(PollardP1(p, 10).isEmpty)}
-    Set(31053, 31065, 31067, 31077, 31083, 31093, 31127, 31127, 35259).foreach{ p => assert(PollardP1(p, 10, 50).nonEmpty)}
+    assert(Set[Long](73, 41).contains(PollardP1(2993,30)))
+    assert(Set[Long](2,5).contains(PollardP1(10,30)))
+    Seq(30949, 30983, 31013, 31019, 31039, 31051, 31063, 43541).foreach{ p => assert(PollardP1(p, 10) == 1L)}
+    Set(31053, 31065, 31067, 31077, 31083, 31093, 31127, 31127, 35259).foreach{ p => assert(PollardP1(p, 10, 50) == 1L)}
   }
 }
