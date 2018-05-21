@@ -9,7 +9,7 @@ class Polynomial(coeffs: Double*) extends (Double => Double){
 
   lazy val coefficients: Seq[Double] = if(coeffs.isEmpty) Seq(0) else if(coeffs.forall(_ == 0)) Seq(0) else coeffs.reverse.dropWhile(_ == 0).reverse
   val leadingCoeff: Double = coefficients.head
-  lazy val degree: Int = if(this == Polynomial.zero) 0 else Math.max(0, coefficients.size - 1)
+  lazy val degree: Int = Math.max(0, coefficients.size - 1)
   lazy val factors: Seq[Polynomial] = PolyUtil.kroneckerFactorization(this)
   lazy val isSquareFree: Boolean = factors.size == factors.toSet.size
   lazy val isReducible: Boolean = factors.size > 1
@@ -77,12 +77,4 @@ object Polynomial{
   def apply(coefficients: Double*): Polynomial = new Polynomial(coefficients:_*)
   val zero = new Polynomial(0)
   val one = new Polynomial(1)
-}
-
-object test{
-  def main(args: Array[String]): Unit = {
-    val x = List(1.0)
-    val y: Seq[Double] = Array(1.0)
-    println(x == y)
-  }
 }

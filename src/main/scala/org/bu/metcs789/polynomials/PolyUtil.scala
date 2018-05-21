@@ -13,7 +13,7 @@ object PolyUtil {
     * @return Seq[Polynomial]
     */
   def kroneckerFactorization(p: Polynomial): Seq[Polynomial] = {
-    if(p == Polynomial.zero || p == Polynomial.one || p == Polynomial(-1.0)) return Seq(p)
+    if(p.degree <= 1) return Seq(p)
     val range = 0 to p.degree/2
     val factorSets: immutable.List[List[Long]] = range
       .map(i => p(i).toLong)
@@ -21,7 +21,7 @@ object PolyUtil {
     var (quotient, remainder) = (Polynomial.zero, Polynomial.one)
     var factor = Polynomial.one
     var combos = combinationList(factorSets)
-    while((remainder != Polynomial.zero || factor == Polynomial(-1)) && combos.nonEmpty){
+    while((remainder != Polynomial.zero || factor == Polynomial(-1)) && combos.flatten.nonEmpty){
       // left hand side vector
       val coeffs = range.map{ i =>
         range.map { j =>
@@ -55,11 +55,5 @@ object PolyUtil {
     else {
       GCD(p2, p1 % p2)
     }
-  }
-}
-
-object foo{
-  def main(args: Array[String]): Unit = {
-    println(Math.pow(0, 0))
   }
 }
