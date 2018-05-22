@@ -21,7 +21,7 @@ object PolyUtil {
     var (quotient, remainder) = (Polynomial.zero, Polynomial.one)
     var factor = Polynomial.one
     var combos = combinationList(factorSets)
-    while((remainder != Polynomial.zero || factor == Polynomial(-1)) && combos.flatten.nonEmpty){
+    while((remainder != Polynomial.zero || factor == Polynomial(-1)) && combos.nonEmpty){
       // left hand side vector
       val coeffs = range.map{ i =>
         range.map { j =>
