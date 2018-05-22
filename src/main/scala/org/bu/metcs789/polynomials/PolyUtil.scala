@@ -10,7 +10,8 @@ object PolyUtil {
 
   /**
     * Factors a polynomial into a set of irreducible polynomials whose product equals this polynomial
-    * If this polynomial is irreducible, this function returns a singleton set containing this polynomial
+    * If this polynomial is irreducible, this function returns a singleton set containing the input polynomial polynomial
+    * @param p - Polynomial to be Factored
     * @return Seq[Polynomial]
     */
   def kroneckerFactorization(p: Polynomial): Seq[Polynomial] = {
@@ -30,25 +31,11 @@ object PolyUtil {
       remainder = r
     }
     else {
-      var combos = combinationList(factorSets)
+      var combos: Seq[List[Long]] = combinationList(factorSets)
       while ((remainder != Polynomial.zero || factor == Polynomial(-1) || factor == Polynomial.one) && combos.nonEmpty) {
-        // left hand side vector
-        val coeffs = range.map { i =>
-          range.map { j =>
-            Math.pow(i, j)
-          }.toArray
-        }.toArray
-        val coefficients = new Array2DRowRealMatrix(coeffs, false)
-        val solver = new LUDecomposition(coefficients).getSolver
-
-        // right hand side vector
-        val x = choose(combos.iterator).map(_.toDouble)
+        val x: Seq[Double] = choose(combos.iterator).map(_.toDouble)
         combos = combos.filter(_ != x)
-        val constants = new ArrayRealVector(Array[Double](x: _*), false)
-
-        // solve system of equation to find coefficients for potential factor
-        val solution = solver.solve(constants).toArray.toSeq
-        factor = Polynomial(solution: _*)
+        factor = generatePotentialFactor(range, x)
         val (q, r) = p / factor
         quotient = q
         remainder = r
@@ -58,7 +45,33 @@ object PolyUtil {
       kroneckerFactorization(factor) ++ kroneckerFactorization(quotient)
     else Seq(p)
   }
+
+  /**
+    * Helper function for Kronecker's factorization method
+    * Uses Apache Common's solver to solve for coefficients, typically with Gaussian Elimination
+    * @param range - range of possible degree of the factor polynomial (forms the matrix on the left hand side)
+    * @param x - constant vector (on the right hand side of the equation)
+    * @return Polynomial that might be a viable factor
+    */
+  private def generatePotentialFactor(range: Range, x: Seq[Double]): Polynomial = {
+    // entries of left hand side matrix
+    val coeffs = range.map { i =>
+      range.map { j =>
+        Math.pow(i, j)
+      }.toArray
+    }.toArray
+    val coefficients = new Array2DRowRealMatrix(coeffs, false)
+    val solver = new LUDecomposition(coefficients).getSolver
+
+    // right hand side vector
+    val constants = new ArrayRealVector(Array[Double](x: _*), false)
+
+    // solve system of equation to find coefficients for potential factor
+    val solution = solver.solve(constants).toArray.toSeq
+    Polynomial(solution: _*)
+  }
   //  def berlekampFactorization(p: Polynomial): Set[Polynomial] = ???
+
 
   def GCD(p1: Polynomial, p2: Polynomial): Polynomial = {
     if(p2 == Polynomial.zero) p1
