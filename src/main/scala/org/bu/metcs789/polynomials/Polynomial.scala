@@ -45,6 +45,13 @@ class Polynomial(coeffs: Double*) extends (Double => Double){
   def != (other: Polynomial): Boolean = !this.equals(other)
   def integral(lowerBound: Double, upperBound: Double): Double = antiDerivative(upperBound) - antiDerivative(lowerBound)
 
+  def apply(other: Polynomial): Polynomial = {
+    other.coefficients.indices.map { i =>
+      val c = other.coefficients(i)
+      Polynomial(c) * (this ^ i)
+    }.reduce((p1, p2) => p1 + p2)
+  }
+
   override def apply(v1: Double): Double = coefficients.indices.map{ i => coefficients(i) * Math.pow(v1, i)}.sum
 
   override def equals(obj: scala.Any): Boolean = obj match {

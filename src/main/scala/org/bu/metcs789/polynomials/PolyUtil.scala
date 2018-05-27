@@ -20,9 +20,9 @@ object PolyUtil {
     val roots = range.map(i => (i, p(i).toLong)).filter{case (_, pi) => pi == 0}.map{case(i,_) => i}
     val factorSets: immutable.List[List[Long]] = range
       .map(i => p(i).toLong)
-      .map(GetAllFactors(_).toList).toList //TODO: we want ALL factors!!!
-    var (quotient, remainder) = (Polynomial.zero, Polynomial.one)
-    var factor = Polynomial.one
+      .map(GetAllFactors(_).toList).toList
+
+    var (quotient, remainder, factor) = (Polynomial.zero, Polynomial.one, Polynomial.one)
 
     if(roots.nonEmpty){
       factor = Polynomial(-roots.head, 1)
@@ -33,7 +33,7 @@ object PolyUtil {
     else {
       var combos: Seq[List[Long]] = combinationList(factorSets)
       while ((remainder != Polynomial.zero || factor == Polynomial(-1) || factor == Polynomial.one) && combos.nonEmpty) {
-        val x: Seq[Double] = choose(combos.iterator).map(_.toDouble)
+        val x: Seq[Double] = combos.head.map(_.toDouble)
         combos = combos.filter(_ != x)
         factor = generatePotentialFactor(range, x)
         val (q, r) = p / factor
@@ -70,6 +70,7 @@ object PolyUtil {
     val solution = solver.solve(constants).toArray.toSeq
     Polynomial(solution: _*)
   }
+
   //  def berlekampFactorization(p: Polynomial): Set[Polynomial] = ???
 
 
