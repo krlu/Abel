@@ -1,12 +1,10 @@
 package org.bu.metcs789.polynomials
 
 /**
-  * Finite polynomial
-  *
+  * Finite polynomial with real coefficients
   * @param coeffs - input coefficients
   */
 class Polynomial(coeffs: Double*) extends (Double => Double){
-
   lazy val coefficients: Seq[Double] = if(coeffs.isEmpty) Seq(0) else if(coeffs.forall(_ == 0)) Seq(0) else coeffs.reverse.dropWhile(_ == 0).reverse
   val leadingCoeff: Double = coefficients.head
   lazy val degree: Int = Math.max(0, coefficients.size - 1)
@@ -45,11 +43,15 @@ class Polynomial(coeffs: Double*) extends (Double => Double){
   def != (other: Polynomial): Boolean = !this.equals(other)
   def integral(lowerBound: Double, upperBound: Double): Double = antiDerivative(upperBound) - antiDerivative(lowerBound)
 
-  def apply(other: Polynomial): Polynomial = {
-    other.coefficients.indices.map { i =>
-      val c = other.coefficients(i)
-      Polynomial(c) * (this ^ i)
-    }.reduce((p1, p2) => p1 + p2)
+  def compose(other: Double => Double): Polynomial = {
+    other match {
+      case poly: Polynomial =>
+        poly.coefficients.indices.map { i =>
+          val c = poly.coefficients(i)
+          Polynomial(c) * (this ^ i)
+        }.reduce((p1, p2) => p1 + p2)
+      case _ => throw new IllegalArgumentException("input is not a polynomial!!")
+    }
   }
 
   override def apply(v1: Double): Double = coefficients.indices.map{ i => coefficients(i) * Math.pow(v1, i)}.sum
@@ -85,3 +87,69 @@ object Polynomial{
   val zero = new Polynomial(0)
   val one = new Polynomial(1)
 }
+
+
+trait Monoid{
+  val zero: Monoid
+  def +(other: Monoid): Monoid
+  def -(other: Monoid): Monoid
+  def *(other: Monoid): Monoid
+  def /(other: Monoid): Monoid
+  def ^(exp: Int): Monoid = if(exp == 0) zero else this * (this ^ (exp-1))
+  def isZero: Boolean
+}
+
+case class Real(value: Double) extends Monoid{
+  lazy val zero: Real = Real(1.0)
+  override def isZero: Boolean = value == 0.0
+  override def +(other: Monoid): Monoid = other match {
+    case r : Real => Real(this.value + r.value)
+    case _ => throw new IllegalArgumentException(s"Expected Real type but found ${other.getClass}")
+  }
+  override def -(other: Monoid): Monoid = other match {
+    case r : Real => Real(this.value - r.value)
+    case _ => throw new IllegalArgumentException(s"Expected Real type but found ${other.getClass}")
+  }
+  override def *(other: Monoid): Monoid = other match {
+    case r : Real => Real(this.value * r.value)
+    case _ => throw new IllegalArgumentException(s"Expected Real type but found ${other.getClass}")
+  }
+  override def /(other: Monoid): Monoid = other match {
+    case r : Real => Real(this.value / r.value)
+    case _ => throw new IllegalArgumentException(s"Expected Real type but found ${other.getClass}")
+  }
+}
+
+class Poly[T <: Monoid](coeffs: T*) extends (T => T){
+  lazy val coefficients: Seq[T] = if(coeffs.isEmpty) Seq() else if(coeffs.forall(_ == 0)) Seq() else coeffs.reverse.dropWhile(_.isZero).reverse
+  val degree: Int = coefficients.size
+  def + (other: Poly[T]): Poly[T] = {
+    val largeSeq = if(this.degree > other.degree) this.coefficients else other.coefficients
+    val smallSeq = if(this.degree <= other.degree) this.coefficients else other.coefficients
+    val endCoeffs = largeSeq.takeRight(largeSeq.size - smallSeq.size)
+    val combinedCoeffs = this.coefficients.zip(other.coefficients).map {case (a: T, b: T) => (a + b).asInstanceOf[T] }
+    new Poly( combinedCoeffs ++ endCoeffs:_*)
+  }
+
+  override def apply(v1: T): T = {
+    coefficients.indices.map { i =>
+      coefficients(i) * (v1 ^ i)
+    }.reduce((a: Monoid,b: Monoid) => a + b).asInstanceOf[T]
+  }
+}
+
+object Poly{
+  def apply[T <: Monoid](coeffs: T*): Poly[T] = new Poly[T](coeffs:_*)
+}
+
+object test {
+  def main(args: Array[String]): Unit = {
+    val p1 = Poly(Real(1))
+    val p2 = Poly(Real(1), Real(1), Real(1))
+    val p3 = p1 + p2
+    println(p3(Real(2)))
+  }
+}
+
+
+

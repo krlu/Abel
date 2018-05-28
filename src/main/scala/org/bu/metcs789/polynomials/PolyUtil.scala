@@ -73,11 +73,5 @@ object PolyUtil {
 
   //  def berlekampFactorization(p: Polynomial): Set[Polynomial] = ???
 
-
-  def GCD(p1: Polynomial, p2: Polynomial): Polynomial = {
-    if(p2 == Polynomial.zero) p1
-    else {
-      GCD(p2, p1 % p2)
-    }
-  }
+  def GCD(p1: Polynomial, p2: Polynomial): Polynomial = if(p2 == Polynomial.zero) p1 else GCD(p2, p1 % p2)
 }

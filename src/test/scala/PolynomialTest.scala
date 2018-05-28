@@ -58,8 +58,9 @@ class PolynomialTest extends FlatSpec with Matchers{
   "A Polynomial" should "compose with other polynomials" in {
     val p1 = Polynomial(1, 1)
     val p2 = Polynomial(0, 0, 1)
-    assert(p1(p2) == Polynomial(1,2,1))
-    assert(p1(3) == 4)
+    val p3 = p1 compose p2
+    assert( p3 == Polynomial(1,2,1))
+    assert(p3(3) == 16)
   }
 
   "Polynomial Util" should "compute GCD between polynomials" in {
