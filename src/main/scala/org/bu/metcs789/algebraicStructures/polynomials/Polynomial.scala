@@ -1,6 +1,7 @@
-package org.bu.metcs789.polynomials
+package org.bu.metcs789.algebraicStructures.polynomials
 
 import org.bu.metcs789.RealPoly
+import org.bu.metcs789.algebraicStructures.fields.{Field, Real}
 
 /**
   * Finite polynomial with real coefficients
@@ -15,7 +16,7 @@ class Polynomial(coeffs: Double*) extends Poly[Double, Real](coeffs:_*)(Real()){
   lazy val antiDerivative = Polynomial(Array.fill(1)(0.0).toSeq ++ coefficients.indices.map{ i => coefficients(i) * 1.0/(i+1)}:_*)
 
   override def toString(): String =
-    if(this == Polynomial.zero) "0.0"
+    if(this == Poly.zero) "0.0"
     else {
       coefficients.indices.map { i =>
         val coeffStr = coefficients(i) match {
@@ -33,11 +34,7 @@ class Polynomial(coeffs: Double*) extends Poly[Double, Real](coeffs:_*)(Real()){
     }
 }
 
-object Polynomial{
-  def apply(coefficients: Double*): Polynomial = new Polynomial(coefficients:_*)
-  val zero = new Polynomial(0)
-  val one = new Polynomial(1)
-}
+object Polynomial{ def apply(coefficients: Double*): Polynomial = new Polynomial(coefficients:_*) }
 
 /**
   * Generalization of a Polynomial
@@ -46,7 +43,7 @@ object Polynomial{
   * @tparam T - Set of values coefficients can take
   * @tparam U - Type bound on Algebraic Field
   */
-class Poly[T, U <: Field[T]](coeffs: T*)(field: U) extends (T => T){
+class Poly[T, U <: Field[T]](coeffs: T*)(implicit field: U) extends (T => T){
 
   lazy val coefficients: Seq[T] = if(coeffs.isEmpty || coeffs.forall(field.eq(_, field.zero))) Seq(field.zero) else coeffs.reverse.dropWhile(field.eq(_, field.zero)).reverse
   lazy val degree: Int = Math.max(0, coefficients.size - 1)

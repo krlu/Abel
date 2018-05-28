@@ -1,5 +1,5 @@
 import org.bu.metcs789.RealPoly
-import org.bu.metcs789.polynomials.{PolyUtil, Polynomial}
+import org.bu.metcs789.algebraicStructures.polynomials.{Poly, PolyUtil, Polynomial}
 import org.scalatest.{FlatSpec, Matchers}
 
 class PolynomialTest extends FlatSpec with Matchers{
@@ -48,7 +48,7 @@ class PolynomialTest extends FlatSpec with Matchers{
     assert(Polynomial(quotient.coefficients:_*).toString() == "x^3 + (-1.0)x^2 + x + (-1.0)")
     assert(quotient*y == x)
     assert(remainder == modY)
-    assert(remainder == Polynomial.zero)
+    assert(remainder == Poly.zero)
   }
 
   "A Polynomial" should "support toString" in {

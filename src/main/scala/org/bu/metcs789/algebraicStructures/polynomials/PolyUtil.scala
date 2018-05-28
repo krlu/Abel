@@ -1,4 +1,4 @@
-package org.bu.metcs789.polynomials
+package org.bu.metcs789.algebraicStructures.polynomials
 
 import org.apache.commons.math3.linear.{Array2DRowRealMatrix, ArrayRealVector, LUDecomposition}
 import org.bu.metcs789._
@@ -31,7 +31,7 @@ object PolyUtil {
     }
     else {
       var combos: Seq[List[Long]] = combinationList(factorSets)
-      while ((remainder != Polynomial.zero || factor == Polynomial(-1) || factor == Polynomial.one) && combos.nonEmpty) {
+      while ((remainder != Poly.zero || factor == Poly(-1) || factor == Poly.one) && combos.nonEmpty) {
         val x: Seq[Double] = combos.head.map(_.toDouble)
         combos = combos.filter(_ != x)
         factor = generatePotentialFactor(range, x)
@@ -40,7 +40,7 @@ object PolyUtil {
         remainder = r
       }
     }
-    if(remainder == Polynomial.zero && factor != Polynomial(-1.0) && factor != Polynomial.one)
+    if(remainder == Poly.zero && factor != Polynomial(-1.0) && factor != Poly.one)
       kroneckerFactorization(Polynomial(factor.coefficients:_*)) ++ kroneckerFactorization(Polynomial(quotient.coefficients:_*))
     else Seq(p)
   }
@@ -72,5 +72,5 @@ object PolyUtil {
 
   //  def berlekampFactorization(p: Polynomial): Set[Polynomial] = ???
 
-  def GCD(p1: RealPoly, p2: RealPoly): RealPoly = if(p2 == Polynomial.zero) p1 else GCD(p2, p1 % p2)
+  def GCD(p1: RealPoly, p2: RealPoly): RealPoly = if(p2 == Poly.zero) p1 else GCD(p2, p1 % p2)
 }

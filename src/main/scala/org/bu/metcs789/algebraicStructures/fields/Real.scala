@@ -1,15 +1,4 @@
-package org.bu.metcs789.polynomials
-
-abstract class Field[T]{
-  val zero: T
-  val one: T
-  def eq(a: T, b: T): Boolean
-  def add(a: T, b: T): T
-  def sub(a: T, b: T): T
-  def mult(a: T, b: T): T
-  def div(a: T, b: T): T
-  def pow(a: T, exp: Int): T = if(exp == 0) one else mult(a, pow(a, exp - 1))
-}
+package org.bu.metcs789.algebraicStructures.fields
 
 class Real extends Field[Double]{
   lazy val zero = 0.0

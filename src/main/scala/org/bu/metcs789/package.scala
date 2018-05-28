@@ -1,6 +1,7 @@
 package org.bu
 
-import org.bu.metcs789.polynomials.{Poly, Real}
+import org.bu.metcs789.algebraicStructures.fields.Real
+import org.bu.metcs789.algebraicStructures.polynomials.Poly
 
 package object metcs789 {
 
