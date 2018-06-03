@@ -1,5 +1,4 @@
-import org.bu.metcs789.RealPoly
-import org.bu.metcs789.algebraicStructures.polynomials.{Poly, PolyUtil, RealPolynomial}
+import org.bu.metcs789.algebraicStructures.polynomials.{PolyUtil, RealPolynomial}
 import org.bu.metcs789.factorization.polynomial.Kronecker
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -49,7 +48,7 @@ class PolynomialTest extends FlatSpec with Matchers{
     assert(RealPolynomial(quotient.coefficients:_*).toString() == "x^3 + (-1.0)x^2 + x + (-1.0)")
     assert(quotient*y == x)
     assert(remainder == modY)
-    assert(remainder == Poly.zero)
+    assert(remainder == RealPolynomial.zero)
   }
 
   "A RealPolynomial" should "support toString" in {
@@ -79,11 +78,11 @@ class PolynomialTest extends FlatSpec with Matchers{
     val factors1 = Set(RealPolynomial(1, 1), RealPolynomial(-1, 1), RealPolynomial(1, 0, 1))
     val factors2 = Set(RealPolynomial(1, 1), RealPolynomial(-1, 1))
     assert(Kronecker(p1).toSet == factors1)
-    val x: RealPoly = factors1.reduce((a: RealPoly, b: RealPoly) => a * b)
+    val x = factors1.reduce((a, b) => a * b)
     assert(x == p1)
 
     assert(Kronecker(p2).toSet == factors2)
-    assert(factors2.reduce((a: RealPoly, b: RealPoly) => a * b) == p2)
+    assert(factors2.reduce((a, b) => a * b) == p2)
 
     assert(Kronecker(RealPolynomial(1, 0, 1)) == Seq(RealPolynomial(1, 0, 1)))
     for (i <- 1 to 8) {

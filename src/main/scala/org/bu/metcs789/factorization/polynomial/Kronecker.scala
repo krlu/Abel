@@ -3,19 +3,19 @@ package org.bu.metcs789.factorization.polynomial
 import org.apache.commons.math3.linear.{Array2DRowRealMatrix, ArrayRealVector, LUDecomposition}
 import org.bu.metcs789.algebraicStructures.polynomials.{Poly, RealPolynomial}
 import org.bu.metcs789.factorization.GetAllFactors
-import org.bu.metcs789.{RealPoly, combinationList}
+import org.bu.metcs789.combinationList
 
 import scala.collection.immutable
 
-object Kronecker extends (RealPoly => Seq[RealPoly]){
-  override def apply(v1: RealPoly): Seq[RealPoly] = kroneckerFactorization(v1)
+object Kronecker extends PolynomialFactorizationAlgo {
+  override def apply(v1: RealPolynomial): Seq[RealPolynomial] = kroneckerFactorization(v1)
   /**
     * Factors a polynomial into a set of irreducible polynomials whose product equals this polynomial
     * If this polynomial is irreducible, this function returns a singleton set containing the input polynomial polynomial
     * @param p - Polynomial to be Factored
     * @return Seq[Polynomial]
     */
-  private def kroneckerFactorization(p: RealPoly): Seq[RealPoly] = {
+  private def kroneckerFactorization(p: RealPolynomial): Seq[RealPolynomial] = {
     if(p.degree <= 1) return Seq(p)
     val range = 0 to p.degree/2
     val roots = range.map(i => (i, p(i).toLong)).filter{case (_, pi) => pi == 0}.map{case(i,_) => i}
@@ -23,7 +23,7 @@ object Kronecker extends (RealPoly => Seq[RealPoly]){
       .map(i => p(i).toLong)
       .map(GetAllFactors(_).toList).toList
 
-    var (quotient, remainder, factor) = (Poly.zero, Poly.one, Poly.one)
+    var (quotient, remainder, factor) = (RealPolynomial.zero, RealPolynomial.one, RealPolynomial.one)
 
     if(roots.nonEmpty){
       factor = RealPolynomial(-roots.head, 1)
@@ -33,7 +33,7 @@ object Kronecker extends (RealPoly => Seq[RealPoly]){
     }
     else {
       var combos: Seq[List[Long]] = combinationList(factorSets)
-      while ((remainder != Poly.zero || factor == Poly(-1) || factor == Poly.one) && combos.nonEmpty) {
+      while ((remainder != RealPolynomial.zero || factor == Poly(-1) || factor == RealPolynomial.one) && combos.nonEmpty) {
         val x: Seq[Double] = combos.head.map(_.toDouble)
         combos = combos.filter(_ != x)
         factor = generatePotentialFactor(range, x)
@@ -42,7 +42,7 @@ object Kronecker extends (RealPoly => Seq[RealPoly]){
         remainder = r
       }
     }
-    if(remainder == Poly.zero && factor != RealPolynomial(-1.0) && factor != Poly.one)
+    if(remainder == RealPolynomial.zero && factor != RealPolynomial(-1.0) && factor != RealPolynomial.one)
       kroneckerFactorization(RealPolynomial(factor.coefficients:_*)) ++ kroneckerFactorization(RealPolynomial(quotient.coefficients:_*))
     else Seq(p)
   }
@@ -54,7 +54,7 @@ object Kronecker extends (RealPoly => Seq[RealPoly]){
     * @param x - constant vector (on the right hand side of the equation)
     * @return Polynomial that might be a viable factor
     */
-  private def generatePotentialFactor(range: Range, x: Seq[Double]): RealPoly = {
+  private def generatePotentialFactor(range: Range, x: Seq[Double]): RealPolynomial = {
     // entries of left hand side matrix
     val coeffs = range.map { i =>
       range.map { j =>

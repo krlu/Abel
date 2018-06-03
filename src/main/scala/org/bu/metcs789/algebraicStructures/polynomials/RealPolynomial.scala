@@ -16,7 +16,7 @@ sealed class RealPolynomial(coeffs: Double*) extends Poly[Double, Real](coeffs:_
   lazy val antiDerivative = RealPolynomial(Array.fill(1)(0.0).toSeq ++ coefficients.indices.map{ i => coefficients(i) * 1.0/(i+1)}:_*)
 
   override def toString(): String =
-    if(this == Poly.zero) "0.0"
+    if(this == RealPolynomial.zero) "0.0"
     else {
       coefficients.indices.map { i =>
         val coeffStr = coefficients(i) match {
@@ -32,8 +32,32 @@ sealed class RealPolynomial(coeffs: Double*) extends Poly[Double, Real](coeffs:_
         s"$coeffStr$expStr"
       }.filter(_.nonEmpty).reverse.mkString(" + ")
     }
+  def + (other: RealPolynomial): RealPolynomial = RealPolynomial((this.asInstanceOf[RealPoly] + other.asInstanceOf[RealPoly]).coefficients:_*)
+  def - (other: RealPolynomial): RealPolynomial = RealPolynomial((this.asInstanceOf[RealPoly] - other.asInstanceOf[RealPoly]).coefficients:_*)
+  def * (other: RealPolynomial): RealPolynomial = RealPolynomial((this.asInstanceOf[RealPoly] * other.asInstanceOf[RealPoly]).coefficients:_*)
+  def ^(exp: Int): RealPolynomial = RealPolynomial((this pow exp).coefficients:_*)
+  def % (other: RealPolynomial): RealPolynomial = (this/other)._2
+  def / (other: RealPolynomial): (RealPolynomial, RealPolynomial) = {
+    val zeroPoly = RealPolynomial.zero
+    require(other != zeroPoly)
+    var quotient = zeroPoly
+    var remainder = RealPolynomial(coeffs:_*)
+    if(this.coefficients.isEmpty) return (other, RealPolynomial(0.0))
+    while(remainder.degree >= other.degree && remainder.degree > 0) {
+      val rLeadCoeff = remainder.coefficients.reverse.head
+      val otherLeadCoeff = other.coefficients.reverse.head
+      val tempVal = (RealPolynomial(Real().zero, Real().one) ^ (remainder.degree - other.degree)) * RealPolynomial(Real().div(rLeadCoeff,otherLeadCoeff))
+      if(tempVal == zeroPoly)
+        return (quotient, remainder)
+      remainder = RealPolynomial((remainder.asInstanceOf[RealPoly] - (tempVal * other)).coefficients:_*)
+      quotient += tempVal
+    }
+    (quotient, remainder)
+  }
 }
 
 object RealPolynomial{
   def apply(coefficients: Double*): RealPolynomial = new RealPolynomial(coefficients:_*)
+  def zero = new RealPolynomial(0.0)
+  def one = new RealPolynomial(1.0)
 }
