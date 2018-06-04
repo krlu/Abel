@@ -7,4 +7,6 @@ class Integer extends Ring[Int]{
   override def sub(a: Int, b: Int): Int = a - b
   override def mult(a: Int, b: Int): Int = a * b
   override def eq(a: Int, b: Int): Boolean = a == b
+  override def inverse(a: Int): Int = -a
 }
+object Integer{ def apply(): Integer = new Integer() }

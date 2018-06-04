@@ -19,4 +19,6 @@ class Rational extends Field[(Int, Int)]{
   }
   override def sub(a: (Int, Int), b: (Int, Int)): (Int, Int) = add(a, (-b._1, b._2))
   override def eq(a: (Int, Int), b: (Int, Int)): Boolean = a._1 == b._1 && a._2 == b._2
+
+  override def inverse(a: (Int, Int)): (Int, Int) = (-a._1, a._2)
 }

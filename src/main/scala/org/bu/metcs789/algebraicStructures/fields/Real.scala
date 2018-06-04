@@ -8,5 +8,6 @@ class Real extends Field[Double]{
   override def mult(a: Double, b: Double): Double = a * b
   override def div(a: Double, b: Double): Double = a/b
   override def eq(a: Double, b: Double): Boolean = a == b
+  override def inverse(a: Double): Double = -a
 }
 object Real{ def apply(): Real = new Real() }
