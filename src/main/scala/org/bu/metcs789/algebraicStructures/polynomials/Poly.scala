@@ -10,7 +10,7 @@ import org.bu.metcs789.algebraicStructures.rings.Ring
   * @tparam T - Type bound must support Ring structure
   * @tparam U - Type bound must extend Ring[T]
   */
-class Poly[T, U <: Ring[T]](coeffs: T*)(implicit ring: U) extends (T => T){
+protected class Poly[T, U <: Ring[T]](coeffs: T*)(implicit ring: U) extends (T => T){
 
   lazy val coefficients: Seq[T] = if(coeffs.isEmpty || coeffs.forall(ring.eq(_, ring.zero))) Seq(ring.zero) else coeffs.reverse.dropWhile(ring.eq(_, ring.zero)).reverse
   lazy val degree: Int = Math.max(0, coefficients.size - 1)
@@ -50,7 +50,7 @@ class Poly[T, U <: Ring[T]](coeffs: T*)(implicit ring: U) extends (T => T){
   }
 }
 
-object Poly{
+protected object Poly{
   def apply[T, U <: Ring[T]](coeffs: T*)(field: U): Poly[T,U] = new Poly[T, U](coeffs:_*)(field)
   def apply(coeffs: Double*) = new Poly[Double, Real](coeffs:_*)(Real())
 }
