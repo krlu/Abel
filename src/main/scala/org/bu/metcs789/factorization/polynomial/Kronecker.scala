@@ -1,9 +1,9 @@
 package org.bu.metcs789.factorization.polynomial
 
 import org.apache.commons.math3.linear.{Array2DRowRealMatrix, ArrayRealVector, LUDecomposition}
-import org.bu.metcs789.algebraicStructures.polynomials.{Poly, RealPolynomial}
-import org.bu.metcs789.factorization.GetAllFactors
+import org.bu.metcs789.algebraicStructures.polynomials.RealPolynomial
 import org.bu.metcs789.combinationList
+import org.bu.metcs789.factorization.GetAllFactors
 
 import scala.collection.immutable
 
@@ -33,7 +33,7 @@ object Kronecker extends PolynomialFactorizationAlgo {
     }
     else {
       var combos: Seq[List[Long]] = combinationList(factorSets)
-      while ((remainder != RealPolynomial.zero || factor == Poly(-1) || factor == RealPolynomial.one) && combos.nonEmpty) {
+      while ((remainder != RealPolynomial.zero || factor == RealPolynomial(-1) || factor == RealPolynomial.one) && combos.nonEmpty) {
         val x: Seq[Double] = combos.head.map(_.toDouble)
         combos = combos.filter(_ != x)
         factor = generatePotentialFactor(range, x)

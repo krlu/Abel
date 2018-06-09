@@ -3,20 +3,20 @@ import org.bu.metcs789.factorization.polynomial.Kronecker
 import org.scalatest.{FlatSpec, Matchers}
 
 class PolynomialTest extends FlatSpec with Matchers{
-  "A RealPolynomial" should "support binary addition" in {
+  "A RealPolynomial" should "support addition" in {
     val p1 = RealPolynomial(1,1)
     val p2 = RealPolynomial(1,2,4)
     val p3 = p1 + p2
     assert(p3.coefficients == Seq(2,3,4))
   }
-  "A RealPolynomial" should "support binary subtraction" in {
+  "A RealPolynomial" should "support subtraction" in {
     val p1 = RealPolynomial(1,1)
     val p2 = RealPolynomial(1,2,4)
     val p3 = p1 - p2
     assert(p3.coefficients == Seq(0,-1,-4))
   }
 
-  "A RealPolynomial" should "support binary multiplication" in {
+  "A RealPolynomial" should "support multiplication" in {
     val p1 = RealPolynomial(3,1)
     val p2 = RealPolynomial(9,-3,1)
     val p3 = p1 * p2

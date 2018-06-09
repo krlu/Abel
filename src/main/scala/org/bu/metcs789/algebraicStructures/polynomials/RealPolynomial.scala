@@ -1,6 +1,5 @@
 package org.bu.metcs789.algebraicStructures.polynomials
 
-import org.bu.metcs789.RealPoly
 import org.bu.metcs789.algebraicStructures.fields.Real
 import org.bu.metcs789.factorization.polynomial.Kronecker
 
@@ -8,8 +7,11 @@ import org.bu.metcs789.factorization.polynomial.Kronecker
   * Finite polynomial with real coefficients
   * @param coeffs - input coefficients
   */
-sealed class RealPolynomial(coeffs: Double*) extends Poly[Double, Real](coeffs:_*)(Real()){
-  lazy val factors: Seq[RealPoly] = Kronecker(this)
+sealed class RealPolynomial(coeffs: Double*) extends Polynomial[Double, Real](coeffs:_*)(Real()){
+
+  private type RealPoly = Polynomial[Double, Real]
+
+  lazy val factors: Seq[RealPolynomial] = Kronecker(this)
   lazy val isSquareFree: Boolean = factors.size == factors.toSet.size
   lazy val isReducible: Boolean = factors.size > 1
   lazy val derivative = RealPolynomial(coefficients.indices.map{ i =>coefficients(i) * i}.drop(1):_*)
@@ -46,10 +48,10 @@ sealed class RealPolynomial(coeffs: Double*) extends Poly[Double, Real](coeffs:_
     while(remainder.degree >= other.degree && remainder.degree > 0) {
       val rLeadCoeff = remainder.coefficients.reverse.head
       val otherLeadCoeff = other.coefficients.reverse.head
-      val tempVal = (RealPolynomial(Real().zero, Real().one) ^ (remainder.degree - other.degree)) * RealPolynomial(Real().div(rLeadCoeff,otherLeadCoeff))
+      val tempVal = (RealPolynomial(ring.zero, ring.one) ^ (remainder.degree - other.degree)) * RealPolynomial(ring.div(rLeadCoeff,otherLeadCoeff))
       if(tempVal == zeroPoly)
         return (quotient, remainder)
-      remainder = RealPolynomial((remainder.asInstanceOf[RealPoly] - (tempVal * other)).coefficients:_*)
+      remainder = RealPolynomial((remainder - (tempVal * other)).coefficients:_*)
       quotient += tempVal
     }
     (quotient, remainder)

@@ -1,11 +1,6 @@
 package org.bu
 
-import org.bu.metcs789.algebraicStructures.fields.Real
-import org.bu.metcs789.algebraicStructures.polynomials.Poly
-
 package object metcs789 {
-
-  type RealPoly = Poly[Double, Real]
 
   def choose[A](it: Iterator[A]): A =
     it.zip(Iterator.iterate(1)(_ + 1)).reduceLeft((row, col) =>
