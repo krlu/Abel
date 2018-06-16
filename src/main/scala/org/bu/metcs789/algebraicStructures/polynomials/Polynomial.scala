@@ -9,7 +9,7 @@ import org.bu.metcs789.algebraicStructures.rings.Ring
   * @tparam T - Type bound must support Ring structure
   * @tparam U - Type bound must extend Ring[T]
   */
-protected class Polynomial[T, U <: Ring[T]](coeffs: T*)(val ring: U) extends (T => T){
+protected[polynomials] class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) extends (T => T){
 
   private type PolyType = Polynomial[T, U]
 

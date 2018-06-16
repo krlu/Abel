@@ -22,3 +22,5 @@ class Rational extends Field[(Int, Int)]{
 
   override def inverse(a: (Int, Int)): (Int, Int) = (-a._1, a._2)
 }
+
+object Rational{ def apply(): Rational = new Rational() }
