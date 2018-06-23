@@ -49,6 +49,23 @@ protected[polynomials] class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit va
       case _ => throw new IllegalArgumentException("input is not a polynomial!!")
     }
   }
+
+  override def toString(): String =
+    if(this == RealPolynomial.zero) "0.0"
+    else {
+      coefficients.indices.map { i =>
+        val coeffStr = coefficients(i) match {
+          case c if c == ring.zero || (c == ring.one && i != ring.zero) => ""
+          case c => s"($c)"
+        }
+        val expStr = i match {
+          case exp if exp == 0 || coefficients(i) == 0 => ""
+          case exp if exp == 1 => "x"
+          case exp => s"x^$exp"
+        }
+        s"$coeffStr$expStr"
+      }.filter(_.nonEmpty).reverse.mkString(" + ")
+    }
 }
 
 protected object Polynomial{

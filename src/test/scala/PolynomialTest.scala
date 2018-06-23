@@ -54,7 +54,7 @@ class PolynomialTest extends FlatSpec with Matchers{
   "A RealPolynomial" should "support toString" in {
     val p1 = RealPolynomial(1,-1)
     val p2 = p1 ^ 3
-    assert(RealPolynomial(p2.coefficients:_*).toString == "(-1.0)x^3 + 3.0x^2 + (-3.0)x + 1.0")
+    assert(RealPolynomial(p2.coefficients:_*).toString == "(-1.0)x^3 + (3.0)x^2 + (-3.0)x + (1.0)")
   }
 
   "A RealPolynomial" should "compose with other polynomials" in {
