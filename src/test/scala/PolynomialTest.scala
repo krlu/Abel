@@ -85,7 +85,7 @@ class PolynomialTest extends FlatSpec with Matchers{
     assert(factors2.reduce((a, b) => a * b) == p2)
 
     assert(Kronecker(RealPolynomial(1, 0, 1)) == Seq(RealPolynomial(1, 0, 1)))
-    for (i <- 1 to 8) {
+    for (i <- 1 to 3) {
       val p = RealPolynomial(1, 1) ^ i
       val factors = Kronecker(p)
       assert(factors.size == i)
