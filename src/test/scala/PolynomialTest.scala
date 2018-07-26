@@ -55,6 +55,7 @@ class PolynomialTest extends FlatSpec with Matchers{
     val p1 = RealPolynomial(1,-1)
     val p2 = p1 ^ 3
     assert(RealPolynomial(p2.coefficients:_*).toString == "(-1.0)x^3 + (3.0)x^2 + (-3.0)x + (1.0)")
+    assert(RealPolynomial(p2.coefficients:_*) == p1 * p1 * p1)
   }
 
   "A RealPolynomial" should "compose with other polynomials" in {
@@ -69,6 +70,10 @@ class PolynomialTest extends FlatSpec with Matchers{
     val p1 = RealPolynomial(0,1) * RealPolynomial(1,1)
     val p2 = RealPolynomial(1,0,1) * RealPolynomial(1,1)
     assert(PolyUtil.GCD(p1, p2) == RealPolynomial(1,1))
+
+//    val p3 = RealPolynomial(-1,1) * RealPolynomial(1,1)
+//    val p4 = RealPolynomial(1,1) ^ 2
+//    assert(PolyUtil.GCD(p3, p4) == RealPolynomial(1,1))
   }
 
   "Kronecker's Method" should "Factor Polynomials" in {
