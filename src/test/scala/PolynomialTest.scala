@@ -3,6 +3,7 @@ import org.bu.metcs789.factorization.polynomial.Kronecker
 import org.scalatest.{FlatSpec, Matchers}
 
 class PolynomialTest extends FlatSpec with Matchers{
+
   "A RealPolynomial" should "support addition" in {
     val p1 = RealPolynomial(1,1)
     val p2 = RealPolynomial(1,2,4)
@@ -27,8 +28,12 @@ class PolynomialTest extends FlatSpec with Matchers{
     val p1 = RealPolynomial(1,1)
     val p2 = p1 ^ 3
     val p3 = p1 ^ 1
+    val p4 = p1 ^ 8
+    val p5 = p1 ^ 9
     assert(p3.coefficients == Seq(1,1))
+    assert(p3 == p1)
     assert(p2.coefficients == Seq(1,3,3,1))
+    assert(p5 == p4 * p1)
   }
 
   "A RealPolynomial" should "support differentiation and antiderivation" in {

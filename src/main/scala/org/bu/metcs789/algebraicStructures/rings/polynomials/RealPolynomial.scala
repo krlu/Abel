@@ -1,11 +1,12 @@
 package org.bu.metcs789.algebraicStructures.rings.polynomials
 
 import org.bu.metcs789.algebraicStructures.fields.Real
-import org.bu.metcs789.basics.GCD
+import org.bu.metcs789.basics.MultiGCD
 import org.bu.metcs789.factorization.polynomial.Kronecker
 
 /**
   * Finite polynomial with real coefficients
+  * Supports division and modular arithmetic
   * @param coeffs - input coefficients
   */
 sealed class RealPolynomial(coeffs: Double*) extends Polynomial[Double, Real](coeffs:_*)(ring = Real()){
@@ -16,13 +17,20 @@ sealed class RealPolynomial(coeffs: Double*) extends Polynomial[Double, Real](co
   lazy val isSquareFree: Boolean = factors.size == factors.toSet.size
   lazy val isReducible: Boolean = factors.size > 1
   lazy val derivative = RealPolynomial(coefficients.indices.map{ i =>coefficients(i) * i}.drop(1):_*)
-  lazy val antiDerivative = RealPolynomial(Array.fill(1)(0.0).toSeq ++ coefficients.indices.map{ i => coefficients(i) * 1.0/(i+1)}:_*)
+  lazy val antiDerivative =
+    RealPolynomial(Array.fill(1)(0.0).toSeq ++ coefficients.indices.map{ i => coefficients(i) * 1.0/(i+1)}:_*)
   lazy val nearZero: Boolean = this.coefficients.size == 1 && Math.abs(this.coefficients.head) < 0.000001
 
-  def + (other: RealPolynomial): RealPolynomial = RealPolynomial((this.asInstanceOf[RealPoly] + other.asInstanceOf[RealPoly]).coefficients:_*)
-  def - (other: RealPolynomial): RealPolynomial = RealPolynomial((this.asInstanceOf[RealPoly] - other.asInstanceOf[RealPoly]).coefficients:_*)
-  def * (other: RealPolynomial): RealPolynomial = RealPolynomial((this.asInstanceOf[RealPoly] * other.asInstanceOf[RealPoly]).coefficients:_*)
+  // wrappers for the arithmetic functions from Polynomial superclass
+  def + (other: RealPolynomial): RealPolynomial =
+    RealPolynomial((this.asInstanceOf[RealPoly] + other.asInstanceOf[RealPoly]).coefficients:_*)
+  def - (other: RealPolynomial): RealPolynomial =
+    RealPolynomial((this.asInstanceOf[RealPoly] - other.asInstanceOf[RealPoly]).coefficients:_*)
+  def * (other: RealPolynomial): RealPolynomial =
+    RealPolynomial((this.asInstanceOf[RealPoly] * other.asInstanceOf[RealPoly]).coefficients:_*)
   def ^(exp: Int): RealPolynomial = RealPolynomial((this pow exp).coefficients:_*)
+
+  // functions supporting division
   def % (other: RealPolynomial): RealPolynomial = (this/other)._2
 
   def / (other: RealPolynomial): (RealPolynomial, RealPolynomial) = {
@@ -43,7 +51,8 @@ sealed class RealPolynomial(coeffs: Double*) extends Polynomial[Double, Real](co
         }
         rLeadCoeff = remainder.coefficients.reverse(divisionIndex)
       }
-      val tempVal = (RealPolynomial(ring.zero, ring.one) ^ (remainder.degree - other.degree)) * RealPolynomial(ring.div(rLeadCoeff,otherLeadCoeff))
+      val tempVal = (RealPolynomial(ring.zero, ring.one) ^ (remainder.degree - other.degree)) *
+        RealPolynomial(ring.div(rLeadCoeff,otherLeadCoeff))
       if(tempVal == zeroPoly)
         return (quotient, remainder)
       remainder = RealPolynomial((remainder - (tempVal * other)).coefficients:_*)
@@ -53,18 +62,8 @@ sealed class RealPolynomial(coeffs: Double*) extends Polynomial[Double, Real](co
   }
 
   def reduceCoeffs: (RealPolynomial, RealPolynomial) = {
-    val divisor = RealPolynomial(coeffsGCD(this.coefficients.map(_.toInt)))
+    val divisor = RealPolynomial(MultiGCD(this.coefficients.map(_.toLong).filter(_ > 0)))
     ((this/divisor)._1, divisor)
-  }
-
-  private def coeffsGCD(coeffs: Seq[Int]): Int ={
-    val nonZeroCoeffs = coeffs.filter(_ > 0)
-    if(nonZeroCoeffs.size == 1) nonZeroCoeffs.head
-    else if(nonZeroCoeffs.size == 2) GCD(nonZeroCoeffs.head, nonZeroCoeffs(1))._1.toInt
-    else {
-      val (left, right) = nonZeroCoeffs.splitAt((nonZeroCoeffs.size + 1) / 2)
-      GCD(coeffsGCD(left), coeffsGCD(right))._1.toInt
-    }
   }
 }
 

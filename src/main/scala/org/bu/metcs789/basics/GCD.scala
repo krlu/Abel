@@ -28,3 +28,21 @@ object ExtendedGCD extends ((Long, Long) =>(Long,Long)){
     (A, B)
   }
 }
+
+object MultiGCD extends (Seq[Long] => Long){
+  /**
+    * Computes GCD of multiple terms
+    * @param values - must all be greater than zero
+    * @return GCD of all values
+    */
+  override def apply(values: Seq[Long]): Long = {
+    require(values.forall(_ > 0))
+    var currentGCD = values.head
+    var remainingValues = values.tail
+    while(remainingValues.nonEmpty){
+      currentGCD = GCD(currentGCD, remainingValues.head)._1
+      remainingValues = remainingValues.tail
+    }
+    currentGCD
+  }
+}

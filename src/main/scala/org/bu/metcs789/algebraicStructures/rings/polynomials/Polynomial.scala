@@ -4,6 +4,7 @@ import org.bu.metcs789.algebraicStructures.rings.Ring
 
 /**
   * Generalization of a finite Polynomial
+  * Supports addition, subtraction, multiplication, exponentiation
   * @param coeffs - coefficients for polynomial
   * @param ring - Algebraic Ring that governs set T of values
   * @tparam T - Type bound must support Ring structure
@@ -58,16 +59,17 @@ protected[polynomials] class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit va
       Polynomial[T, U](newCoeffs:_*)(ring)
     }.reduce((p1, p2) => p1 + p2)
   }
-
   /**
     * Exponentiation operation, computed by recursively multiplying two polynomials
     * @param exp - A non-negative integer
     * @return exponent of a polynomial two the power of some
     */
-   //TODO: try fast exponentiation as an alternative
   def pow (exp: Int): Polynomial[T, U] = {
      require(exp >= 0)
-     if(exp == 0) Polynomial[T, U](ring.one)(ring) else this * (this pow (exp-1))
+     if(exp == 0) Polynomial[T, U](ring.one)(ring)
+     else if(exp == 1) this
+     else if(exp % 2 == 0) (this * this) pow (exp/2)
+     else this * ((this * this) pow ((exp - 1)/2))
    }
 
   def == (other: Polynomial[T, U]): Boolean = this.equals(other)
@@ -98,7 +100,7 @@ protected[polynomials] class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit va
   }
 
   override def toString(): String =
-    if(this == RealPolynomial.zero) "0.0"
+    if(this.coefficients == Seq(ring.zero)) "0.0"
     else {
       coefficients.indices.map { i =>
         val coeffStr = coefficients(i) match {

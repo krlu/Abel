@@ -13,6 +13,7 @@ class Tests extends FlatSpec with Matchers {
     assert(ExtendedGCD(5, 15) == (1,0))
     assert(ExtendedGCD(10, 15) == (-1,1))
     assert(ExtendedGCD(9, 16) == (-7,4))
+    assert(MultiGCD(Seq(6L, 9L, 15L, 21L)) == 3)
   }
   "Exponentiation Algorithm" should "compute correct values" in {
     assert(FastExp(1, 0) == 1)
