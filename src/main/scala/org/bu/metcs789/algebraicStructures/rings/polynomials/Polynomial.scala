@@ -1,4 +1,4 @@
-package org.bu.metcs789.algebraicStructures.polynomials
+package org.bu.metcs789.algebraicStructures.rings.polynomials
 
 import org.bu.metcs789.algebraicStructures.rings.Ring
 
@@ -13,13 +13,44 @@ protected[polynomials] class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit va
 
   private type PolyType = Polynomial[T, U]
 
-  lazy val coefficients: Seq[T] = if(coeffs.isEmpty || coeffs.forall(ring.eq(_, ring.zero))) Seq(ring.zero) else coeffs.reverse.dropWhile(ring.eq(_, ring.zero)).reverse
+  lazy val coefficients: Seq[T] =
+    if(coeffs.isEmpty || coeffs.forall(ring.eq(_, ring.zero))) Seq(ring.zero)
+    else coeffs.reverse.dropWhile(ring.eq(_, ring.zero)).reverse
   lazy val degree: Int = Math.max(0, coefficients.size - 1)
   val leadingCoeff: T = coefficients.head
 
-  def + (other: Polynomial[T, U]): Polynomial[T, U] = Polynomial[T, U](this.coefficients.zipAll(other.coefficients, ring.zero, ring.zero).map{case(a,b) => ring.add(a,b)}:_*)(ring)
-  def - (other: Polynomial[T, U]): Polynomial[T, U] = Polynomial[T, U](this.coefficients.zipAll(other.coefficients, ring.zero, ring.zero).map{case(a,b) => ring.sub(a,b)}:_*)(ring)
-  def pow (exp: Int): Polynomial[T, U] = if(exp == 0) Polynomial[T, U](ring.one)(ring) else this * (this pow (exp-1))
+  /**
+    * Using this polynomial P, Computes P(x) for some x, where x belongs to the set T with structure Ring[T]
+    * @param x - some input variable
+    * @return p(x) - output value belonging to T with structure Ring[T]
+    */
+  override def apply(x: T): T = coefficients.indices.map{ i =>
+    ring.mult(coefficients(i),ring.pow(x, i))
+  }.reduce((a, b) => ring.add(a, b))
+
+  /**
+    * Addition operation
+    * @param other - another polynomial
+    * @return the sum of two polynomials
+    */
+  def + (other: Polynomial[T, U]): Polynomial[T, U] =
+    Polynomial[T, U](this.coefficients.zipAll(other.coefficients, ring.zero, ring.zero)
+      .map{case(a,b) => ring.add(a,b)}:_*)(ring)
+
+  /**
+    * Subtraction operation
+    * @param other - another polynomial
+    * @return the difference between two polynomials
+    */
+  def - (other: Polynomial[T, U]): Polynomial[T, U] =
+    Polynomial[T, U](this.coefficients.zipAll(other.coefficients, ring.zero, ring.zero)
+      .map{case(a,b) => ring.sub(a,b)}:_*)(ring)
+
+  /**
+    * multiplication operation, computed using distribution property of rings
+    * @param other - another polynomial
+    * @return the product of two polynomials
+    */
   def * (other: Polynomial[T, U]): Polynomial[T, U] = {
     if(this.coefficients.isEmpty || other.coefficients.isEmpty) return Polynomial[T, U](ring.zero)(ring)
     coefficients.indices.map{ i =>
@@ -28,10 +59,26 @@ protected[polynomials] class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit va
     }.reduce((p1, p2) => p1 + p2)
   }
 
+  /**
+    * Exponentiation operation, computed by recursively multiplying two polynomials
+    * @param exp - A non-negative integer
+    * @return exponent of a polynomial two the power of some
+    */
+   //TODO: try fast exponentiation as an alternative
+  def pow (exp: Int): Polynomial[T, U] = {
+     require(exp >= 0)
+     if(exp == 0) Polynomial[T, U](ring.one)(ring) else this * (this pow (exp-1))
+   }
+
   def == (other: Polynomial[T, U]): Boolean = this.equals(other)
   def != (other: Polynomial[T, U]): Boolean = !this.equals(other)
 
-  override def apply(v1: T): T = coefficients.indices.map{ i => ring.mult(coefficients(i),ring.pow(v1, i))}.reduce((a, b) => ring.add(a, b))
+  /**
+    * Overrides equals method.
+    * Computes two polynomials to be equal if and only if their coefficients are the same at each index
+    * @param obj - other polynomial
+    * @return true if and only if this polynomial is equal to the other
+    */
   override def equals(obj: scala.Any): Boolean = obj match {
     case other: Polynomial[T,U] =>
       if(this.coefficients.size != other.coefficients.size) false

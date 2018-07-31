@@ -1,4 +1,4 @@
-package org.bu.metcs789.algebraicStructures.polynomials
+package org.bu.metcs789.algebraicStructures.rings.polynomials
 
 import org.bu.metcs789.algebraicStructures.fields.Real
 import org.bu.metcs789.basics.GCD
@@ -18,7 +18,6 @@ sealed class RealPolynomial(coeffs: Double*) extends Polynomial[Double, Real](co
   lazy val derivative = RealPolynomial(coefficients.indices.map{ i =>coefficients(i) * i}.drop(1):_*)
   lazy val antiDerivative = RealPolynomial(Array.fill(1)(0.0).toSeq ++ coefficients.indices.map{ i => coefficients(i) * 1.0/(i+1)}:_*)
   lazy val nearZero: Boolean = this.coefficients.size == 1 && Math.abs(this.coefficients.head) < 0.000001
-
 
   def + (other: RealPolynomial): RealPolynomial = RealPolynomial((this.asInstanceOf[RealPoly] + other.asInstanceOf[RealPoly]).coefficients:_*)
   def - (other: RealPolynomial): RealPolynomial = RealPolynomial((this.asInstanceOf[RealPoly] - other.asInstanceOf[RealPoly]).coefficients:_*)

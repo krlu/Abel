@@ -1,4 +1,4 @@
-package org.bu.metcs789.algebraicStructures.polynomials
+package org.bu.metcs789.algebraicStructures.rings.polynomials
 
 import org.bu.metcs789.algebraicStructures.fields.Rational
 

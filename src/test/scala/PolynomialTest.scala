@@ -1,4 +1,4 @@
-import org.bu.metcs789.algebraicStructures.polynomials.{PolyUtil, RealPolynomial}
+import org.bu.metcs789.algebraicStructures.rings.polynomials.{PolyUtil, RealPolynomial}
 import org.bu.metcs789.factorization.polynomial.Kronecker
 import org.scalatest.{FlatSpec, Matchers}
 

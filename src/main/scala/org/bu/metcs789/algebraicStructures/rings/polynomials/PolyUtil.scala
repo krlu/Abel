@@ -1,4 +1,4 @@
-package org.bu.metcs789.algebraicStructures.polynomials
+package org.bu.metcs789.algebraicStructures.rings.polynomials
 
 object PolyUtil {
   //  def berlekampFactorization(p: Polynomial): Set[Polynomial] = ???
