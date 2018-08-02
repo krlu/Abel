@@ -13,12 +13,12 @@ object SquareFreeFactorization extends PolynomialFactorizationAlgo {
       while(r != RealPolynomial.one){
         val g = PolyUtil.GCD(r, f)
         val s = (f/g)._1
-        p = p * (s^j)
+        p = p * (s ^ j)
         r = (r/g)._1
         f = g
         j += 1
       }
-      Seq(c * p, f^j)
+      Seq(c * p, f ^ j)
     }
   }
 }

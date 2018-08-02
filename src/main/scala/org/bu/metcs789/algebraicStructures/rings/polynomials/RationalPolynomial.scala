@@ -4,9 +4,6 @@ import org.bu.metcs789.algebraicStructures.fields.Rational
 
 
 class RationalPolynomial(coeffs: (Int, Int)*) extends Polynomial[(Int, Int), Rational](coeffs:_*)(ring = Rational()){
-
-  private type RationalPoly = Polynomial[(Int, Int), Rational]
-
   lazy val derivative = RationalPolynomial(coefficients.indices.map{ i =>
     val (a, b) = coefficients(i)
     (a*i, b)
@@ -15,11 +12,10 @@ class RationalPolynomial(coeffs: (Int, Int)*) extends Polynomial[(Int, Int), Rat
     val (a, b) = coefficients(i)
     (a, b * (i + 1))
   }:_*)
-
-  def + (other: RationalPolynomial): RationalPolynomial = RationalPolynomial((this.asInstanceOf[RationalPoly] + other.asInstanceOf[RationalPoly]).coefficients:_*)
-  def - (other: RationalPolynomial): RationalPolynomial = RationalPolynomial((this.asInstanceOf[RationalPoly] - other.asInstanceOf[RationalPoly]).coefficients:_*)
-  def * (other: RationalPolynomial): RationalPolynomial = RationalPolynomial((this.asInstanceOf[RationalPoly] * other.asInstanceOf[RationalPoly]).coefficients:_*)
-  def ^(exp: Int): RationalPolynomial = RationalPolynomial((this pow exp).coefficients:_*)
+  def + (other: RationalPolynomial): RationalPolynomial = RationalPolynomial((this add other).coefficients:_*)
+  def - (other: RationalPolynomial): RationalPolynomial = RationalPolynomial((this sub other).coefficients:_*)
+  def * (other: RationalPolynomial): RationalPolynomial = RationalPolynomial((this mult other).coefficients:_*)
+  def ^(exp: Int): RationalPolynomial = RationalPolynomial((this ^ exp).coefficients:_*)
 }
 
 object RationalPolynomial{

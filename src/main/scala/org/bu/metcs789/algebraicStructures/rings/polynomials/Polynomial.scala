@@ -10,7 +10,7 @@ import org.bu.metcs789.algebraicStructures.rings.Ring
   * @tparam T - Type bound must support Ring structure
   * @tparam U - Type bound must extend Ring[T]
   */
-protected[polynomials] class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) extends (T => T){
+protected class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) extends (T => T){
 
   private type PolyType = Polynomial[T, U]
 
@@ -34,7 +34,7 @@ protected[polynomials] class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit va
     * @param other - another polynomial
     * @return the sum of two polynomials
     */
-  def + (other: Polynomial[T, U]): Polynomial[T, U] =
+  protected def add(other: Polynomial[T, U]): Polynomial[T, U] =
     Polynomial[T, U](this.coefficients.zipAll(other.coefficients, ring.zero, ring.zero)
       .map{case(a,b) => ring.add(a,b)}:_*)(ring)
 
@@ -43,7 +43,7 @@ protected[polynomials] class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit va
     * @param other - another polynomial
     * @return the difference between two polynomials
     */
-  def - (other: Polynomial[T, U]): Polynomial[T, U] =
+  protected def sub(other: Polynomial[T, U]): Polynomial[T, U] =
     Polynomial[T, U](this.coefficients.zipAll(other.coefficients, ring.zero, ring.zero)
       .map{case(a,b) => ring.sub(a,b)}:_*)(ring)
 
@@ -52,25 +52,33 @@ protected[polynomials] class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit va
     * @param other - another polynomial
     * @return the product of two polynomials
     */
-  def * (other: Polynomial[T, U]): Polynomial[T, U] = {
+  protected def mult(other: Polynomial[T, U]): Polynomial[T, U] = {
     if(this.coefficients.isEmpty || other.coefficients.isEmpty) return Polynomial[T, U](ring.zero)(ring)
     coefficients.indices.map{ i =>
       val newCoeffs = (0 until i).map(_ => ring.zero) ++ other.coefficients.map(c => ring.mult(c,coefficients(i)))
       Polynomial[T, U](newCoeffs:_*)(ring)
-    }.reduce((p1, p2) => p1 + p2)
+    }.reduce((p1, p2) => p1 add p2)
   }
+
+  /**
+    * Multiplies all coefficients in polynomial by a scalar value under Ring[T]
+    * @param scalar - lives with the set T
+    * @return a new scaled Polynomial
+    */
+  protected def scale(scalar: T): Polynomial[T, U] = Polynomial(this.coeffs.map(c => ring.mult(c, scalar)):_*)(ring)
+
   /**
     * Exponentiation operation, computed by recursively multiplying two polynomials
     * @param exp - A non-negative integer
     * @return exponent of a polynomial two the power of some
     */
-  def pow (exp: Int): Polynomial[T, U] = {
-     require(exp >= 0)
-     if(exp == 0) Polynomial[T, U](ring.one)(ring)
-     else if(exp == 1) this
-     else if(exp % 2 == 0) (this * this) pow (exp/2)
-     else this * ((this * this) pow ((exp - 1)/2))
-   }
+  protected def pow(exp: Int): Polynomial[T, U] = {
+    require(exp >= 0)
+    if(exp == 0) Polynomial[T, U](ring.one)(ring)
+    else if(exp == 1) this
+    else if(exp % 2 == 0) (this mult this) pow (exp/2)
+    else this mult ((this mult this) pow ((exp - 1)/2))
+  }
 
   def == (other: Polynomial[T, U]): Boolean = this.equals(other)
   def != (other: Polynomial[T, U]): Boolean = !this.equals(other)
@@ -93,8 +101,8 @@ protected[polynomials] class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit va
       case poly: Polynomial[T, U] =>
         poly.coefficients.indices.map { i =>
           val c = poly.coefficients(i)
-          Polynomial[T,U](c)(ring) * (this pow i)
-        }.reduce((p1, p2) => p1 + p2)
+          Polynomial[T,U](c)(ring) mult (this pow i)
+        }.reduce((p1, p2) => p1 add p2)
       case _ => throw new IllegalArgumentException("input is not a polynomial!!")
     }
   }

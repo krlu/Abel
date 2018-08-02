@@ -9,6 +9,7 @@ class PolynomialTest extends FlatSpec with Matchers{
     val p2 = RealPolynomial(1,2,4)
     val p3 = p1 + p2
     assert(p3.coefficients == Seq(2,3,4))
+    assert(p3 == RealPolynomial(2,3,4))
   }
   "A RealPolynomial" should "support subtraction" in {
     val p1 = RealPolynomial(1,1)
@@ -21,7 +22,9 @@ class PolynomialTest extends FlatSpec with Matchers{
     val p1 = RealPolynomial(3,1)
     val p2 = RealPolynomial(9,-3,1)
     val p3 = p1 * p2
+    val p4 = p1 * 2
     assert(p3.coefficients == Seq(27,0,0,1))
+    assert(p4 == RealPolynomial(6,2))
   }
 
   "A RealPolynomial" should "support exponentiation" in {
