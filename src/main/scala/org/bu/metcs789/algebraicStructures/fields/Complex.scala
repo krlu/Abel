@@ -1,14 +1,14 @@
 package org.bu.metcs789.algebraicStructures.fields
-import org.bu.metcs789.algebraicStructures.types.ComplexNumber
+import org.bu.metcs789.algebraicStructures.types.C
 
-class Complex extends Field[ComplexNumber] {
-  override val zero: ComplexNumber = ComplexNumber(0, 0)
-  override val one: ComplexNumber = ComplexNumber(1, 0)
+class Complex extends Field[C] {
+  override val zero: C = C(0, 0)
+  override val one: C = C(1, 0)
 
-  override def inverse(a: ComplexNumber): ComplexNumber = a * -1
-  override def add(a: ComplexNumber, b: ComplexNumber): ComplexNumber = a + b
-  override def sub(a: ComplexNumber, b: ComplexNumber): ComplexNumber = a - b
-  override def mult(a: ComplexNumber, b: ComplexNumber): ComplexNumber = a * b
-  override def div(a: ComplexNumber, b: ComplexNumber): ComplexNumber = a/b
-  override def eq(a: ComplexNumber, b: ComplexNumber): Boolean = a == b
+  override def inverse(a: C): C = a * -1
+  override def add(a: C, b: C): C = a + b
+  override def sub(a: C, b: C): C = a - b
+  override def mult(a: C, b: C): C = a * b
+  override def div(a: C, b: C): C = a/b
+  override def eq(a: C, b: C): Boolean = a == b
 }
