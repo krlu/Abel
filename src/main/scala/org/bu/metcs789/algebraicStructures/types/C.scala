@@ -15,7 +15,14 @@ case class C(re: Double, im: Double) {
     val numerator = this * other.conjugate
     numerator/denominator
   }
-  def exp(c: C) : C = {
+  def ^(e: Int): C = {
+    require(e >= 0)
+    if(e == 0) C(1,0)
+    else if(e == 1) this
+    else if(e % 2 == 0) (this * this) ^ (e/2)
+    else this * ((this * this) ^ ((e - 1)/2))
+  }
+  def ^(c: C): C = {
     val r = cosh(c.re) + sinh(c.re)
     C(cos(c.im), sin(c.im)) * r
   }
