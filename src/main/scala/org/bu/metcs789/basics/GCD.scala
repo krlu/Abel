@@ -29,20 +29,23 @@ object ExtendedGCD extends ((Long, Long) =>(Long,Long)){
   }
 }
 
-object MultiGCD extends (Seq[Long] => Long){
+object MultiGCD extends (Seq[Long] => Option[Long]){
   /**
     * Computes GCD of multiple terms
     * @param values - must all be greater than zero
-    * @return GCD of all values
+    * @return GCD of all values, if list empty, returns None
     */
-  override def apply(values: Seq[Long]): Long = {
-    require(values.forall(_ > 0))
-    var currentGCD = values.head
-    var remainingValues = values.tail
-    while(remainingValues.nonEmpty){
-      currentGCD = GCD(currentGCD, remainingValues.head)._1
-      remainingValues = remainingValues.tail
+  override def apply(values: Seq[Long]): Option[Long] = {
+    if(values.isEmpty) None
+    else {
+      require(values.forall(_ > 0))
+      var currentGCD = values.head
+      var remainingValues = values.tail
+      while (remainingValues.nonEmpty) {
+        currentGCD = GCD(currentGCD, remainingValues.head)._1
+        remainingValues = remainingValues.tail
+      }
+      Some(currentGCD)
     }
-    currentGCD
   }
 }

@@ -17,7 +17,7 @@ protected class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) ex
   lazy val coefficients: Seq[T] =
     if(coeffs.isEmpty || coeffs.forall(ring.eq(_, ring.zero))) Seq(ring.zero)
     else coeffs.reverse.dropWhile(ring.eq(_, ring.zero)).reverse
-  lazy val degree: Int = Math.max(0, coefficients.size - 1)
+  lazy val degree: Int = coefficients.size - 1
   val leadingCoeff: T = coefficients.head
 
   /**

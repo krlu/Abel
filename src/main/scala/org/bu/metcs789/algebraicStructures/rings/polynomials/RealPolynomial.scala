@@ -33,7 +33,8 @@ sealed class RealPolynomial(coeffs: Double*) extends Polynomial[Double, Real](co
     var remainder = RealPolynomial(coeffs:_*)
     var divisionIndex = 0
     if(this.coefficients.isEmpty) return (other, zeroPoly)
-    while(remainder.degree >= other.degree && remainder.degree >= 0) {
+    while(remainder.degree >= other.degree) {
+//      println(remainder, other)
       var rLeadCoeff = remainder.coefficients.reverse(divisionIndex)
       val otherLeadCoeff = other.coefficients.reverse.head
       // inner while loop to enforce integer division
@@ -54,7 +55,7 @@ sealed class RealPolynomial(coeffs: Double*) extends Polynomial[Double, Real](co
   }
 
   def reduceCoeffs: (RealPolynomial, RealPolynomial) = {
-    val divisor = RealPolynomial(MultiGCD(this.coefficients.map(_.toLong).filter(_ > 0)))
+    val divisor = RealPolynomial(MultiGCD(this.coefficients.map(_.toLong).filter(x => x != 0).map(Math.abs)).getOrElse(1L).toInt)
     ((this/divisor)._1, divisor)
   }
 }
