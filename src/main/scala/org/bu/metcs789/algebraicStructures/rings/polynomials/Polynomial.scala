@@ -18,7 +18,7 @@ protected class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) ex
     if(coeffs.isEmpty || coeffs.forall(ring.eq(_, ring.zero))) Seq(ring.zero)
     else coeffs.reverse.dropWhile(ring.eq(_, ring.zero)).reverse
   lazy val degree: Int = coefficients.size - 1
-  val leadingCoeff: T = coefficients.head
+  val leadingCoeff: T = coefficients.reverse.head
 
   /**
     * Using this polynomial P, Computes P(x) for some x, where x belongs to the set T with structure Ring[T]
