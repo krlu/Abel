@@ -1,3 +1,5 @@
+package org.bu.metcs789
+
 import org.bu.metcs789.basics._
 import org.bu.metcs789.encryption._
 import org.bu.metcs789.factorization.{PollardP1, PollardRho, PrimeFactorization}

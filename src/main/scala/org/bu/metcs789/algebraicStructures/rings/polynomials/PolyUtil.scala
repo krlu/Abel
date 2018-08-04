@@ -1,7 +1,6 @@
 package org.bu.metcs789.algebraicStructures.rings.polynomials
 
 object PolyUtil {
-  //  def berlekampFactorization(p: Polynomial): Set[Polynomial] = ???
   def GCD(p1: RealPolynomial, p2: RealPolynomial): RealPolynomial = {
 //    println(p1 , p2)
 //    Thread.sleep(1000)
