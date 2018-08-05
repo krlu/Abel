@@ -5,7 +5,7 @@ object SquareFreeFactorization extends PolynomialFactorizationAlgo {
   override def apply(u: RealPolynomial): Seq[RealPolynomial] = {
     if(u == RealPolynomial.zero) Seq(u)
     else{
-      val c = RealPolynomial(u.coefficients.head)
+      val c = RealPolynomial(u.coefficients.take(u.degree) ++ Seq(u.leadingCoeff):_*)
       var p = RealPolynomial.one
       var r = PolyUtil.GCD(u, u.derivative)
       var f = (u/r)._1

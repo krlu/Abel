@@ -26,28 +26,25 @@ sealed class RealPolynomial(coeffs: Double*) extends Polynomial[Double, Real](co
   // functions supporting division
   def % (other: RealPolynomial): RealPolynomial = (this/other)._2
 
-  // TODO: Handle negative leading coeff for tempVal and remainder
-  // TODO: Instead of inner while loop, check for integer divisibility
   def / (other: RealPolynomial): (RealPolynomial, RealPolynomial) = {
     val zeroPoly = RealPolynomial.zero
     require(other != zeroPoly)
     var quotient = zeroPoly
     var remainder = RealPolynomial(coeffs:_*)
-    var divisionIndex = 0
     if(this.coefficients.isEmpty) return (other, zeroPoly)
     while(remainder.degree >= other.degree) {
-//      Thread.sleep(1000)
+      var divisionIndex = 0
       var rLeadCoeff = remainder.coefficients.reverse(divisionIndex)
-      val otherLeadCoeff = other.coefficients.reverse.head
+      val otherLeadCoeff = other.leadingCoeff
       // inner while loop to enforce integer division
-      while(Math.abs(rLeadCoeff) % Math.abs(otherLeadCoeff) != 0){
+      while(Math.abs(rLeadCoeff) < Math.abs(otherLeadCoeff)){
         divisionIndex += 1
-        if(divisionIndex + other.degree >= remainder.degree)
+        if(divisionIndex + other.degree > remainder.degree)
           return (quotient, remainder)
         rLeadCoeff = remainder.coefficients.reverse(divisionIndex)
       }
-      val tempVal = (RealPolynomial(ring.zero, ring.one) ^ (remainder.degree - other.degree)) *
-        RealPolynomial(ring.div(rLeadCoeff,otherLeadCoeff))
+      val tempVal = (RealPolynomial(ring.zero, ring.one) ^ (remainder.degree - divisionIndex - other.degree))*
+        RealPolynomial(ring.div(rLeadCoeff - (rLeadCoeff % otherLeadCoeff),otherLeadCoeff))
       if(tempVal == zeroPoly)
         return (quotient, remainder)
       remainder = RealPolynomial((remainder sub (tempVal mult other)).coefficients:_*)
