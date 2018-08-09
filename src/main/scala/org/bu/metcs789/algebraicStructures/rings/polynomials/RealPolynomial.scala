@@ -23,9 +23,9 @@ sealed class RealPolynomial(coeffs: Double*) extends Polynomial[Double, Real](co
   def * (other: RealPolynomial): RealPolynomial = RealPolynomial((this mult other).coefficients:_*)
   def * (scalar: Double): RealPolynomial = RealPolynomial((this scale scalar).coefficients:_*)
   def ^(exp: Int): RealPolynomial = RealPolynomial((this pow exp).coefficients:_*)
+
   // functions supporting division
   def % (other: RealPolynomial): RealPolynomial = (this/other)._2
-
   def / (other: RealPolynomial): (RealPolynomial, RealPolynomial) = {
     val zeroPoly = RealPolynomial.zero
     require(other != zeroPoly)
