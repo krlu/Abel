@@ -5,7 +5,7 @@ import org.bu.metcs789.basics._
 object PollardRho extends (Long => Long){
   override def apply(n: Long): Long = {
     if(n%2 == 0) return 2
-    def g(x: Long): Long = (FastExpWithMod(n)(x, 2) - 1) % n
+    def g(x: Long): Long = (FastExpWithMod(n)(x, 2) + 1) % n
     var x: Long = 2
     var y: Long = 2
     var d: Long = 1

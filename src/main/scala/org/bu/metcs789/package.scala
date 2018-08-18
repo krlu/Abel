@@ -12,4 +12,5 @@ package object metcs789 {
     case head :: tail => val rec = combinationList[T](tail)
       rec.flatMap((r: List[T]) => head.map((t: T) => t::r))
   }
+  
 }

@@ -109,6 +109,9 @@ class PolynomialTest extends FlatSpec with Matchers{
   "Kronecker's Method" should "Factor Polynomials" in {
     val p1 = RealPolynomial(-1, 0, 0, 0, 1)
     val p2 = RealPolynomial(-1, 0, 1)
+    val p3 = RealPolynomial(-16, -24, -4, 10, 6, 1)
+    val f1 = RealPolynomial(2,1)
+    val f2 = RealPolynomial(-2,0,1)
 
     val factors1 = Set(RealPolynomial(1, 1), RealPolynomial(-1, 1), RealPolynomial(1, 0, 1))
     val factors2 = Set(RealPolynomial(1, 1), RealPolynomial(-1, 1))
@@ -119,6 +122,7 @@ class PolynomialTest extends FlatSpec with Matchers{
     assert(Kronecker(p2).toSet == factors2)
     assert(factors2.reduce((a, b) => a * b) == p2)
     assert(Kronecker(RealPolynomial(1, 0, 1)) == Seq(RealPolynomial(1, 0, 1)))
+    assert(Kronecker(p3) == List(f1, f1, f1, f2))
 
     for (i <- 1 to 9) {
       val p = RealPolynomial(1, 1) ^ i

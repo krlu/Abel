@@ -145,7 +145,7 @@ class Tests extends FlatSpec with Matchers {
     var ones = 0
     var zeroes = 0
     for(i <- 0 until Math.pow(2, 10).toInt)
-      if(generator(i) == 1) ones+=1 else zeroes +=1
+      if (generator(i) == 1) ones += 1 else zeroes += 1
     assert(Math.abs(ones -zeroes) < 100)
   }
   "Blum Blum Shub" should "randomly generate binary bits" in {
@@ -160,7 +160,7 @@ class Tests extends FlatSpec with Matchers {
     assert(Math.abs(ones - zeroes) < 100)
   }
 
-  "Prime Facotrization" should "Find all prime factors of N" in {
+  "Prime Factorization" should "Find all prime factors of N" in {
     assert(Set[Long](2,3,5) == PrimeFactorization(30).toSet)
   }
 
@@ -168,7 +168,7 @@ class Tests extends FlatSpec with Matchers {
     assert(Set[Long](73, 41).contains(PollardRho(2993)))
     assert(Set[Long](2,5).contains(PollardRho(10)))
     Seq(30949, 30983, 31013, 31019, 31039, 31051, 31063, 43541).foreach{ p => assert(PollardRho(p) == 1L)}
-    Set(31053, 31065, 31067, 31077, 31083, 31093, 31127, 31127, 35259).foreach{ p => assert(PollardRho(p) == 1L)}
+    Set(31053, 31065, 31067, 31077, 31083, 31093, 31127, 35259).foreach{ p => assert(PollardRho(p) != 1L)}
     assert(Set[Long](41, 73).contains(PollardP1(2993, 30)))
   }
   "Pollard P-1" should  "find factor of N" in {
