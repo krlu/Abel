@@ -76,11 +76,9 @@ object MillerRabin extends ((Long, Int) => Boolean){
   }
   private def millerRabinHelper(x: Long, r: Long, n: Long): Boolean = {
     var temp = x
-//    println(s"r: $r")
     for (i <- 0 until r.toInt) {
       val exp = Math.pow(2,i).toInt
       temp = FastExpWithMod(n)(x, exp)
-//      println(temp, exp)
       if(temp == 1) return false
       if(temp == n-1) {
         return true

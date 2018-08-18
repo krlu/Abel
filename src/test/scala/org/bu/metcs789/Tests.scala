@@ -2,7 +2,7 @@ package org.bu.metcs789
 
 import org.bu.metcs789.basics._
 import org.bu.metcs789.encryption._
-import org.bu.metcs789.factorization.{PollardP1, PollardRho, PrimeFactorization}
+import org.bu.metcs789.factorization.{GetAllFactors, PollardP1, PollardRho, PrimeFactorization}
 import org.bu.metcs789.rng.{BlumBlumShub, NaorReingold}
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -64,7 +64,6 @@ class Tests extends FlatSpec with Matchers {
     assert(PrimitiveRoots(54) == List(5, 11, 23, 29, 41, 47))
     assert(PrimitiveRoots(71) ==
       List(7, 11, 13, 21, 22, 28, 31, 33, 35, 42, 44, 47, 52, 53, 55, 56, 59, 61, 62, 63, 65, 67, 68, 69))
-
   }
 
   "Mod Inverse" should "compute mod inverse" in {
@@ -78,6 +77,20 @@ class Tests extends FlatSpec with Matchers {
       val original = FastExpWithMod(4187)(power, inv)
       assert(original == i)
     }
+  }
+
+  "Prime Factorization" should "find prime factors" in {
+    assert(PrimeFactorization(12) == Seq(2,2,3))
+    assert(PrimeFactorization(9) == Seq(3,3))
+    assert(PrimeFactorization(30) == Seq(2,3,5))
+
+  }
+
+  "Get All Factors" should "find all possible factors" in {
+    assert(GetAllFactors(9) == Seq(1,3,9))
+    assert(GetAllFactors(12) == Seq(1,2,3,4,6,12))
+    assert(GetAllFactors(32) == Seq(1,2,4,8,16,32))
+    assert(GetAllFactors(729) == Seq(1,3,9,27,81,243,729))
   }
 
   "Baby Step Giant Step" should "compute discrete Log" in {
@@ -133,9 +146,8 @@ class Tests extends FlatSpec with Matchers {
   }
 
   "Miller Rabin" should "correctly verify primes" in {
-    for(_ <- 1 to 10){
+    for(_ <- 1 to 10)
       Seq(30949, 30983, 31013, 31019, 31039, 31051, 31063, 43541).foreach{ p => assert(MillerRabin(p, 10))}
-    }
     Set(31053, 31065, 31067, 31077, 31083, 31093, 31127, 31127, 35259).foreach{ p => assert(!MillerRabin(p, 10))}
     assert(!MillerRabin(1027485, 1))
   }
@@ -156,12 +168,7 @@ class Tests extends FlatSpec with Matchers {
       if(generator.generateBit == 1) ones+=1 else zeroes +=1
       generator.resetSeed()
     }
-//    println(zeroes, ones)
     assert(Math.abs(ones - zeroes) < 100)
-  }
-
-  "Prime Factorization" should "Find all prime factors of N" in {
-    assert(Set[Long](2,3,5) == PrimeFactorization(30).toSet)
   }
 
   "Pollard Rho" should "find factor of N" in {
