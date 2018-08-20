@@ -23,6 +23,7 @@ case class Q(numerator: Int, denominator: Int) {
   def /(x: Int):  Q = this * Q(1, x)
   def / (other: Q): Q = this * Q(other.denominator,other.numerator)
   def ^(e: Int) : Q = Q(Math.pow(numerator, e).toInt, Math.pow(denominator, e).toInt)
+
   def != (other: Q): Boolean = !this.equals(other)
   def == (other: Q): Boolean = this.equals(other)
   override def toString: String = s"$numerator/$denominator"

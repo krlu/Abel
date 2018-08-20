@@ -10,7 +10,9 @@ class RationalPolynomial(coeffs: Q*) extends Polynomial[Q, Rational](coeffs:_*)(
     RationalPolynomial(Array.fill(1)(ring.zero).toSeq ++ coefficients.indices.map{ i => coefficients(i)/(i+1)}:_*)
 
   def + (other: RationalPolynomial): RationalPolynomial = RationalPolynomial((this add other).coefficients:_*)
+  def + (scalar: Q): RationalPolynomial = RationalPolynomial((this add scalar).coefficients:_*)
   def - (other: RationalPolynomial): RationalPolynomial = RationalPolynomial((this sub other).coefficients:_*)
+  def - (scalar: Q): RationalPolynomial = RationalPolynomial((this sub scalar).coefficients:_*)
   def * (other: RationalPolynomial): RationalPolynomial = RationalPolynomial((this mult other).coefficients:_*)
   def * (scalar: Q): RationalPolynomial = RationalPolynomial((this scale scalar).coefficients:_*)
   def ^(exp: Int): RationalPolynomial = RationalPolynomial((this pow exp).coefficients:_*)

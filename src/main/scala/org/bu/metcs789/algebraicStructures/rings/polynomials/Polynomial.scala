@@ -38,6 +38,8 @@ protected class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) ex
     Polynomial[T, U](this.coefficients.zipAll(other.coefficients, ring.zero, ring.zero)
       .map{case(a,b) => ring.add(a,b)}:_*)(ring)
 
+  protected def add(scalar: T): Polynomial[T, U] = this add Polynomial[T, U](scalar)(ring)
+
   /**
     * Subtraction operation
     * @param other - another polynomial
@@ -46,6 +48,8 @@ protected class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) ex
   protected def sub(other: Polynomial[T, U]): Polynomial[T, U] =
     Polynomial[T, U](this.coefficients.zipAll(other.coefficients, ring.zero, ring.zero)
       .map{case(a,b) => ring.sub(a,b)}:_*)(ring)
+
+  protected def sub(scalar: T): Polynomial[T, U] = this sub Polynomial[T, U](scalar)(ring)
 
   /**
     * multiplication operation, computed using distribution property of rings

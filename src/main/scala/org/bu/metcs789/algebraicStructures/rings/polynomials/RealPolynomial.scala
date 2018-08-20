@@ -19,7 +19,9 @@ sealed class RealPolynomial(coeffs: Double*) extends Polynomial[Double, Real](co
 
   // wrappers for the arithmetic functions from Polynomial superclass
   def + (other: RealPolynomial): RealPolynomial = RealPolynomial((this add other).coefficients:_*)
+  def + (scalar: Double): RealPolynomial = RealPolynomial((this add scalar).coefficients:_*)
   def - (other: RealPolynomial): RealPolynomial = RealPolynomial((this sub other).coefficients:_*)
+  def - (scalar: Double): RealPolynomial = RealPolynomial((this sub scalar).coefficients:_*)
   def * (other: RealPolynomial): RealPolynomial = RealPolynomial((this mult other).coefficients:_*)
   def * (scalar: Double): RealPolynomial = RealPolynomial((this scale scalar).coefficients:_*)
   def ^(exp: Int): RealPolynomial = RealPolynomial((this pow exp).coefficients:_*)

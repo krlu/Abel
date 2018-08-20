@@ -13,6 +13,7 @@ class PolynomialTest extends FlatSpec with Matchers{
     assert(p3.coefficients == Seq(2,3,4))
     assert(p3 == RealPolynomial(2,3,4))
   }
+
   "A RealPolynomial" should "support subtraction" in {
     val p1 = RealPolynomial(1,1)
     val p2 = RealPolynomial(1,2,4)
@@ -97,13 +98,13 @@ class PolynomialTest extends FlatSpec with Matchers{
     val p2 = RealPolynomial(1,0,1) * RealPolynomial(1,1)
     assert(PolyUtil.GCD(p1, p2) == RealPolynomial(1,1))
 
-    val p5 = RealPolynomial(-1,0,1)
-    val p6 = RealPolynomial(2,2)
-    assert(PolyUtil.GCD(p5, p6) == RealPolynomial(1,1))
-
     val p3 = RealPolynomial(-1,1) * RealPolynomial(1,1)
     val p4 = RealPolynomial(1,1) ^ 2
     assert(PolyUtil.GCD(p3, p4) == RealPolynomial(1,1))
+
+    val p5 = RealPolynomial(-1,0,1)
+    val p6 = RealPolynomial(2,2)
+    assert(PolyUtil.GCD(p5, p6) == RealPolynomial(1,1))
   }
 
   "Kronecker's Method" should "Factor Polynomials" in {

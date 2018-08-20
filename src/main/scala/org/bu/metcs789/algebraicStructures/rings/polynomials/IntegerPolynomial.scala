@@ -9,7 +9,9 @@ class IntegerPolynomial(coeffs: Int*) extends Polynomial[Int, Integer](coeffs:_*
     IntegerPolynomial(Array.fill(1)(0).toSeq ++ coefficients.indices.map{ i => coefficients(i) / (i + 1) }:_*)
 
   def + (other: IntegerPolynomial): IntegerPolynomial = IntegerPolynomial((this add other).coefficients:_*)
+  def + (scalar: Int): IntegerPolynomial = IntegerPolynomial((this add scalar).coefficients:_*)
   def - (other: IntegerPolynomial): IntegerPolynomial = IntegerPolynomial((this sub other).coefficients:_*)
+  def - (scalar: Int): IntegerPolynomial = IntegerPolynomial((this sub scalar).coefficients:_*)
   def * (other: IntegerPolynomial): IntegerPolynomial = IntegerPolynomial((this mult other).coefficients:_*)
   def * (scalar: Int): IntegerPolynomial = IntegerPolynomial((this scale scalar).coefficients:_*)
   def ^(exp: Int): IntegerPolynomial = IntegerPolynomial((this pow exp).coefficients:_*)
