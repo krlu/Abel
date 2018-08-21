@@ -14,7 +14,7 @@ object Kronecker extends PolynomialFactorizationAlgo {
     * Starts by checking possible roots from 0 to (deg(P)/2) then performs a more exhaustive search
     * If this polynomial is irreducible, this function returns a singleton set containing the input polynomial polynomial
     * @param p - Polynomial to be Factored
-    * @return Seq[Polynomial]
+    * @return Seq[Polynomial] - Seq of factors of polynomial (if found)
     */
   private def kroneckerFactorization(p: RealPolynomial): Seq[RealPolynomial] = {
     if(p.degree <= 1) return Seq(p)

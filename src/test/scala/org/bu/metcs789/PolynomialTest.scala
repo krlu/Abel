@@ -1,7 +1,7 @@
 package org.bu.metcs789
 
 import org.bu.metcs789.algebraicStructures.rings.polynomials.{PolyUtil, RealPolynomial}
-import org.bu.metcs789.factorization.polynomial.Kronecker
+import org.bu.metcs789.factorization.polynomial.{Kronecker, NewtonsMethod}
 import org.scalatest.{FlatSpec, Matchers}
 
 class PolynomialTest extends FlatSpec with Matchers{
@@ -134,6 +134,32 @@ class PolynomialTest extends FlatSpec with Matchers{
     for (i <- -10 to 10) {
       val pi = RealPolynomial(i)
       assert(Kronecker(pi) == Seq(pi))
+    }
+  }
+
+  "Newton's factorization" should "Factor polynomials via newton's method for root finding" in {
+    val p1 = RealPolynomial(-1, 0, 0, 0, 1)
+    val p2 = RealPolynomial(-1, 0, 1)
+
+    val factors1 = Set(RealPolynomial(1, 1), RealPolynomial(-1, 1), RealPolynomial(1, 0, 1))
+    val factors2 = Set(RealPolynomial(1, 1), RealPolynomial(-1, 1))
+    assert(NewtonsMethod()(p1).toSet == factors1)
+    val x = factors1.reduce((a, b) => a * b)
+
+    assert(x == p1)
+    assert(NewtonsMethod()(p2).toSet == factors2)
+    assert(factors2.reduce((a, b) => a * b) == p2)
+    assert(NewtonsMethod()(RealPolynomial(1, 0, 1)) == Seq(RealPolynomial(1, 0, 1)))
+
+    for (i <- 1 to 9) {
+      val p = RealPolynomial(1, 1) ^ i
+      val factors = NewtonsMethod()(p)
+      assert(factors.size == i)
+      assert(factors.toSet == Set(RealPolynomial(1,1)))
+    }
+    for (i <- -10 to 10) {
+      val pi = RealPolynomial(i)
+      assert(NewtonsMethod()(pi) == Seq(pi))
     }
   }
 }
