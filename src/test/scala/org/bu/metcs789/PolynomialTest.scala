@@ -126,10 +126,11 @@ class PolynomialTest extends FlatSpec with Matchers{
     assert(Kronecker(p3) == List(f1, f1, f1, f2))
 
     for (i <- 1 to 9) {
-      val p = RealPolynomial(1, 1) ^ i
+      val coeff = (Math.random()*5).toInt + 1
+      val p = RealPolynomial(coeff, 1) ^ i
       val factors = Kronecker(p)
       assert(factors.size == i)
-      assert(factors.toSet == Set(RealPolynomial(1,1)))
+      assert(factors.toSet == Set(RealPolynomial(coeff,1)))
     }
     for (i <- -10 to 10) {
       val pi = RealPolynomial(i)
@@ -152,10 +153,11 @@ class PolynomialTest extends FlatSpec with Matchers{
     assert(NewtonsMethod()(RealPolynomial(1, 0, 1)) == Seq(RealPolynomial(1, 0, 1)))
 
     for (i <- 1 to 9) {
-      val p = RealPolynomial(1, 1) ^ i
+      val coeff = (Math.random()*5).toInt
+      val p = RealPolynomial(coeff, 1) ^ i
       val factors = NewtonsMethod()(p)
       assert(factors.size == i)
-      assert(factors.toSet == Set(RealPolynomial(1,1)))
+      assert(factors.toSet == Set(RealPolynomial(coeff,1)))
     }
     for (i <- -10 to 10) {
       val pi = RealPolynomial(i)

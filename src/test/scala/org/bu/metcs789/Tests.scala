@@ -176,7 +176,6 @@ class Tests extends FlatSpec with Matchers {
     assert(Set[Long](2,5).contains(PollardRho(10)))
     Seq(30949, 30983, 31013, 31019, 31039, 31051, 31063, 43541).foreach{ p => assert(PollardRho(p) == 1L)}
     Set(31053, 31065, 31067, 31077, 31083, 31093, 31127, 35259).foreach{ p => assert(PollardRho(p) != 1L)}
-    assert(Set[Long](41, 73).contains(PollardP1(2993, 30)))
   }
   "Pollard P-1" should  "find factor of N" in {
     assert(Set[Long](73, 41).contains(PollardP1(2993,30)))
