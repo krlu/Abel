@@ -1,6 +1,15 @@
 # MET-CS-789
 
-Term Project for MetCS 789 Cryptography Fall 2017
+An algebraic structures library (currently in progress)
+Originally a Term Project for MetCS 789 Cryptography Fall 2017 
+Feel free to contribute if you like! 
+
+## Currently Supports 
+- Arithmetic Operations for Univariate Polynomials with arbitrary Coefficients extending any ring 
+- Small Univariate Polynomial Factorization 
+- Small Univariate Polynomial Root Finding 
+- Large Integer Factorization 
+- Large Integer Exponentiation 
 
 ## Requirements 
 - scala 2.12.3 (or higher) 
@@ -13,7 +22,3 @@ Navigate to root directory and type:
 
 Note that the tests may take up to 15 minutes to complete, due to testing against large prime numbers. 
 If you wish to skip these tests, navigate to the [Test Suite](https://github.com/krlu/MET-CS-789/blob/master/src/test/scala/org/bu/metcs789/Tests.scala) and comment out the two tests at the bottom
-
-## Running the Experiment 
-Go to the the [Main Experiment Class](https://github.com/krlu/MET-CS-789/blob/master/src/main/scala/org/bu/metcs789/FinalProjectExperiment.scala) and run the main method
-
