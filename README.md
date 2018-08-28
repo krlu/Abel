@@ -1,6 +1,6 @@
 # MET-CS-789
 
-An algebraic structures library (currently in progress that was originally a term project for MetCS 789 Cryptography Fall 2017 
+An algebraic structures library (currently under development) that was originally a term project for MetCS 789 Cryptography Fall 2017 
 
 Feel free to contribute if you like! 
 
