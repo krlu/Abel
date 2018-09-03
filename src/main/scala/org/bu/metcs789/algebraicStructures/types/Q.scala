@@ -26,6 +26,10 @@ case class Q(numerator: Int, denominator: Int) {
 
   def != (other: Q): Boolean = !this.equals(other)
   def == (other: Q): Boolean = this.equals(other)
+  override def equals(other: Any): Boolean = other match {
+    case q: Q => this.numerator == q.numerator && this.denominator == q.denominator
+    case _ => false
+  }
   override def toString: String = s"$numerator/$denominator"
 }
 

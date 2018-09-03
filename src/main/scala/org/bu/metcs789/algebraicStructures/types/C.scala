@@ -26,7 +26,10 @@ case class C(re: Double, im: Double) {
     val r = cosh(c.re) + sinh(c.re)
     C(cos(c.im), sin(c.im)) * r
   }
-
+  override def equals(other: Any): Boolean = other match {
+    case c: C => this.re == c.re && this.im == c.im
+    case _ => false
+  }
   def != (other: C): Boolean = !this.equals(other)
   def == (other: C): Boolean = this.equals(other)
   override def toString: String = s"$re + ${im}i"
