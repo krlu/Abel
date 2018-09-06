@@ -2,7 +2,17 @@ package org.bu.metcs789.algebraicStructures.types
 
 import org.bu.metcs789.basics.GCD
 
-case class Q(numerator: Int, denominator: Int) {
+/**
+  * Class representing a rational number, denoted by Q - symbol for set of rationals
+  * @param n - denominator for rational number
+  * @param d - numerator for rational number
+  */
+case class Q(private val n: Int, private val d: Int) {
+
+  private val gcd = GCD(n, d)._1.toInt
+  val numerator: Int = n/gcd
+  val denominator: Int = d/gcd
+
   require(denominator != 0)
   def +(other: Q): Q = helper(this, other, (a,b) => a + b)
   def -(other: Q): Q = helper(this, other, (a,b) => a - b)

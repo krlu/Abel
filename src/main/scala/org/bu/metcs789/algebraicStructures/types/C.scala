@@ -1,9 +1,12 @@
 package org.bu.metcs789.algebraicStructures.types
 
-import scala.math._
-
+/**
+  * Class representing a C number, denoted by C - symbol for set of C numbers
+  * @param re - re part
+  * @param im - imaginary coefficient
+  */
 case class C(re: Double, im: Double) {
-  val conjugate: C = C(re, -im)
+  lazy val conjugate: C = C(re, -im)
   val conjugateProd: Double = re*re + im*im
   def +(other: C): C = C(re + other.re, im + other.im)
   def -(other: C): C = C(re - other.re, im - other.im)
@@ -15,6 +18,13 @@ case class C(re: Double, im: Double) {
     val numerator = this * other.conjugate
     numerator/denominator
   }
+  def abs: Double = math.sqrt(re * re + im * im)
+  def log: C = C(math.log(abs), math.atan2(im, re))
+  def exp: C = {
+    val expreal = math.exp(re)
+    C(expreal * math.cos(im), expreal * math.sin(im))
+  }
+
   def ^(e: Int): C = {
     require(e >= 0)
     if(e == 0) C(1,0)
@@ -23,8 +33,15 @@ case class C(re: Double, im: Double) {
     else this * ((this * this) ^ ((e - 1)/2))
   }
   def ^(c: C): C = {
-    val r = cosh(c.re) + sinh(c.re)
-    C(cos(c.im), sin(c.im)) * r
+    if (c == C.zero) C.one
+    else if (this == C.zero) {
+      if (c.im != 0.0 || c.re < 0.0) C(Double.NaN, Double.NaN)
+      else C.zero
+    } else {
+      val b = log * c
+      val expReal = math.exp(c.re)
+      C(expReal * math.cos(c.im), expReal * math.sin(c.im))
+    }
   }
   override def equals(other: Any): Boolean = other match {
     case c: C => this.re == c.re && this.im == c.im
@@ -37,4 +54,7 @@ case class C(re: Double, im: Double) {
 
 object C{
   def apply(re: Double, im: Double): C = new C(re, im)
+  def zero = C(0,0)
+  def one = C(1,0)
+  def i = C(0,1)
 }
