@@ -44,11 +44,19 @@ class NumbersTest extends FlatSpec with Matchers{
         case e if e == 2 =>
           assert((i ^ e) == C(-1,0))
         case e if e == 3 =>
-          assert((i ^ e) == C(0, -1))
+          assert((i ^ e) == C(0,-1))
       }
     }
+
     // test that e ^ (i*pi) = -1
     val iPi = C.i * Math.PI
-    assert(iPi.exp.re == - 1 && Math.abs(iPi.exp.im) < 0.000000000001)
+    assert(iPi.exp.re == - 1 && Math.abs(iPi.exp.im) < 1E-15)
+
+    // test that i ^ i = e ^ (- pi/2)
+    assert((C.i ^ C.i) == (iPi * i/2).exp)
+
+    // test that e ^ (i pi/2) == i
+    val identity = (C.i * Math.PI/2.0).exp
+    assert(Math.abs(identity.re) < 1E-16 && identity.im == 1)
   }
 }

@@ -6,7 +6,15 @@ package org.bu.metcs789.algebraicStructures.types
   * @param im - imaginary coefficient
   */
 case class C(re: Double, im: Double) {
+
   lazy val conjugate: C = C(re, -im)
+  lazy val abs: Double = math.sqrt(re * re + im * im)
+  lazy val log: C = C(math.log(abs), math.atan2(im, re))
+  lazy val exp: C = {
+    val expreal = math.exp(re)
+    C(expreal * math.cos(im), expreal * math.sin(im))
+  }
+
   val conjugateProd: Double = re*re + im*im
   def +(other: C): C = C(re + other.re, im + other.im)
   def -(other: C): C = C(re - other.re, im - other.im)
@@ -18,13 +26,6 @@ case class C(re: Double, im: Double) {
     val numerator = this * other.conjugate
     numerator/denominator
   }
-  def abs: Double = math.sqrt(re * re + im * im)
-  def log: C = C(math.log(abs), math.atan2(im, re))
-  def exp: C = {
-    val expreal = math.exp(re)
-    C(expreal * math.cos(im), expreal * math.sin(im))
-  }
-
   def ^(e: Int): C = {
     require(e >= 0)
     if(e == 0) C(1,0)
@@ -32,17 +33,9 @@ case class C(re: Double, im: Double) {
     else if(e % 2 == 0) (this * this) ^ (e/2)
     else this * ((this * this) ^ ((e - 1)/2))
   }
-  def ^(c: C): C = {
-    if (c == C.zero) C.one
-    else if (this == C.zero) {
-      if (c.im != 0.0 || c.re < 0.0) C(Double.NaN, Double.NaN)
-      else C.zero
-    } else {
-      val b = log * c
-      val expReal = math.exp(c.re)
-      C(expReal * math.cos(c.im), expReal * math.sin(c.im))
-    }
-  }
+
+  def ^(c: C): C = (this * C.i * Math.PI/2).exp
+
   override def equals(other: Any): Boolean = other match {
     case c: C => this.re == c.re && this.im == c.im
     case _ => false
