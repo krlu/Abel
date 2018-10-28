@@ -1,7 +1,7 @@
-package org.bu.metcs789.factorization
+package org.bu.metcs789.factorization.Integer
 
-import org.bu.metcs789.basics._
 import org.bu.metcs789._
+import org.bu.metcs789.basics._
 
 object PollardP1 extends ((Long, Long, Int) => Long){
   private var beta = 1L

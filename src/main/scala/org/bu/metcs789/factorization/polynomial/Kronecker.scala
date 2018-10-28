@@ -3,7 +3,7 @@ package org.bu.metcs789.factorization.polynomial
 import org.apache.commons.math3.linear.{Array2DRowRealMatrix, ArrayRealVector, LUDecomposition}
 import org.bu.metcs789.algebraicStructures.rings.polynomials.RealPolynomial
 import org.bu.metcs789.combinationList
-import org.bu.metcs789.factorization.GetAllFactors
+import org.bu.metcs789.factorization.Integer.GetAllFactors
 
 import scala.collection.immutable
 

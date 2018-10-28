@@ -2,11 +2,11 @@ package org.bu.metcs789
 
 import org.bu.metcs789.basics._
 import org.bu.metcs789.encryption._
-import org.bu.metcs789.factorization.{GetAllFactors, PollardP1, PollardRho, PrimeFactorization}
+import org.bu.metcs789.factorization.Integer.{GetAllFactors, PollardP1, PollardRho, PrimeFactorization}
 import org.bu.metcs789.rng.{BlumBlumShub, NaorReingold}
 import org.scalatest.{FlatSpec, Matchers}
 
-class Tests extends FlatSpec with Matchers {
+class CryptoTests extends FlatSpec with Matchers {
   "Euclidean Algorithm" should "compute correct values" in {
     val (gcd, _) = GCD(614,513)
     assert(gcd == 1)

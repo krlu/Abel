@@ -1,7 +1,7 @@
 package org.bu.metcs789
 
 import org.bu.metcs789.basics._
-import org.bu.metcs789.factorization.PollardRho
+import org.bu.metcs789.factorization.Integer.PollardRho
 
 object FinalProjectExperiment{
 

@@ -1,4 +1,4 @@
-package org.bu.metcs789.factorization
+package org.bu.metcs789.factorization.Integer
 
 import org.bu.metcs789.basics._
 
