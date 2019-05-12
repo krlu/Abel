@@ -65,4 +65,5 @@ object RealPolynomial{
   def apply(coefficients: Double*): RealPolynomial = new RealPolynomial(coefficients:_*)
   def zero = new RealPolynomial(0.0)
   def one = new RealPolynomial(1.0)
+  def x = new RealPolynomial(1.0, 1.0)
 }
