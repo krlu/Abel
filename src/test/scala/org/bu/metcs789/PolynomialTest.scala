@@ -14,6 +14,12 @@ class PolynomialTest extends FlatSpec with Matchers{
     assert(p3 == RealPolynomial(2,3,4))
   }
 
+  "A Real Polynomial" should "hash almost uniquely" in {
+    val x1 = Set(RealPolynomial(3,1), RealPolynomial(5,1), RealPolynomial(1,1), RealPolynomial(4,1), RealPolynomial(7,1))
+    val x2 = Set(RealPolynomial(3,1), RealPolynomial(5,1), RealPolynomial(1,1), RealPolynomial(4,1), RealPolynomial(7,1))
+    assert(x1 == x2)
+  }
+
   "A RealPolynomial" should "support subtraction" in {
     val p1 = RealPolynomial(1,1)
     val p2 = RealPolynomial(1,2,4)
