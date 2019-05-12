@@ -36,7 +36,7 @@ object Kronecker extends PolynomialFactorizationAlgo {
       while ((remainder != RealPolynomial.zero || factor == RealPolynomial(-1) || factor == RealPolynomial.one) && combos.nonEmpty) {
         val x: Seq[Double] = combos.head.map(_.toDouble)
         combos = combos.filter(_ != x)
-        factor = RealPolynomial(x.head, x(1))
+        factor = generatePotentialFactor(range, x)
         val (q, r) = p / factor
         quotient = q
         remainder = r
@@ -54,7 +54,6 @@ object Kronecker extends PolynomialFactorizationAlgo {
     * @param x - constant vector (on the right hand side of the equation)
     * @return Polynomial that might be a viable factor
     */
-  @deprecated
   protected def generatePotentialFactor(range: Range, x: Seq[Double]): RealPolynomial = {
     // entries of left hand side matrix
     val coeffs = range.map { i =>
