@@ -20,7 +20,7 @@ class PolynomialTest extends FlatSpec with Matchers{
       val coeffs = Seq.fill(numCoeffs)(Math.random() * 10)
       RealPolynomial(coeffs:_*)
     }
-    for(size <- 1 to 10){
+    for(size <- 1 to 100){
       val polysA: Seq[RealPolynomial] = (1 to size).map{ _ => generatePoly }
       val polysB: Seq[RealPolynomial] = (1 to size).map{ _ => generatePoly }
       val s1 = polysA.toSet
@@ -30,11 +30,7 @@ class PolynomialTest extends FlatSpec with Matchers{
       assert(s1 != s3)
       assert(s2 != s3)
     }
-    val x1 = Set(RealPolynomial(3,1), RealPolynomial(5,1), RealPolynomial(1,1), RealPolynomial(4,1), RealPolynomial(7,1))
-    val x2 = Set(RealPolynomial(3,1), RealPolynomial(5,1), RealPolynomial(1,1), RealPolynomial(4,1), RealPolynomial(7,1))
-    assert(x1 == x2)
   }
-
 
   "A RealPolynomial" should "support subtraction" in {
     val p1 = RealPolynomial(1,1)

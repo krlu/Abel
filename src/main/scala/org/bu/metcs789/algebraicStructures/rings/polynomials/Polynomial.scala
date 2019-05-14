@@ -103,11 +103,9 @@ protected class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) ex
 
   override def hashCode: Int = {
     val number = coefficients.map(_.toString).mkString("")
-      .replace("-", "")
-      .replace(".", "")
+      .filterNot(c => List('-', '.', 'E').contains(c))
     BigDecimal(number).toInt
   }
-
 
   def compose(other: T => T): Polynomial[T, U] = {
     other match {
