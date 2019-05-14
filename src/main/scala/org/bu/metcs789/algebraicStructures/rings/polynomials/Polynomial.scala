@@ -101,7 +101,13 @@ protected class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) ex
   }
   def canEqual(a: Any): Boolean = a.isInstanceOf[Polynomial[T, U]]
 
-  override def hashCode: Int = coefficients.map(_.hashCode() % 100).mkString("").toInt
+  override def hashCode: Int = {
+    val number = coefficients.map(_.toString).mkString("")
+      .replace("-", "")
+      .replace(".", "")
+    BigDecimal(number).toInt
+  }
+
 
   def compose(other: T => T): Polynomial[T, U] = {
     other match {
