@@ -123,7 +123,7 @@ protected class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) ex
     else {
       coefficients.indices.map { i =>
         val coeffStr = coefficients(i) match {
-          case c if c == ring.zero || (c == ring.one && i != ring.zero) => ""
+          case c if c == ring.zero || ((c == ring.one || c == ring.inverse(ring.one)) && i != ring.zero) => ""
           case c => s"($c)"
         }
         val expStr = i match {

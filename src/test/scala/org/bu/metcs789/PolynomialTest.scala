@@ -6,6 +6,12 @@ import org.scalatest.{FlatSpec, Matchers}
 
 class PolynomialTest extends FlatSpec with Matchers{
 
+  implicit class Combinations(n: Int) {
+    private def fact(n: Int): Int = (1 to n).product
+    def ! : Int = fact(n)
+    def choose(k: Int): Int = fact(n) / (fact(n - k) * fact(k))
+  }
+
   "A RealPolynomial" should "support addition" in {
     val p1 = RealPolynomial(1,1)
     val p2 = RealPolynomial(1,2,4)
@@ -15,14 +21,14 @@ class PolynomialTest extends FlatSpec with Matchers{
   }
 
   "A Real Polynomial" should "hash almost uniquely" in {
-    def generatePoly: RealPolynomial = {
+    def generateRealPoly: RealPolynomial = {
       val numCoeffs = choose((1 to 6).iterator)
       val coeffs = Seq.fill(numCoeffs)(Math.random() * 10)
       RealPolynomial(coeffs:_*)
     }
     for(size <- 1 to 100){
-      val polysA: Seq[RealPolynomial] = (1 to size).map{ _ => generatePoly }
-      val polysB: Seq[RealPolynomial] = (1 to size).map{ _ => generatePoly }
+      val polysA: Seq[RealPolynomial] = (1 to size).map{ _ => generateRealPoly }
+      val polysB: Seq[RealPolynomial] = (1 to size).map{ _ => generateRealPoly }
       val s1 = polysA.toSet
       val s2 = polysA.toSet
       val s3 = polysB.toSet
@@ -67,12 +73,6 @@ class PolynomialTest extends FlatSpec with Matchers{
     }
   }
 
-  implicit class Combinations(n: Int) {
-    private def fact(n: Int): Int = (1 to n).product
-    def ! : Int = fact(n)
-    def choose(k: Int): Int = fact(n) / (fact(n - k) * fact(k))
-  }
-
   "A RealPolynomial" should "support differentiation and antiderivation" in {
     val p1 = RealPolynomial(1,2,1)
     val p2 = p1.derivative
@@ -81,6 +81,33 @@ class PolynomialTest extends FlatSpec with Matchers{
   }
 
   "A RealPolynomial" should "support division and mod operations" in {
+    def generateIntegerPoly: RealPolynomial = {
+      val numCoeffs = choose((1 to 3).iterator)
+      val possibleValues = (1 to 10).toList.filter(_ != 0)
+      val coeffs = Seq.fill(numCoeffs)(choose(possibleValues.iterator)).map(_.toDouble)
+      RealPolynomial(coeffs:_*)
+    }
+    def testDivision(p1: RealPolynomial, p2: RealPolynomial): Unit = {
+      val p3 = RealPolynomial(1)
+      val prod1 = p1 * p2
+      val prod2 = (p1 * p2) + p3
+      val (q1, r1) = prod1/p2
+      val (q2, r2) = prod1/p1
+      assert(q1 == p1 && r1 == RealPolynomial.zero)
+      assert(q2 == p2 && r2 == RealPolynomial.zero)
+      assert(prod2%p1 == p3 || prod2%p2 == p3)
+      val (q3, r3) = (prod2 - p3)/p2
+      val (q4, r4) = (prod2 - p3)/p1
+      assert(q3 == p1 && r3 == RealPolynomial.zero)
+      assert(q4 == p2 && r4 == RealPolynomial.zero)
+    }
+    for(_ <- 1 to 100){
+      val p1 = generateIntegerPoly
+      val p2 = generateIntegerPoly
+      testDivision(p1, p2)
+      testDivision(p2, p1)
+    }
+
     val p1 = RealPolynomial(-1,0,0,0,1)
     val p2 = RealPolynomial(1,1)
     val p3 = RealPolynomial(-16, -24, -4, 10, 6, 1)
@@ -99,8 +126,8 @@ class PolynomialTest extends FlatSpec with Matchers{
     val p1 = RealPolynomial(1,-1)
     val p2 = p1 ^ 3
     val p3 = RealPolynomial(-1,1,-1,1)
-    assert(p3.toString == "x^3 + (-1.0)x^2 + x + (-1.0)")
-    assert(p2.toString == "(-1.0)x^3 + (3.0)x^2 + (-3.0)x + (1.0)")
+    assert(p2.toString == "-x^3 + 3*x^2 - 3*x + 1")
+    assert(p3.toString == "x^3 - x^2 + x - 1")
   }
 
   "A RealPolynomial" should "compose with other polynomials" in {

@@ -59,6 +59,35 @@ sealed class RealPolynomial(coeffs: Double*) extends Polynomial[Double, Real](co
     val divisor = RealPolynomial(MultiGCD(this.coefficients.map(_.toLong).filter(x => x != 0).map(Math.abs)).getOrElse(1L).toInt)
     ((this/divisor)._1, divisor)
   }
+
+  override def toString(): String =
+    if(this.coefficients == Seq(ring.zero)) "0.0"
+    else {
+      var toReturn = Array.empty[String]
+      coefficients.reverse.indices.foreach{ i =>
+        val coeffStr = coefficients(i) match {
+          case c if c == ring.zero || ((c == ring.one || c == ring.inverse(ring.one))&& i != ring.zero) => ""
+          case c => s"${Math.abs(c.toInt)}"
+        }
+        val expStr = i match {
+          case exp if exp == 0 || coefficients(i) == 0 => ""
+          case exp if exp == 1 => "x"
+          case exp => s"x^$exp"
+        }
+        val multiStr = if(i > 0 && coeffStr.nonEmpty) "*" else ""
+        val finalStr = s"$coeffStr$multiStr$expStr"
+        if(finalStr.nonEmpty){
+          if(coefficients(i) >= 0) {
+            if(i == coefficients.indices.last) toReturn = toReturn ++ Array(finalStr)
+            else toReturn = toReturn ++ Array(" + " + finalStr)
+          }else {
+            if (i == coefficients.indices.last) toReturn = toReturn ++ Array("-" + finalStr)
+            else toReturn = toReturn ++ Array(" - " + finalStr)
+          }
+        }
+      }
+      toReturn.reverse.mkString("")
+    }
 }
 
 object RealPolynomial{
