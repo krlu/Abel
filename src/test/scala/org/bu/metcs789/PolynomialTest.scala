@@ -11,6 +11,12 @@ class PolynomialTest extends FlatSpec with Matchers{
     def ! : Int = fact(n)
     def choose(k: Int): Int = fact(n) / (fact(n - k) * fact(k))
   }
+  private def randomIntegerPoly: RealPolynomial = {
+    val numCoeffs = choose((1 to 3).iterator)
+    val possibleValues = (1 to 10).toList.filter(_ != 0)
+    val coeffs = Seq.fill(numCoeffs)(choose(possibleValues.iterator)).map(_.toDouble)
+    RealPolynomial(coeffs:_*)
+  }
 
   "A RealPolynomial" should "support addition" in {
     val p1 = RealPolynomial(1,1)
@@ -21,14 +27,14 @@ class PolynomialTest extends FlatSpec with Matchers{
   }
 
   "A Real Polynomial" should "hash almost uniquely" in {
-    def generateRealPoly: RealPolynomial = {
+    def randomRealPoly: RealPolynomial = {
       val numCoeffs = choose((1 to 6).iterator)
       val coeffs = Seq.fill(numCoeffs)(Math.random() * 10)
       RealPolynomial(coeffs:_*)
     }
     for(size <- 1 to 100){
-      val polysA: Seq[RealPolynomial] = (1 to size).map{ _ => generateRealPoly }
-      val polysB: Seq[RealPolynomial] = (1 to size).map{ _ => generateRealPoly }
+      val polysA: Seq[RealPolynomial] = (1 to size).map{ _ => randomRealPoly }
+      val polysB: Seq[RealPolynomial] = (1 to size).map{ _ => randomRealPoly }
       val s1 = polysA.toSet
       val s2 = polysA.toSet
       val s3 = polysB.toSet
@@ -81,12 +87,6 @@ class PolynomialTest extends FlatSpec with Matchers{
   }
 
   "A RealPolynomial" should "support division and mod operations" in {
-    def generateIntegerPoly: RealPolynomial = {
-      val numCoeffs = choose((1 to 3).iterator)
-      val possibleValues = (1 to 10).toList.filter(_ != 0)
-      val coeffs = Seq.fill(numCoeffs)(choose(possibleValues.iterator)).map(_.toDouble)
-      RealPolynomial(coeffs:_*)
-    }
     def testDivision(p1: RealPolynomial, p2: RealPolynomial): Unit = {
       val p3 = RealPolynomial(1)
       val prod1 = p1 * p2
@@ -102,8 +102,8 @@ class PolynomialTest extends FlatSpec with Matchers{
       assert(q4 == p2 && r4 == RealPolynomial.zero)
     }
     for(_ <- 1 to 100){
-      val p1 = generateIntegerPoly
-      val p2 = generateIntegerPoly
+      val p1 = randomIntegerPoly
+      val p2 = randomIntegerPoly
       testDivision(p1, p2)
       testDivision(p2, p1)
     }
@@ -139,17 +139,17 @@ class PolynomialTest extends FlatSpec with Matchers{
   }
 
   "RealPolynomial Util" should "compute GCD between polynomials" in {
-    val p1 = RealPolynomial(0,1) * RealPolynomial(1,1)
-    val p2 = RealPolynomial(1,0,1) * RealPolynomial(1,1)
-    assert(PolyUtil.GCD(p1, p2) == RealPolynomial(1,1))
-
-    val p3 = RealPolynomial(-1,1) * RealPolynomial(1,1)
-    val p4 = RealPolynomial(1,1) ^ 2
-    assert(PolyUtil.GCD(p3, p4) == RealPolynomial(1,1))
-
-    val p5 = RealPolynomial(-1,0,1)
-    val p6 = RealPolynomial(2,2)
-    assert(PolyUtil.GCD(p5, p6) == RealPolynomial(1,1))
+    for(_ <- 1 to 100){
+      val p1 = randomIntegerPoly
+      val p2 = randomIntegerPoly
+      val p3 = randomIntegerPoly
+      val gcdWithin = PolyUtil.GCD(p1, p2)
+      val n = ((Math.random() - 0.5) * 100).toInt
+      val a = p1 * p3 * n
+      val b = p2 * p3 * n
+      val gcd = PolyUtil.GCD(a, b)
+      assert(gcd == p3 * gcdWithin * n || gcd == p3 * gcdWithin * n * -1)
+    }
   }
 
   "Kronecker's Method" should "Factor Polynomials" in {

@@ -61,7 +61,7 @@ sealed class RealPolynomial(coeffs: Double*) extends Polynomial[Double, Real](co
   }
 
   override def toString(): String =
-    if(this.coefficients == Seq(ring.zero)) "0.0"
+    if(this.coefficients == Seq(ring.zero)) "0"
     else {
       var toReturn = Array.empty[String]
       coefficients.reverse.indices.foreach{ i =>

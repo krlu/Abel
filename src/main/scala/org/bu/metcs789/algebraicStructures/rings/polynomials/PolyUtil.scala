@@ -1,14 +1,19 @@
 package org.bu.metcs789.algebraicStructures.rings.polynomials
 
+import cc.redberry.rings.Integers.Integers
+import cc.redberry.rings.bigint.BigInteger
+import cc.redberry.rings.poly.PolynomialMethods
+import cc.redberry.rings.scaladsl.{UnivariatePolynomial, UnivariateRing}
+
 object PolyUtil {
   def GCD(p1: RealPolynomial, p2: RealPolynomial): RealPolynomial = {
-    if(p2 == RealPolynomial.zero) p1
-    else {
-      val newP1 = helper(p1)
-      val newP2 = helper(p2)
-      GCD(newP2, newP1 % newP2)
+    val p3: UnivariatePolynomial[BigInteger] = UnivariateRing(Integers, "x")(p1.toString())
+    val p4: UnivariatePolynomial[BigInteger] = UnivariateRing(Integers, "x")(p2.toString())
+    var coeffs = List.empty[BigInteger]
+    PolynomialMethods.PolynomialGCD(p3, p4).forEach { coeff =>
+      coeffs = coeffs ++ List(coeff)
     }
+    RealPolynomial(coeffs.map(_.intValue().toDouble):_*)
   }
-  private def helper(p: RealPolynomial): RealPolynomial = (if(p.coefficients.reverse.head < 0) p * -1 else p).reduceCoeffs._1
 
 }
