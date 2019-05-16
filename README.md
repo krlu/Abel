@@ -5,7 +5,12 @@ An algebraic structures library (currently under development) that was originall
 Feel free to contribute if you like! 
 
 ## Currently Supports 
-- Arithmetic Operations for Univariate Polynomials with arbitrary Coefficients extending any ring 
+- Ring and Field Operations for: 
+   - Rational Numbers 
+   - Real Numbers 
+   - Integers 
+   - Complex Numbers
+- Arithmetic Operations for Univariate Polynomials with arbitrary Coefficients from any Ring 
 - Small Univariate Polynomial Factorization 
 - Small Univariate Polynomial Root Finding 
 - Large Integer Factorization 
@@ -19,6 +24,3 @@ Feel free to contribute if you like!
 Navigate to root directory and type: 
 > sbt clean compile \
 > sbt test
-
-Note that the tests may take up to 15 minutes to complete, due to testing against large prime numbers. 
-If you wish to skip these tests, navigate to the [Test Suite](https://github.com/krlu/MET-CS-789/blob/master/src/test/scala/org/bu/metcs789/Tests.scala) and comment out the two tests at the bottom
