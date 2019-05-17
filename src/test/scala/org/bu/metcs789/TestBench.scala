@@ -1,19 +1,16 @@
 package org.bu.metcs789
 
 import org.bu.metcs789.algebraicStructures.rings.polynomials.RealPolynomial
-import org.bu.metcs789.factorization.polynomial.{NewtonsMethod, SquareFreeFactorization}
+import org.bu.metcs789.factorization.polynomial.SquareFreeFactorization
 
 object TestBench {
 
   def main(args: Array[String]): Unit = {
-    val U = (RealPolynomial(1,1,1)^10) * (RealPolynomial(1,2)^5)
-    val t1 = System.currentTimeMillis()
-    val newtonFactors = NewtonsMethod()(U)
-    val t2 = System.currentTimeMillis()
-    println(s"newtons runtime: ${(t2-t1)/1000.0}, $newtonFactors")
+    val U = RealPolynomial(-16,-24,-4,10,6,1)
+    val str = "x^5 + 6x^4 + 10x^3 - 4x^2 - 24x - 16"
+    println(RealPolynomial.parse(str))
     val sqFreeFactors = SquareFreeFactorization(U)
-    val t3 = System.currentTimeMillis()
-    println(s"newtons runtime: ${(t3-t2)/1000.0}, $sqFreeFactors")
+    println(s"$sqFreeFactors")
   }
 }
 

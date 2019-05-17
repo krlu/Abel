@@ -95,4 +95,26 @@ object RealPolynomial{
   def zero = new RealPolynomial(0.0)
   def one = new RealPolynomial(1.0)
   def x = new RealPolynomial(1.0, 1.0)
+  def parse(polyString: String): RealPolynomial = {
+    val tokens = polyString.replace(" ", "").replace("-", "+-").split("[+]").filter(_ != "")
+    val coeffsAndExp: Seq[(Double, Int)] = tokens.map{ token =>
+      if(token.contains("x")){
+        val subTokens = token.split("x")
+        if(subTokens(0).isEmpty)
+          (1.0, subTokens(1).replace("^","").toInt)
+        else if(subTokens.length == 1)
+          (subTokens(0).toDouble, 1)
+        else
+          (subTokens(0).toDouble, subTokens(1).replace("^","").toInt)
+      }
+      else{
+        (token.toDouble, 0)
+      }
+    }.toList
+    val maxExp = coeffsAndExp.map(_._2).max
+    val coeffs = (0 to maxExp).map{ exp =>
+      coeffsAndExp.filter(_._2 == exp).map(_._1).sum
+    }
+    RealPolynomial(coeffs:_*)
+  }
 }
