@@ -18,7 +18,8 @@ object SquareFreeFactorization extends PolynomialFactorizationAlgo {
         f = g
         j += 1
       }
-      Seq(c * p, f ^ j)
+      val moreFactors = if(p == RealPolynomial.one) List() else SquareFreeFactorization(p)
+      List.fill(j)(f) ++ moreFactors
     }
   }
 }

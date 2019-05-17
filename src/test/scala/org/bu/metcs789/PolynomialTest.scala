@@ -1,7 +1,7 @@
 package org.bu.metcs789
 
 import org.bu.metcs789.algebraicStructures.rings.polynomials.{PolyUtil, RealPolynomial}
-import org.bu.metcs789.factorization.polynomial.{Kronecker, NewtonsMethod}
+import org.bu.metcs789.factorization.polynomial.{Kronecker, NewtonsMethod, SquareFreeFactorization}
 import org.scalatest.{FlatSpec, Matchers}
 
 class PolynomialTest extends FlatSpec with Matchers{
@@ -215,6 +215,17 @@ class PolynomialTest extends FlatSpec with Matchers{
       assert(NewtonsMethod()(pi) == Seq(pi))
     }
   }
-  private def comparePolys(p1: RealPolynomial, p2: RealPolynomial): Boolean =  p1.coefficients.head > p2.coefficients.head
+
+  "Square free factorization" should "Factor polynomials" in {
+    val p1 = RealPolynomial(1,1)
+    for(i <- 1 to 20) {
+      val U = p1 ^ i
+      val sqFreeFactors = SquareFreeFactorization(U)
+      assert(sqFreeFactors == List.fill(i)(p1))
+    }
+  }
+
+  private def comparePolys(p1: RealPolynomial, p2: RealPolynomial): Boolean =
+    p1.coefficients.head > p2.coefficients.head
 
 }
