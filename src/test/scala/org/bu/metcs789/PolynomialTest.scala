@@ -106,7 +106,6 @@ class PolynomialTest extends FlatSpec with Matchers{
       testDivision(p1, p2)
       testDivision(p2, p1)
     }
-
     val p1 = RealPolynomial(-1,0,0,0,1)
     val p2 = RealPolynomial(1,1)
     val p3 = RealPolynomial(-16, -24, -4, 10, 6, 1)
@@ -158,7 +157,17 @@ class PolynomialTest extends FlatSpec with Matchers{
     val str2 = "+x^5 + 6x^4 + 10x^3 - 4x^2 - 24x - 16"
     assert(RealPolynomial.parse(str2) == p1)
     val str3 = "+x^5 + 10x^3 - 4x^2 - 24x - 16 - 3x^5"
-    assert(RealPolynomial.parse(str3) == RealPolynomial(-16, -24, -4,10, 0, -2))
-
+    assert(RealPolynomial.parse(str3) == RealPolynomial(-16, -24, -4, 10, 0, -2))
+    val length = choose((1 to 100).iterator)
+    for(_ <- 1 to 100) {
+      val chars = ('a' to 'z') ++ ('A' to 'Z') ++ ('0' to '9') ++ List('-', '+', '^', '%', '#', '@', '!', '$')
+      val str = List.fill(length)(choose(chars.iterator)).mkString
+      try {
+        RealPolynomial.parse(str)
+      } catch {
+        case e: IllegalArgumentException =>
+          assert(e.getMessage.contains(str))
+      }
+    }
   }
 }
