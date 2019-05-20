@@ -158,6 +158,8 @@ class PolynomialTest extends FlatSpec with Matchers{
     assert(RealPolynomial.parse(str2) == p1)
     val str3 = "+x^5 + 10x^3 - 4x^2 - 24x - 16 - 3x^5"
     assert(RealPolynomial.parse(str3) == RealPolynomial(-16, -24, -4, 10, 0, -2))
+    assert(RealPolynomial.parse("0x^100") == RealPolynomial.zero)
+    assert(RealPolynomial.parse("0x^2 + 1x^2") == RealPolynomial(0,0,1))
     val length = choose((1 to 100).iterator)
     for(_ <- 1 to 100) {
       val chars = ('a' to 'z') ++ ('A' to 'Z') ++ ('0' to '9') ++ List('-', '+', '^', '%', '#', '@', '!', '$')
