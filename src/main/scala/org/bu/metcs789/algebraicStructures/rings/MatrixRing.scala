@@ -1,7 +1,6 @@
-package org.bu.metcs789.algebraicStructures
+package org.bu.metcs789.algebraicStructures.rings
 
 import org.apache.commons.math3.linear.{MatrixUtils, RealMatrix}
-import org.bu.metcs789.algebraicStructures.rings.Ring
 
 class MatrixRing(dim: Int) extends Ring[RealMatrix]{
 
