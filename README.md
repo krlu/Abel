@@ -1,4 +1,4 @@
-# MET-CS-789
+# Abel
 
 An computer algebra library design to support applications in crypotgraphy
 
