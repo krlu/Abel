@@ -1,4 +1,4 @@
-name := "MET-CS-789"
+name := "Abel"
 
 version := "1.0"
 
