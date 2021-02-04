@@ -13,7 +13,7 @@ class PolynomialTest extends FlatSpec with Matchers{
   private def randomIntegerPoly: RealPolynomial = {
     val numCoeffs = choose((1 to 3).iterator)
     val possibleValues = (1 to 10).toList.filter(_ != 0)
-    val coeffs = Seq.fill(numCoeffs)(choose(possibleValues.iterator)).map(_.toDouble)
+    val coeffs = Seq.fill(numCoeffs)(choose(possibleValues.iterator)).map(_.toDouble).map(BigDecimal(_))
     RealPolynomial(coeffs:_*)
   }
 
@@ -21,14 +21,14 @@ class PolynomialTest extends FlatSpec with Matchers{
     val p1 = RealPolynomial(1,1)
     val p2 = RealPolynomial(1,2,4)
     val p3 = p1 + p2
-    assert(p3.coefficients == Seq(2,3,4))
+    assert(p3.coefficients == Seq(2,3,4).map(BigDecimal(_)))
     assert(p3 == RealPolynomial(2,3,4))
   }
 
   "A Real Polynomial" should "hash almost uniquely" in {
     def randomRealPoly: RealPolynomial = {
       val numCoeffs = choose((1 to 6).iterator)
-      val coeffs = Seq.fill(numCoeffs)(Math.random() * 10)
+      val coeffs = Seq.fill(numCoeffs)(Math.random() * 10).map(BigDecimal(_))
       RealPolynomial(coeffs:_*)
     }
     for(size <- 1 to 100){
@@ -43,11 +43,17 @@ class PolynomialTest extends FlatSpec with Matchers{
     }
   }
 
+  "A Real Polynomial" should "support negation" in {
+    val p1 = RealPolynomial(1,1,1)
+    val p2 = -p1
+    assert(p2 == p1 * -1)
+  }
+
   "A RealPolynomial" should "support subtraction" in {
     val p1 = RealPolynomial(1,1)
     val p2 = RealPolynomial(1,2,4)
     val p3 = p1 - p2
-    assert(p3.coefficients == Seq(0,-1,-4))
+    assert(p3.coefficients == Seq(0,-1,-4).map(BigDecimal(_)))
   }
 
   "A RealPolynomial" should "support multiplication" in {
@@ -55,7 +61,7 @@ class PolynomialTest extends FlatSpec with Matchers{
     val p2 = RealPolynomial(9,-3,1)
     val p3 = p1 * p2
     val p4 = p1 * 2
-    assert(p3.coefficients == Seq(27,0,0,1))
+    assert(p3.coefficients == Seq(27,0,0,1).map(BigDecimal(_)))
     assert(p4 == RealPolynomial(6,2))
   }
 
@@ -66,8 +72,8 @@ class PolynomialTest extends FlatSpec with Matchers{
     val p3 = p1 ^ 3
     assert(p0 == RealPolynomial.one)
     assert(p2 == p1)
-    assert(p2.coefficients == Seq(1,1))
-    assert(p3.coefficients == Seq(1,3,3,1))
+    assert(p2.coefficients == Seq(1,1).map(BigDecimal(_)))
+    assert(p3.coefficients == Seq(1,3,3,1).map(BigDecimal(_)))
     for(i <- 0 to 10){
       val pi = p1 ^ i
       val px = pi * p1
@@ -76,13 +82,17 @@ class PolynomialTest extends FlatSpec with Matchers{
       assert(px == (p1 ^ (i + 1)))
       assert(pi.coefficients == coeffs)
     }
+    // exponentiation should be accurate up to order ~200
+    val result = RealPolynomial(1,1,1)^92
+    assert(result.coefficients(46).toBigInt().toString() == "60956397035021112188677714778830920")
+
   }
 
   "A RealPolynomial" should "support differentiation and antiderivation" in {
     val p1 = RealPolynomial(1,2,1)
     val p2 = p1.derivative
-    assert(p2.coefficients == Seq(2,2))
-    assert(p2.antiDerivative.coefficients == Seq(0,2,1))
+    assert(p2.coefficients == Seq(2,2).map(BigDecimal(_)))
+    assert(p2.antiDerivative.coefficients == Seq(0,2,1).map(BigDecimal(_)))
   }
 
   "A RealPolynomial" should "support division and mod operations" in {
@@ -160,9 +170,9 @@ class PolynomialTest extends FlatSpec with Matchers{
     assert(RealPolynomial.parse(str3) == RealPolynomial(-16, -24, -4, 10, 0, -2))
     assert(RealPolynomial.parse("0x^100") == RealPolynomial.zero)
     assert(RealPolynomial.parse("0x^2 + 1x^2") == RealPolynomial(0,0,1))
+    val chars = ('a' to 'z') ++ ('A' to 'Z') ++ ('0' to '9') ++ List('-', '+', '^', '%', '#', '@', '!', '$')
     val length = choose((1 to 100).iterator)
     for(_ <- 1 to 100) {
-      val chars = ('a' to 'z') ++ ('A' to 'Z') ++ ('0' to '9') ++ List('-', '+', '^', '%', '#', '@', '!', '$')
       val str = List.fill(length)(choose(chars.iterator)).mkString
       try {
         RealPolynomial.parse(str)

@@ -68,7 +68,7 @@ object Kronecker extends PolynomialFactorizationAlgo {
     val constants = new ArrayRealVector(Array[Double](x: _*), false)
 
     // solve system of equation to find coefficients for potential factor
-    val solution = solver.solve(constants).toArray.toSeq
+    val solution = solver.solve(constants).toArray.toSeq.map(BigDecimal(_))
     RealPolynomial(solution: _*)
   }
 

@@ -13,7 +13,7 @@ object PolyUtil {
     PolynomialMethods.PolynomialGCD(p3, p4).forEach { coeff =>
       coeffs = coeffs ++ List(coeff)
     }
-    RealPolynomial(coeffs.map(_.intValue().toDouble):_*)
+    RealPolynomial(coeffs.map(_.intValue().toDouble).map(BigDecimal(_)):_*)
   }
 
 }

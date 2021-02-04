@@ -29,6 +29,8 @@ class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) extends (T =
     ring.mult(coefficients(i),ring.pow(x, i))
   }.reduce((a, b) => ring.add(a, b))
 
+  protected[polynomials] def invert : Polynomial[T, U] = Polynomial[T,U](this.coefficients.map(ring.inverse):_*)(ring)
+
   /**
     * Addition operation
     * @param other - another polynomial
@@ -72,6 +74,7 @@ class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) extends (T =
   protected[polynomials]  def scale(scalar: T): Polynomial[T, U] = Polynomial(this.coeffs.map(c => ring.mult(c, scalar)):_*)(ring)
 
   /**
+    * TODO: can save computation with multi-nominal definition instead
     * Exponentiation operation, computed by recursively multiplying two polynomials
     * @param exp - A non-negative integer
     * @return exponent of a polynomial two the power of some
@@ -137,5 +140,5 @@ class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) extends (T =
 }
 
 protected object Polynomial{
-  def apply[T, U <: Ring[T]](coeffs: T*)(ring: U): Polynomial[T,U] = new Polynomial[T, U](coeffs:_*)(ring)
+   def apply[T, U <: Ring[T]](coeffs: T*)(ring: U): Polynomial[T,U] = new Polynomial[T, U](coeffs:_*)(ring)
 }

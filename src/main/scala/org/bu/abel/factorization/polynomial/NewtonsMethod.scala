@@ -35,7 +35,9 @@ protected class NewtonsMethod(initialGuess: Double, maxIterations: Int, maxGuess
       return Kronecker(p)
     var numIterations = 0
     while(p(root) != 0 && numIterations < maxIterations){
-      root = root - (p(root)/p.derivative(root))
+      if(p.derivative(root) != 0){
+        root = root - (p(root)/p.derivative(root)).toDouble
+      }
       numIterations += 1
     }
     if(p(root) != 0) Seq(p)

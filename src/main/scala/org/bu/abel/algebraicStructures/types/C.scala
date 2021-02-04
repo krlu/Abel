@@ -2,7 +2,7 @@ package org.bu.abel.algebraicStructures.types
 
 /**
   * Class representing a C number, denoted by C - symbol for set of C numbers
-  * @param re - re part
+  * @param re - real part
   * @param im - imaginary coefficient
   */
 case class C(re: Double, im: Double) {
