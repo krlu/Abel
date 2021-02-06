@@ -1,9 +1,9 @@
-package org.bu.abel
+package org.bu.abel.encryption
 
 import org.bu.abel.basics._
 import org.bu.abel.factorization.Integer.PollardRho
 
-object FinalProjectExperiment{
+object EncryptionExperiments{
 
   def main(args: Array[String]) {
     println("************************************ RSA Experiment******************************************")

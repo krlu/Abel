@@ -1,5 +1,5 @@
 package org.bu.abel.factorization.polynomial
-import org.bu.abel.algebraicStructures.rings.polynomials.{PolyUtil, RealPolynomial}
+import org.bu.abel.types.polynomials.{PolyUtil, RealPolynomial}
 
 object SquareFreeFactorization extends PolynomialFactorizationAlgo {
   override def apply(u: RealPolynomial): Seq[RealPolynomial] = {

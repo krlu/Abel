@@ -1,6 +1,6 @@
 package org.bu.abel
 
-import org.bu.abel.algebraicStructures.rings.polynomials.{PolyUtil, RealPolynomial}
+import org.bu.abel.types.polynomials.{PolyUtil, RealPolynomial}
 import org.scalatest.{FlatSpec, Matchers}
 
 class PolynomialTest extends FlatSpec with Matchers{
@@ -134,8 +134,8 @@ class PolynomialTest extends FlatSpec with Matchers{
     val p1 = RealPolynomial(1,-1)
     val p2 = p1 ^ 3
     val p3 = RealPolynomial(-1,1,-1,1)
-    assert(p2.toString == "-x^3 + 3*x^2 - 3*x + 1")
-    assert(p3.toString == "x^3 - x^2 + x - 1")
+    assert(p2.toString == "-x^3+3*x^2-3*x+1")
+    assert(p3.toString == "x^3-x^2+x-1")
   }
 
   "A RealPolynomial" should "compose with other polynomials" in {
@@ -182,4 +182,5 @@ class PolynomialTest extends FlatSpec with Matchers{
       }
     }
   }
+
 }

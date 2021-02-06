@@ -1,6 +1,6 @@
 package org.bu.abel
 
-import org.bu.abel.algebraicStructures.types.{C, Q}
+import org.bu.abel.types.{C, Q}
 import org.scalatest.{FlatSpec, Matchers}
 
 class NumbersTest extends FlatSpec with Matchers{

@@ -1,4 +1,4 @@
-package org.bu.abel.algebraicStructures.types
+package org.bu.abel.types
 
 import org.bu.abel.basics.GCD
 

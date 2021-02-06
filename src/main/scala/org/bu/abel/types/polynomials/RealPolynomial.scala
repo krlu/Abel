@@ -1,4 +1,4 @@
-package org.bu.abel.algebraicStructures.rings.polynomials
+package org.bu.abel.types.polynomials
 
 import org.bu.abel.algebraicStructures.fields.Real
 import org.bu.abel.basics.MultiGCD
@@ -80,10 +80,10 @@ sealed class RealPolynomial(coeffs: BigDecimal*) extends Polynomial[BigDecimal, 
         if(finalStr.nonEmpty){
           if(coefficients(i) >= 0) {
             if(i == coefficients.indices.last) toReturn = toReturn ++ Array(finalStr)
-            else toReturn = toReturn ++ Array(" + " + finalStr)
+            else toReturn = toReturn ++ Array("+" + finalStr)
           }else {
             if (i == coefficients.indices.last) toReturn = toReturn ++ Array("-" + finalStr)
-            else toReturn = toReturn ++ Array(" - " + finalStr)
+            else toReturn = toReturn ++ Array("-" + finalStr)
           }
         }
       }

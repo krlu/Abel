@@ -1,4 +1,4 @@
-package org.bu.abel.algebraicStructures.rings.polynomials
+package org.bu.abel.types.polynomials
 
 class MultivariatePolynomial[T](coeffs: Seq[Seq[T]]) extends (Seq[T] => T){
   override def apply(v1: Seq[T]): T = ???

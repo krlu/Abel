@@ -1,7 +1,7 @@
 package org.bu.abel.factorization.polynomial
 
 import org.apache.commons.math3.linear.{Array2DRowRealMatrix, ArrayRealVector, LUDecomposition}
-import org.bu.abel.algebraicStructures.rings.polynomials.RealPolynomial
+import org.bu.abel.types.polynomials.RealPolynomial
 import org.bu.abel.combinationList
 import org.bu.abel.factorization.Integer.GetAllFactors
 

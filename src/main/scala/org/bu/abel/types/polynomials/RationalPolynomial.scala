@@ -1,7 +1,7 @@
-package org.bu.abel.algebraicStructures.rings.polynomials
+package org.bu.abel.types.polynomials
 
 import org.bu.abel.algebraicStructures.fields.Rational
-import org.bu.abel.algebraicStructures.types.Q
+import org.bu.abel.types.Q
 
 class RationalPolynomial(coeffs: Q*) extends Polynomial[Q, Rational](coeffs:_*)(ring = Rational()){
 

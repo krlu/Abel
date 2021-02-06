@@ -1,5 +1,5 @@
 package org.bu.abel.algebraicStructures.fields
-import org.bu.abel.algebraicStructures.types.C
+import org.bu.abel.types.C
 
 class Complex extends Field[C] {
   override val zero: C = C(0, 0)

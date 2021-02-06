@@ -1,6 +1,6 @@
 package org.bu.abel
 
-import org.bu.abel.algebraicStructures.rings.polynomials.RealPolynomial
+import org.bu.abel.types.polynomials.{PolyUtil, RealPolynomial}
 import org.bu.abel.factorization.polynomial.{Kronecker, NewtonsMethod, SquareFreeFactorization}
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -60,9 +60,14 @@ class PolyFactorizationTest extends FlatSpec with Matchers{
       val coeffs = (1 to i).toList.map(_ => (Math.random()*5).toInt + 1)
       val realFactors = coeffs.map(coeff => RealPolynomial(coeff, 1))
       val p = realFactors.foldLeft(RealPolynomial.one){(p1 ,p2) => p1 * p2}
-      val factors = NewtonsMethod()(p)
-      assert(factors.size == i)
-      assert(factors.sortWith(comparePolys) == realFactors.sortWith(comparePolys))
+      try {
+        val factors = NewtonsMethod()(p)
+        assert(factors.size == i)
+        assert(factors.sortWith(comparePolys) == realFactors.sortWith(comparePolys))
+      } catch {
+        case e: IllegalStateException =>
+          assert(e.getMessage == "found saddle point")
+      }
     }
     for (i <- -10 to 10) {
       val pi = RealPolynomial(i)
@@ -73,9 +78,19 @@ class PolyFactorizationTest extends FlatSpec with Matchers{
   "Square free factorization" should "Factor polynomials" in {
     val p1 = RealPolynomial(1,1)
     for(i <- 1 to 20) {
-      val U = p1 ^ i
-      val sqFreeFactors = SquareFreeFactorization(U)
+      val p = p1 ^ i
+      val sqFreeFactors = SquareFreeFactorization(p)
       assert(sqFreeFactors == List.fill(i)(p1))
+    }
+  }
+
+  "Rings factorization" should "Factor polynomials quickly and correctly up to degree 18" in {
+    val totalFactors = 8
+    val factors = (1 to totalFactors).map(i => RealPolynomial(7, i, i+1))
+    var product = RealPolynomial.one
+    for(i <- 0 until totalFactors){
+      product = product * factors(i)
+      assert(PolyUtil.factorRealPolynomial(product) == factors.take(i+1).toSet)
     }
   }
   private def comparePolys(p1: RealPolynomial, p2: RealPolynomial): Boolean =

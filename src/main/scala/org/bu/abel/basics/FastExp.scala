@@ -12,7 +12,7 @@ object FastExp extends ((Long, Long) => Long){
   }
 }
 
-protected class FastExpWithMod(modulus: Long)extends ((Long, Long) => Long) {
+protected class FastExpWithMod(modulus: Long) extends ((Long, Long) => Long) {
   override def apply(base: Long, exp: Long): Long = {
     var x = 1
     for (_ <- 0 until exp.toInt)

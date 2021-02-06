@@ -1,6 +1,6 @@
-package org.bu.abel.algebraicStructures.rings.polynomials
+package org.bu.abel.algebraicStructures.rings
 
-import org.bu.abel.algebraicStructures.rings.Ring
+import org.bu.abel.types.polynomials.Polynomial
 
 trait PolynomialRing[U, T <: Ring[U]] extends Ring[Polynomial[U, T]] {
 

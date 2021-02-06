@@ -1,6 +1,6 @@
 package org.bu.abel.factorization.polynomial
 
-import org.bu.abel.algebraicStructures.rings.polynomials.RealPolynomial
+import org.bu.abel.types.polynomials.RealPolynomial
 
 /**
   * Performs multiple instances of newtons method with multiple guesses, expanding outwards from the original guess
@@ -37,6 +37,10 @@ protected class NewtonsMethod(initialGuess: Double, maxIterations: Int, maxGuess
     while(p(root) != 0 && numIterations < maxIterations){
       if(p.derivative(root) != 0){
         root = root - (p(root)/p.derivative(root)).toDouble
+      }
+      else{
+        throw new IllegalStateException("found saddle point")
+//        root -= 0.000001
       }
       numIterations += 1
     }

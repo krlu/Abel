@@ -1,6 +1,6 @@
 package org.bu.abel.algebraicStructures.fields
 
-import org.bu.abel.algebraicStructures.types.Q
+import org.bu.abel.types.Q
 
 class Rational extends Field[Q]{
   override val zero: Q = Q(0,1)

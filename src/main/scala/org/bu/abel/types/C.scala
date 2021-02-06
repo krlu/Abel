@@ -1,11 +1,11 @@
-package org.bu.abel.algebraicStructures.types
+package org.bu.abel.types
 
 /**
   * Class representing a C number, denoted by C - symbol for set of C numbers
   * @param re - real part
   * @param im - imaginary coefficient
   */
-case class C(re: Double, im: Double) {
+class C(val re: Double, val im: Double) {
 
   lazy val conjugate: C = C(re, -im)
   lazy val abs: Double = math.sqrt(re * re + im * im)
@@ -47,7 +47,7 @@ case class C(re: Double, im: Double) {
 
 object C{
   def apply(re: Double, im: Double): C = new C(re, im)
-  def zero = C(0,0)
-  def one = C(1,0)
-  def i = C(0,1)
+  def zero: C = C(0,0)
+  def one: C = C(1,0)
+  def i: C = C(0,1)
 }

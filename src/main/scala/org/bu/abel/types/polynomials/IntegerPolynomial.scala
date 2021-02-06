@@ -1,4 +1,4 @@
-package org.bu.abel.algebraicStructures.rings.polynomials
+package org.bu.abel.types.polynomials
 
 import org.bu.abel.algebraicStructures.rings.Integer
 
