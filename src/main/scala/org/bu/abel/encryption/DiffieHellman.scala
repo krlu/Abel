@@ -13,10 +13,10 @@ class DiffieHellman(g: Long, p: Long) extends ((DHUser, DHUser) => Unit){
     * @param bob - User to receive a Key
     */
   override def apply(alice: DHUser, bob: DHUser): Unit = {
-    bob.intermediateKeys = bob.intermediateKeys :+ FastExp(g, alice.privateKey).toLong % p
-    alice.intermediateKeys = alice.intermediateKeys :+ FastExp(g, bob.privateKey).toLong % p
-    alice.sharedKey = FastExp(alice.intermediateKeys.last, alice.privateKey).toLong % p
-    bob.sharedKey = FastExp(bob.intermediateKeys.last, bob.privateKey).toLong % p
+    bob.intermediateKeys = bob.intermediateKeys :+ FastExp(g, alice.privateKey) % p
+    alice.intermediateKeys = alice.intermediateKeys :+ FastExp(g, bob.privateKey) % p
+    alice.sharedKey = FastExp(alice.intermediateKeys.last, alice.privateKey) % p
+    bob.sharedKey = FastExp(bob.intermediateKeys.last, bob.privateKey) % p
   }
 }
 

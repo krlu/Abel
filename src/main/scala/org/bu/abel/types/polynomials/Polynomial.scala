@@ -74,16 +74,21 @@ class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) extends (T =
   protected[abel]  def scale(scalar: T): Polynomial[T, U] = Polynomial(this.coeffs.map(c => ring.mult(c, scalar)):_*)(ring)
 
   /**
-    * Exponentiation operation, computed by recursively multiplying two polynomials
+    * Exponentiation operation, computed by recursively by squaring
     * @param exp - A non-negative integer
     * @return exponent of a polynomial two the power of some
     */
   protected[abel] def pow(exp: Int): Polynomial[T, U] = {
     require(exp >= 0)
-    if(exp == 0) Polynomial[T, U](ring.one)(ring)
-    else if(exp == 1) this
-    else if(exp % 2 == 0) (this mult this) pow (exp/2)
-    else this mult ((this mult this) pow ((exp - 1)/2))
+    expBySquaring(Polynomial[T,U](ring.one)(ring), this, exp)
+  }
+
+  @scala.annotation.tailrec
+  private def expBySquaring(currentVal: Polynomial[T,U], base: Polynomial[T,U], exp: Long): Polynomial[T,U] = exp match {
+    case 0 => currentVal
+    case 1 => currentVal mult base
+    case y if y%2 == 0 => expBySquaring(currentVal, base mult base, exp/2)
+    case _ => expBySquaring(currentVal mult base, base, exp - 1)
   }
 
   def == (other: Polynomial[T, U]): Boolean = this.equals(other)
