@@ -45,7 +45,7 @@ object ObliviousTransferWithFactorization extends ObliviousTransfer{
   */
 protected class ObliviousTransferWithDiscreteLog(modulus: Int) extends ObliviousTransfer{
   require(modulus > 1)
-  val fastExpWithMod = FastExpWithMod(modulus)
+  val fastExpWithMod: FastExpWithMod = FastExpWithMod(modulus)
   override def apply(alice: OTPUser, bob: OTPUser): OTPUser = {
     var biInvXY0, biInvXY1, t0Copy, t1Copy, m0, m1 = -1L
     do {

@@ -25,6 +25,7 @@ sealed class RealPolynomial(coeffs: BigDecimal*) extends Polynomial[BigDecimal, 
   def * (other: RealPolynomial): RealPolynomial = RealPolynomial((this mult other).coefficients:_*)
   def * (scalar: BigDecimal): RealPolynomial = RealPolynomial((this scale scalar).coefficients:_*)
   def ^(exp: Int): RealPolynomial = RealPolynomial((this pow exp).coefficients:_*)
+
   def unary_- : RealPolynomial = RealPolynomial(this.invert.coefficients:_*)
 
   // functions supporting division

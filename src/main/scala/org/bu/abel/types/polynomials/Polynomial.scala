@@ -1,5 +1,6 @@
 package org.bu.abel.types.polynomials
 
+import org.bu.abel.Multiplication
 import org.bu.abel.algebraicStructures.rings.{PolynomialRing, Ring}
 
 /**
@@ -51,10 +52,11 @@ class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) extends (T =
     Polynomial[T, U](this.coefficients.zipAll(other.coefficients, ring.zero, ring.zero)
       .map{case(a,b) => ring.sub(a,b)}:_*)(ring)
 
+
   protected[abel]  def sub(scalar: T): Polynomial[T, U] = this sub Polynomial[T, U](scalar)(ring)
 
   /**
-    * multiplication operation, computed using distribution property of rings
+    * multiplication operation, computed using distributive property of rings
     * @param other - another polynomial
     * @return the product of two polynomials
     */
@@ -137,5 +139,5 @@ class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) extends (T =
 }
 
 protected[abel] object Polynomial{
-   def apply[T, U <: Ring[T]](coeffs: T*)(ring: U): Polynomial[T,U] = new Polynomial[T, U](coeffs:_*)(ring)
+  def apply[T, U <: Ring[T]](coeffs: T*)(ring: U): Polynomial[T,U] = new Polynomial[T, U](coeffs:_*)(ring)
 }

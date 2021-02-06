@@ -1,6 +1,6 @@
 package org.bu.abel.algebraicStructures.rings
 
-import org.bu.abel.types.polynomials.Polynomial
+import org.bu.abel.types.polynomials.{Polynomial, RealPolynomial}
 
 class PolynomialRing[U, T <: Ring[U]](val ring: T) extends Ring[Polynomial[U, T]] {
 

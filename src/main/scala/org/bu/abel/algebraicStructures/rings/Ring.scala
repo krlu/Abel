@@ -6,6 +6,8 @@ trait Ring[T] extends Group[T]{
   val one: T
   def mult(a: T, b: T): T
   def pow(a: T, exp: Long): T = expBySquaring(one, a, exp)
+
+  @scala.annotation.tailrec
   private def expBySquaring(currentVal: T, base: T, exp: Long): T = exp match {
     case 0 => currentVal
     case 1 => mult(currentVal, base)
