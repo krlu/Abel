@@ -2,9 +2,8 @@ package org.bu.abel.algebraicStructures.rings
 
 import org.bu.abel.types.polynomials.Polynomial
 
-trait PolynomialRing[U, T <: Ring[U]] extends Ring[Polynomial[U, T]] {
+class PolynomialRing[U, T <: Ring[U]](val ring: T) extends Ring[Polynomial[U, T]] {
 
-  val ring: T
   override val one: Polynomial[U, T] = Polynomial(ring.one)(ring)
   override val zero: Polynomial[U, T] = Polynomial(ring.zero)(ring)
 

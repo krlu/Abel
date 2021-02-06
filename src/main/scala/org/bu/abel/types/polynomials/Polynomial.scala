@@ -1,6 +1,6 @@
 package org.bu.abel.types.polynomials
 
-import org.bu.abel.algebraicStructures.rings.Ring
+import org.bu.abel.algebraicStructures.rings.{PolynomialRing, Ring}
 
 /**
   * Generalization of a finite Polynomial
@@ -80,15 +80,8 @@ class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) extends (T =
     */
   protected[abel] def pow(exp: Int): Polynomial[T, U] = {
     require(exp >= 0)
-    expBySquaring(Polynomial[T,U](ring.one)(ring), this, exp)
-  }
-
-  @scala.annotation.tailrec
-  private def expBySquaring(currentVal: Polynomial[T,U], base: Polynomial[T,U], exp: Long): Polynomial[T,U] = exp match {
-    case 0 => currentVal
-    case 1 => currentVal mult base
-    case y if y%2 == 0 => expBySquaring(currentVal, base mult base, exp/2)
-    case _ => expBySquaring(currentVal mult base, base, exp - 1)
+    val pr = new PolynomialRing[T,U](ring)
+    pr.pow(this, exp)
   }
 
   def == (other: Polynomial[T, U]): Boolean = this.equals(other)

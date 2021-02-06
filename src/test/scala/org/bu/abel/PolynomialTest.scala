@@ -85,7 +85,6 @@ class PolynomialTest extends FlatSpec with Matchers{
     // exponentiation should be accurate up to order ~200
     val result = RealPolynomial(1,1,1)^92
     assert(result.coefficients(46).toBigInt().toString() == "60956397035021112188677714778830926")
-
   }
 
   "A RealPolynomial" should "support differentiation and antiderivation" in {
