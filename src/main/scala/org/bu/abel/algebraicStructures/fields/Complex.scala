@@ -12,3 +12,7 @@ class Complex extends Field[C] {
   override def div(a: C, b: C): C = a/b
   override def eq(a: C, b: C): Boolean = a == b
 }
+
+object Complex{
+  def apply(): Complex = new Complex()
+}

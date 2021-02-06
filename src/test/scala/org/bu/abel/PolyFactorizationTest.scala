@@ -56,7 +56,7 @@ class PolyFactorizationTest extends FlatSpec with Matchers{
     assert(factors2.reduce((a, b) => a * b) == p2)
     assert(NewtonsMethod()(RealPolynomial(1, 0, 1)) == Seq(RealPolynomial(1, 0, 1)))
 
-    for (i <- 1 to 10) {
+    for (i <- 1 to 5) {
       val coeffs = (1 to i).toList.map(_ => (Math.random()*5).toInt + 1)
       val realFactors = coeffs.map(coeff => RealPolynomial(coeff, 1))
       val p = realFactors.foldLeft(RealPolynomial.one){(p1 ,p2) => p1 * p2}

@@ -1,6 +1,7 @@
 package org.bu.abel.factorization.polynomial
 
 import org.apache.commons.math3.linear.{Array2DRowRealMatrix, ArrayRealVector, LUDecomposition}
+import org.bu.abel.basics.LargeNumber
 import org.bu.abel.types.polynomials.RealPolynomial
 import org.bu.abel.combinationList
 import org.bu.abel.factorization.Integer.GetAllFactors
@@ -19,7 +20,7 @@ object Kronecker extends PolynomialFactorizationAlgo {
   private def kroneckerFactorization(p: RealPolynomial): Seq[RealPolynomial] = {
     if(p.degree <= 1) return Seq(p)
     val range = 0 to p.degree/2
-    val roots = range.map(i => (i, p(i).toLong))
+    val roots = range.map(i => (i, p(LargeNumber(i)).value.toLong))
       .filter{case (_, pi) => pi == 0}
       .map{case(i,_) => i}
     var (quotient, remainder, factor) = (RealPolynomial.zero, RealPolynomial.one, RealPolynomial.one)
@@ -31,7 +32,7 @@ object Kronecker extends PolynomialFactorizationAlgo {
       remainder = r
     }
     else {
-      val factorSets: immutable.List[List[Long]] = range.map(i => p(i).toLong).map(GetAllFactors(_).toList).toList
+      val factorSets: immutable.List[List[Long]] = range.map(i => p(LargeNumber(i)).value.toLong).map(GetAllFactors(_).toList).toList
       var combos: Seq[List[Long]] = combinationList(factorSets)
       while ((remainder != RealPolynomial.zero || factor == RealPolynomial(-1) || factor == RealPolynomial.one) && combos.nonEmpty) {
         val x: Seq[Double] = combos.head.map(_.toDouble)
@@ -43,7 +44,7 @@ object Kronecker extends PolynomialFactorizationAlgo {
       }
     }
     if(remainder == RealPolynomial.zero && factor != RealPolynomial(-1.0) && factor != RealPolynomial.one)
-      kroneckerFactorization(RealPolynomial(factor.coefficients:_*)) ++ kroneckerFactorization(RealPolynomial(quotient.coefficients:_*))
+      kroneckerFactorization(RealPolynomial.create(factor.coefficients:_*)) ++ kroneckerFactorization(RealPolynomial.create(quotient.coefficients:_*))
     else Seq(p)
   }
 
@@ -68,8 +69,8 @@ object Kronecker extends PolynomialFactorizationAlgo {
     val constants = new ArrayRealVector(Array[Double](x: _*), false)
 
     // solve system of equation to find coefficients for potential factor
-    val solution = solver.solve(constants).toArray.toSeq.map(BigDecimal(_))
-    RealPolynomial(solution: _*)
+    val solution = solver.solve(constants).toArray.toSeq.map(LargeNumber(_))
+    RealPolynomial.create(solution: _*)
   }
 
 }

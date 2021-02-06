@@ -12,5 +12,21 @@ package object abel {
     case head :: tail => val rec = combinationList[T](tail)
       rec.flatMap((r: List[T]) => head.map((t: T) => t::r))
   }
+
+  def removeLeadingZeroes(s: String): String = {
+    val sb = new StringBuilder(s)
+    while ( {
+      sb.nonEmpty && sb.charAt(0) == '0'
+    }) sb.deleteCharAt(0)
+    sb.toString
+  }
+
+  def removeTrailingZeroes(s: String): String = {
+    val sb = new StringBuilder(s)
+    while ( {
+      sb.nonEmpty && sb.charAt(sb.length - 1) == '0'
+    }) sb.setLength(sb.length - 1)
+    sb.toString
+  }
   
 }

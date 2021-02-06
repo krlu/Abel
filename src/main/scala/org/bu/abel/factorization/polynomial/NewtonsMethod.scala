@@ -36,7 +36,7 @@ protected class NewtonsMethod(initialGuess: Double, maxIterations: Int, maxGuess
     var numIterations = 0
     while(p(root) != 0 && numIterations < maxIterations){
       if(p.derivative(root) != 0){
-        root = root - (p(root)/p.derivative(root)).toDouble
+        root = root - (p(root)/p.derivative(root)).value.toDouble
       }
       else{
         throw new IllegalStateException("found saddle point")

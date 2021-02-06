@@ -1,5 +1,6 @@
 package org.bu.abel
 
+import org.bu.abel.basics.LargeNumber
 import org.bu.abel.types.{C, Q}
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -27,8 +28,8 @@ class NumbersTest extends FlatSpec with Matchers{
       val q1 = C(real, im)
       val q2 = C(real, -im)
       assert(q1.conjugate == q2 && q2.conjugate == q1)
-      assert((q1 * q2).im == 0)
-      assert((q1 * q2).re == (real * real + im * im))
+      assert((q1 * q2).im == LargeNumber(0))
+      assert((q1 * q2).re == LargeNumber(real * real + im * im))
       val sq = q1 ^ 2
       assert(sq.re == q1.re * q1.re - q1.im * q1.im)
       assert(sq.im == q1.im * 2 * q1.re)
@@ -50,13 +51,17 @@ class NumbersTest extends FlatSpec with Matchers{
 
     // test that e ^ (i*pi) = -1
     val iPi = C.i * Math.PI
-    assert(iPi.exp.re == - 1 && Math.abs(iPi.exp.im) < 1E-15)
+    assert(LargeNumber.abs(iPi.exp.re - LargeNumber(-1)) < 1E-15)
+    assert(LargeNumber.abs(iPi.exp.im) < 1E-15)
 
     // test that i ^ i = e ^ (- pi/2)
-    assert((C.i ^ C.i) == (iPi * i/2).exp)
-
+    val c1 = (C.i ^ C.i)
+    val c2 = (iPi * i/2).exp
+    assert(c1.im == c2.im)
+    assert(LargeNumber.abs(c1.re - c2.re) < 1E-15)
     // test that e ^ (i pi/2) == i
     val identity = (C.i * Math.PI/2.0).exp
-    assert(Math.abs(identity.re) < 1E-16 && identity.im == 1)
+    assert(LargeNumber.abs(identity.re) < 1E-15)
+    assert(LargeNumber.abs(identity.im - 1) < 1E-15)
   }
 }
