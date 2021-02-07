@@ -65,15 +65,7 @@ public class FFT {
     }
 
     public static double[] inverse(Complex[] vector) {
-        double[] inv = Tools.toDouble(transform(vector, true), precision);
-        return inv;
-    }
-
-    public static Complex[] transform(int[] vector) {
-        double[] a = new double[vector.length];
-        for (int i = 0; i < vector.length; i++)
-            a[i] = vector[i];
-        return transform(a);
+        return Tools.toDouble(transform(vector, true), precision);
     }
 
 }

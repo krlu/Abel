@@ -42,6 +42,11 @@ class LargeNumber(val value: BigFloat) {
   def ^ (other: Int): LargeNumber = LargeNumber(this.value.pow(other))
   def < (other: Int): Boolean = this < LargeNumber(other)
 
+  def isInteger: Boolean = {
+    val splitStr = this.value.toString.split("\\.").toList
+    if(splitStr.size == 1) true
+    else LargeNumber.fromString(splitStr(1)) == 0
+  }
   def unary_- : LargeNumber = LargeNumber(BigFloat.negate(this.value))
 
   override def equals(obj: Any): Boolean = {
@@ -54,7 +59,24 @@ class LargeNumber(val value: BigFloat) {
   override def toString: String = value.toString
 }
 
+// TODO: LargeNumber needs unit testing!!!
 object LargeNumber{
+  /**
+    * Rounds to nearest whole number
+    * @param value - in large number
+    * @return Large Number as an integer
+    */
+  def round(value: LargeNumber): LargeNumber = {
+    val splitStr = value.value.toString.split("\\.").toList
+    if(splitStr.size == 1) value
+    else if(LargeNumber.fromString(s"0.${splitStr(1)}") < 0.5)
+      LargeNumber.fromString(splitStr.head)
+    else {
+      val integerTerm = LargeNumber.fromString(splitStr.head)
+      if(integerTerm < 0) integerTerm - 1
+      else integerTerm + 1
+    }
+  }
   def abs(value: LargeNumber): LargeNumber = LargeNumber(BigFloat.abs(value.value))
   def exp(value: LargeNumber): LargeNumber = LargeNumber(BigFloat.exp(value.value))
   def ln(value: LargeNumber): LargeNumber = LargeNumber(BigFloat.log(value.value))
@@ -71,5 +93,6 @@ object LargeNumber{
   }
   def sqrt(value: LargeNumber): LargeNumber = LargeNumber(BigFloat.sqrt(value.value))
   def apply(value: BigFloat): LargeNumber = new LargeNumber(value)
+  def fromString(value: String, precision: Int = 100 ): LargeNumber = new LargeNumber(BigFloat.context(precision).valueOf(value))
   def apply(value: Double, precision: Int = 100): LargeNumber = new LargeNumber(BigFloat.context(precision).valueOf(value))
 }

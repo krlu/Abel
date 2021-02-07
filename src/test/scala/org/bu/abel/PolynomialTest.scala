@@ -85,6 +85,8 @@ class PolynomialTest extends FlatSpec with Matchers{
     }
     // exponentiation should be accurate up to order ~200
     val result = RealPolynomial(1,1,1)^92
+    // 2205  with standard mult, 12951 with FFT , polynomial degree: 3000
+    // 56353 with standard mult, 39264 with FFT , polynomial degree: 12000
     assert(result.coefficients(46).toString() == "60956397035021112188677714778830926.00000000000000000000000000000000000000000000000000000000000000000")
   }
 

@@ -2,6 +2,10 @@ package org.bu.abel;
 
 import org.apache.commons.math3.complex.Complex;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Collections;
+
 public class Multiplication {
 
     public static double[] fftMultiply(double[] a, double[] b) {
@@ -13,6 +17,9 @@ public class Multiplication {
         int length = (int) Math.pow(2, exp);
         a = pad(a, length);
         b = pad(b, length);
+//        System.out.println(Arrays.toString(a));
+//        System.out.println(Arrays.toString(b));
+
         double[] c = new double[length];
         Complex[] aPrime = FFT.transform(a);
         Complex[] bPrime = FFT.transform(b);
@@ -21,9 +28,9 @@ public class Multiplication {
         Complex[] cPrime = new Complex[length];
         for (int i = 0; i < length; i++)
             cPrime[i] = aPrime[i].multiply(bPrime[i]);
-
+//        System.out.println(Arrays.toString(cPrime));
         c = FFT.inverse(cPrime);
-
+//        System.out.println(Arrays.toString(c));
         c = removeExtra(c, n);
 
         return c;
