@@ -13,11 +13,6 @@ class C(val re: LargeNumber, val im: LargeNumber) {
 
   lazy val conjugate: C = C(re, -im)
   lazy val abs: LargeNumber = LargeNumber.sqrt(re * re + im * im)
-  lazy val log: C = C(LargeNumber.ln(abs), LargeNumber.atan(im/re))
-  lazy val exp: C = {
-    val expreal = LargeNumber.exp(re)
-    C(expreal * LargeNumber.cos(im), expreal * LargeNumber.sin(im))
-  }
 
   val conjugateProd: LargeNumber = re*re + im*im
   def +(other: C): C = C(re + other.re, im + other.im)
@@ -33,8 +28,7 @@ class C(val re: LargeNumber, val im: LargeNumber) {
     numerator/denominator
   }
   def ^(e: Int): C = Complex().pow(this, e)
-
-  def ^(c: C): C = (this * C.i * (Math.PI/2)).exp
+  def ^(c: C): C = C.exp((C.log(this) * c))
 
   override def equals(other: Any): Boolean = other match {
     case c: C => this.re == c.re && this.im == c.im
@@ -46,7 +40,13 @@ class C(val re: LargeNumber, val im: LargeNumber) {
 }
 
 object C{
+  def log(c: C): C = C(LargeNumber.ln(c.abs), LargeNumber.atan(c.im/c.re))
+  def exp(c: C): C = {
+    val expreal = LargeNumber.exp(c.re)
+    C(expreal * LargeNumber.cos(c.im), expreal * LargeNumber.sin(c.im))
+  }
   def apply(re: LargeNumber, im: LargeNumber): C = new C(re, im)
+  def apply(re: Double, im: Double): C = C(LargeNumber(re), LargeNumber(im))
   def apply(re: Int, im: Int): C = C(LargeNumber(re), LargeNumber(im))
   def zero: C = C(0,0)
   def one: C = C(1,0)

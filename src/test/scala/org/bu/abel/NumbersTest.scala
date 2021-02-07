@@ -1,5 +1,6 @@
 package org.bu.abel
 
+import org.apache.commons.math3.complex.Complex
 import org.bu.abel.basics.LargeNumber
 import org.bu.abel.types.{C, Q}
 import org.scalatest.{FlatSpec, Matchers}
@@ -51,17 +52,19 @@ class NumbersTest extends FlatSpec with Matchers{
 
     // test that e ^ (i*pi) = -1
     val iPi = C.i * Math.PI
-    assert(LargeNumber.abs(iPi.exp.re - LargeNumber(-1)) < 1E-15)
-    assert(LargeNumber.abs(iPi.exp.im) < 1E-15)
+
+    assert(LargeNumber.abs(C.exp(iPi).re - LargeNumber(-1)) < 1E-15)
+    assert(LargeNumber.abs(C.exp(iPi).im) < 1E-15)
 
     // test that i ^ i = e ^ (- pi/2)
-    val c1 = (C.i ^ C.i)
-    val c2 = (iPi * i/2).exp
+    val c1 = C.i ^ C.i
+    val c2 = C.exp((iPi * i/2))
     assert(c1.im == c2.im)
     assert(LargeNumber.abs(c1.re - c2.re) < 1E-15)
     // test that e ^ (i pi/2) == i
-    val identity = (C.i * Math.PI/2.0).exp
+    val identity = C.exp((C.i * Math.PI/2.0))
     assert(LargeNumber.abs(identity.re) < 1E-15)
     assert(LargeNumber.abs(identity.im - 1) < 1E-15)
   }
+
 }

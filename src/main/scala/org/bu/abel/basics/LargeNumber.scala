@@ -61,7 +61,14 @@ object LargeNumber{
   def cos(value: LargeNumber): LargeNumber = LargeNumber(BigFloat.cos(value.value))
   def sin(value: LargeNumber): LargeNumber = LargeNumber(BigFloat.sin(value.value))
   def tan(value: LargeNumber): LargeNumber = LargeNumber(BigFloat.tan(value.value))
-  def atan(value: LargeNumber): LargeNumber = LargeNumber(BigFloat.atan(value.value))
+  def atan(value: LargeNumber): LargeNumber = {
+    if(value.value == BigFloat.POSITIVE_INFINITY)
+      LargeNumber(Math.atan(Double.PositiveInfinity))
+    else if(value.value == BigFloat.POSITIVE_INFINITY)
+      LargeNumber(Math.atan(Double.NegativeInfinity))
+    else
+      LargeNumber(BigFloat.atan(value.value))
+  }
   def sqrt(value: LargeNumber): LargeNumber = LargeNumber(BigFloat.sqrt(value.value))
   def apply(value: BigFloat): LargeNumber = new LargeNumber(value)
   def apply(value: Double, precision: Int = 100): LargeNumber = new LargeNumber(BigFloat.context(precision).valueOf(value))
