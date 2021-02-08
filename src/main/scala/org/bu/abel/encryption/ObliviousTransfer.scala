@@ -2,6 +2,7 @@ package org.bu.abel.encryption
 
 import org.bu.abel.basics._
 import org.bu.abel._
+import org.bu.abel.algops.rings.IntegerModN
 
 trait ObliviousTransfer extends ((OTPUser, OTPUser) => OTPUser)
 
@@ -17,7 +18,7 @@ object ObliviousTransferWithFactorization extends ObliviousTransfer{
       case (Some(p), Some(q)) =>
         val n = p*q
         val bobNumber = generateRandomRelPrime(n)
-        val bobNumSq: Double = FastExpWithMod(n)(bobNumber, 2)
+        val bobNumSq: Double = IntegerModN(n).pow(bobNumber, 2)
         val optPQPair = FindPQ(n)(bobNumSq.toLong)
         optPQPair match {
           // don't know which is P or Q
@@ -45,7 +46,7 @@ object ObliviousTransferWithFactorization extends ObliviousTransfer{
   */
 protected class ObliviousTransferWithDiscreteLog(modulus: Int) extends ObliviousTransfer{
   require(modulus > 1)
-  val fastExpWithMod: FastExpWithMod = FastExpWithMod(modulus)
+  val fastExpWithMod: IntegerModN = IntegerModN(modulus)
   override def apply(alice: OTPUser, bob: OTPUser): OTPUser = {
     var biInvXY0, biInvXY1, t0Copy, t1Copy, m0, m1 = -1L
     do {
@@ -57,25 +58,25 @@ protected class ObliviousTransferWithDiscreteLog(modulus: Int) extends Oblivious
       // bob
       val i = choose(Set(0, 1).iterator)
       val x = choose(elements.iterator)
-      val bi = fastExpWithMod(g, x)
+      val bi = fastExpWithMod.pow(g, x)
       val biInv = (c * ModInverse(bi, modulus)) % modulus
       val B = Map(i -> bi, (1 - i) -> biInv)
 
       // alice
       val y0 = choose(elements.iterator)
       val y1 = choose(elements.iterator)
-      val a0 = fastExpWithMod(g, y0)
-      val t0 = fastExpWithMod(B(0), y0)
-      val a1 = fastExpWithMod(g, y1)
-      val t1 = fastExpWithMod(B(1), y1)
+      val a0 = fastExpWithMod.pow(g, y0)
+      val t0 = fastExpWithMod.pow(B(0), y0)
+      val a1 = fastExpWithMod.pow(g, y1)
+      val t1 = fastExpWithMod.pow(B(1), y1)
       m0 = alice.s0.get ^ t0
       m1 = alice.s1.get ^ t1
 
       // bob
-      t0Copy = fastExpWithMod(a0, x)
-      t1Copy = fastExpWithMod(a1, x)
-      biInvXY0 = fastExpWithMod(biInv, y0)
-      biInvXY1 = fastExpWithMod(biInv, y1)
+      t0Copy = fastExpWithMod.pow(a0, x)
+      t1Copy = fastExpWithMod.pow(a1, x)
+      biInvXY0 = fastExpWithMod.pow(biInv, y0)
+      biInvXY1 = fastExpWithMod.pow(biInv, y1)
 //      if (Set(m0 ^ t0Copy, m1 ^ t1Copy) == Set(alice.s0.get, alice.s1.get))
 //        println(s"c =$c, g=$g, x=$x, B=$B, y0=$y0, i=$i, y1=$y1, t0=$t0, " + s"t1=$t1, a0^x=$t0Copy, a1^x=$t1Copy, a0=$a0, a1=$a1")
     }while(t0Copy == biInvXY0 || t1Copy == biInvXY1)

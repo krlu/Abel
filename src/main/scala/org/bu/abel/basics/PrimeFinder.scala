@@ -1,5 +1,6 @@
 package org.bu.abel.basics
 import org.bu.abel._
+import org.bu.abel.algops.rings.IntegerModN
 
 /**
   * Using Sieve of Eratosthenes
@@ -55,30 +56,30 @@ object MillerRabin extends ((Long, Int) => Boolean){
     */
   override def apply(n: Long, repetitions: Int): Boolean = {
     require(n > 3 && repetitions < n-3 && repetitions > 0)
-    n % 2 == 0 match {
-      case true => false
-      case false =>
-        val r: Long = factorOut2s(n-1)
-        val m: Long = (n-1)/ Math.pow(2, r).toLong
-        var possibleAs = List.range(2, n.toInt - 2)
-        for(_ <- 1 to repetitions){
-          val b = choose(possibleAs.iterator)
-          possibleAs = possibleAs.filter(_ != b)
-          val x = FastExpWithMod(n)(b, m)
-          if(x!=1 && x!= n-1) {
-//            println(s"n: $n,b: $b,m: $m,r $r,x: $x")
-            if(!millerRabinHelper(x, r, n))
-              return false
-          }
+    if (n % 2 == 0)
+      false
+    else {
+      val r: Long = factorOut2s(n - 1)
+      val m: Long = (n - 1) / Math.pow(2, r).toLong
+      var possibleAs = List.range(2, n.toInt - 2)
+      for (_ <- 1 to repetitions) {
+        val b = choose(possibleAs.iterator)
+        possibleAs = possibleAs.filter(_ != b)
+        val x = IntegerModN(n).pow(b, m)
+        if (x != 1 && x != n - 1) {
+          //            println(s"n: $n,b: $b,m: $m,r $r,x: $x")
+          if (!millerRabinHelper(x, r, n))
+            return false
         }
-        true
+      }
+      true
     }
   }
   private def millerRabinHelper(x: Long, r: Long, n: Long): Boolean = {
     var temp = x
     for (i <- 0 until r.toInt) {
       val exp = Math.pow(2,i).toInt
-      temp = FastExpWithMod(n)(x, exp)
+      temp = IntegerModN(n).pow(x, exp)
       if(temp == 1) return false
       if(temp == n-1) {
         return true

@@ -1,11 +1,13 @@
 package org.bu.abel.rng
 
 import org.bu.abel._
-import org.bu.abel.basics.{FastExpWithMod, RelPrimesLessThanN}
+import org.bu.abel.algops.rings.IntegerModN
+import org.bu.abel.basics.RelPrimesLessThanN
 
 class BlumBlumShub(p: Long, q: Long){
   require(p%4 == 3 && q%4 == 3)
-  val n = p*q
+  val n: Long = p*q
+  val zModN = IntegerModN(n)
   private var s0 = choose(RelPrimesLessThanN(n).iterator)
   private var mostRecentS: Option[Long] = None
   def generateBit: Long = {
@@ -14,7 +16,7 @@ class BlumBlumShub(p: Long, q: Long){
         mostRecentS = Some(s0)
         s0 % 2
       case Some(number) =>
-        mostRecentS = Some(FastExpWithMod(n)(number, 2))
+        mostRecentS = Some(zModN.pow(number, 2))
         number % 2
     }
   }

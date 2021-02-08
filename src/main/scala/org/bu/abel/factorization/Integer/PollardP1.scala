@@ -1,7 +1,7 @@
 package org.bu.abel.factorization.Integer
 
 import org.bu.abel._
-import org.bu.abel.algops.rings.IntegerRing
+import org.bu.abel.algops.rings.{IntegerModN, IntegerRing}
 import org.bu.abel.basics._
 
 object PollardP1 extends ((Long, Long, Int) => Long){
@@ -9,6 +9,7 @@ object PollardP1 extends ((Long, Long, Int) => Long){
   private val Z = IntegerRing()
   override def apply(n: Long, initBeta: Long, maxAttempts: Int = 10): Long = {
     var g: Long = 1
+    val zModN = IntegerModN(n)
     beta = initBeta
     var attempts = 0
     var lowerBound = 0L
@@ -16,7 +17,7 @@ object PollardP1 extends ((Long, Long, Int) => Long){
     while((g >= n || g <= 1) && attempts <= maxAttempts){
       val M: Long = PrimesLessThanN(beta).map{ q => Z.pow(q,largestExpLessThan(q,n))}.product
       val a = choose(RelPrimesLessThanN(n).iterator)
-      g = GCD(FastExpWithMod(n)(a, M)-1, n)._1
+      g = GCD(zModN.pow(a, M)-1, n)._1
       if(g >= n)
         upperBound = Math.min(upperBound, beta)
       if(g <= 1)

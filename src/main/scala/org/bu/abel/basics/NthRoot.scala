@@ -1,11 +1,14 @@
 package org.bu.abel.basics
 
+import org.bu.abel.algops.rings.IntegerModN
+
 
 protected class NthRoot(modulus: Long) extends ((Long, Long) => Seq[Long]){
   val elements = RelPrimesLessThanN(modulus)
+  val zModN = IntegerModN(modulus)
   override def apply(v1: Long, root: Long): Seq[Long] = {
     elements.filter(x => {
-       FastExpWithMod(modulus)(x, root).toLong == v1
+       zModN.pow(x, root) == v1
     })
   }
 }

@@ -1,6 +1,6 @@
 package org.bu.abel
 
-import org.bu.abel.algops.rings.IntegerRing
+import org.bu.abel.algops.rings.{IntegerModN, IntegerRing}
 import org.bu.abel.basics._
 import org.bu.abel.encryption._
 import org.bu.abel.factorization.Integer.{GetAllFactors, PollardP1, PollardRho, PrimeFactorization}
@@ -43,7 +43,7 @@ class CryptoTests extends FlatSpec with Matchers {
     assert(Z.pow(2,0) == 1)
     assert(Z.pow(3,0) == 1)
 
-    assert(FastExpWithMod(15688)(3, Phi(15688) -1) == 10459)
+    assert(IntegerModN(15688).pow(3, Phi(15688) -1) == 10459)
   }
 
   "Prime Finder" should "Finder Primes" in {
@@ -71,9 +71,10 @@ class CryptoTests extends FlatSpec with Matchers {
     assert(ModInverse(3,11) == 4)
 
     val inv = ModInverse(3313, Phi(4187))
+    val zModN = IntegerModN(4187)
     for(i <- RelPrimesLessThanN(4187)) {
-      val power = FastExpWithMod(4187)(i, 3313)
-      val original = FastExpWithMod(4187)(power, inv)
+      val power = zModN.pow(i, 3313)
+      val original = zModN.pow(power, inv)
       assert(original == i)
     }
   }
@@ -100,14 +101,14 @@ class CryptoTests extends FlatSpec with Matchers {
     assert(DiscreteLog(15)(2,5).isEmpty)
 
     for(i <- RelPrimesLessThanN(4187)) {
-      val power = FastExpWithMod(4187)(i, 3313)
+      val power = IntegerModN(4187).pow(i, 3313)
       val logs = AllDiscreteLogs(4187)(i, power)
       assert(logs.contains(3313))
     }
     val p = 857
     val pRoots = PrimitiveRoots(p)
     for(i <- RelPrimesLessThanN(p)){
-      val power = FastExpWithMod(p)(i, 33)
+      val power = IntegerModN(p).pow(i, 33)
       val logs = AllDiscreteLogs(p)(2, power)
       if(logs.size > 1)
         assert(!pRoots.contains(i))
@@ -181,8 +182,8 @@ class CryptoTests extends FlatSpec with Matchers {
   }
 
   "Pollard P-1" should  "find factor of N" in {
-    assert(Set[Long](73, 41).contains(PollardP1(2993,30)))
-    assert(Set[Long](2,5).contains(PollardP1(10,30)))
+    assert(Set[Long](73, 41).contains(PollardP1(2993,10)))
+    assert(Set[Long](2,5).contains(PollardP1(10,8)))
 //    Seq(30949, 30983, 31013, 31019, 31039, 31051, 31063, 43541).foreach{ p => assert(PollardP1(p, 10) == 1L)}
 //    Set(31053, 31065, 31067, 31077, 31083, 31093, 31127, 31127, 35259).foreach{ p => assert(PollardP1(p, 10, 50) == 1L)}
   }

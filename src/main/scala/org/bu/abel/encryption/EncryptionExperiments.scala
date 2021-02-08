@@ -1,11 +1,13 @@
 package org.bu.abel.encryption
 
+import org.bu.abel.algops.rings.IntegerModN
 import org.bu.abel.basics._
 import org.bu.abel.factorization.Integer.PollardRho
 
 object EncryptionExperiments{
 
   def main(args: Array[String]) {
+   
     println("************************************ RSA Experiment******************************************")
 
     println("Encrypting Message as Alice")
@@ -28,7 +30,7 @@ object EncryptionExperiments{
     println("Sending Message as Alice")
     ElGamalAlice(857, 125, 100)
     println("Decrypting Message from Bob")
-    val g_ab = FastExpWithMod(857)(674, 100)
+    val g_ab = IntegerModN(857).pow(674, 100)
     val g_ab_inv = ModInverse(g_ab, 857)
     println(s"Alice computes g^(-ab) = $g_ab_inv and m = ${g_ab_inv * 120 % 857}")
     println()
@@ -42,7 +44,7 @@ object EncryptionExperiments{
   }
 
   private def RSAAlice(n: Int, g: Int, m: Int): Unit = {
-    println(s"Alice sends m^g = ${FastExpWithMod(n)(m,g)}")
+    println(s"Alice sends m^g = ${IntegerModN(n).pow(m,g)}")
   }
 
   private def RSABob(p: Int, q: Int, g: Int): Unit ={
@@ -58,7 +60,7 @@ object EncryptionExperiments{
       case Bob => "Bob"
       case Eve => "Ever"
     }
-    println(s"$name Decrypts by getting y^(-g) = ${FastExpWithMod(n)(y, g_inv)}")
+    println(s"$name Decrypts by getting y^(-g) = ${IntegerModN(n).pow(y, g_inv)}")
   }
 
   private def RSADecryptEve(n: Int, g: Int, y: Int): Unit ={
@@ -70,15 +72,15 @@ object EncryptionExperiments{
 
   private def ElGamalAlice(p: Int, g: Int, a: Int): Unit ={
     println(s"Let p = $p, g = $g, a = $a")
-    println(s"Alice sends  p = $p, g = $g, g^a = ${FastExpWithMod(p)(g,a)}")
+    println(s"Alice sends  p = $p, g = $g, g^a = ${IntegerModN(p).pow(g,a)}")
   }
 
   private def ElGamalEve(p: Int, g: Int, g_a: Int, g_b: Int, m_g_ab: Int): Unit ={
     val log = DiscreteLog(1559)(569, 1372)
     val a = DiscreteLog(p)(g, g_a).get
     println(s"a = Log_${g}_$g_a = $a")
-    println(s"Verifying that $g^${log.get} = ${FastExpWithMod(p)(g, log.get)}")
-    val g_ab = FastExpWithMod(p)(g_b, a)
+    println(s"Verifying that $g^${log.get} = ${IntegerModN(p).pow(g, log.get)}")
+    val g_ab = IntegerModN(p).pow(g_b, a)
     println(s"g^ab = $g_ab")
     val g_ab_inv = ModInverse(g_ab, p)
     println(s"g^(-ab) = $g_ab_inv")
@@ -86,9 +88,9 @@ object EncryptionExperiments{
   }
 
   private def ElGamalBob(p: Int, g: Int, g_a: Int, b: Int, m : Int){
-    val g_ab = FastExpWithMod(p)(g_a, b)
+    val g_ab = IntegerModN(p).pow(g_a, b)
     println(s"Let p = $p , g = $g,  b = $b, m = $m ")
-    println(s"g^b = ${FastExpWithMod(p)(g,b)}")
+    println(s"g^b = ${IntegerModN(p).pow(g,b)}")
     println(s"m*(g^(ab)) = ${(m * g_ab) % p}")
   }
 }

@@ -1,5 +1,6 @@
 package org.bu.abel.factorization.Integer
 
+import org.bu.abel.algops.rings.IntegerModN
 import org.bu.abel.basics._
 
 object PollardRho extends (Long => Long){
@@ -18,7 +19,7 @@ object PollardRho extends (Long => Long){
 
   def helper(n: Long, offset: Long): Long = {
     if(n%2 == 0) return 2
-    def g(x: Long): Long = (FastExpWithMod(n)(x, 2) + offset) % n
+    def g(x: Long): Long = (IntegerModN(n).pow(x, 2) + offset) % n
     var x: Long = 2
     var y: Long = 2
     var d: Long = 1
