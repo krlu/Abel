@@ -1,24 +1,19 @@
 package org.bu.abel
 
-import org.bu.abel.basics.LargeNumber
-import org.bu.abel.types.C
+import org.bu.abel.types.{C, LargeNumber}
 import org.bu.abel.types.polynomials.RealPolynomial
 
-object ScalaFFT {
+object LargeFFT {
 
-  // TODO: performance is super slow still
+  // Note: performance is slow due to BigFloatLibrary
   def main(args: Array[String]): Unit = {
-    val coeffs = Array.fill(2000)(1.0)
-    val p1 = RealPolynomial(coeffs:_*)
-    val p2 = RealPolynomial(coeffs:_*)
-    val t1 = System.currentTimeMillis()
-    val padded = pad(p1.coefficients.toArray, 2048)
-    val cVector = FFTUtil.toComplex(padded)
-//    fft(cVector)
-    multiply(p1.coefficients.toArray, p2.coefficients.toArray)
-//    Multiplication.fftMultiply(coeffs, coeffs)
-    val t2 = System.currentTimeMillis()
-    println(t2 - t1)
+    val p1 = RealPolynomial(1,1,1)
+    for(exp <- 1000 to 1000) {
+      val t1 = System.currentTimeMillis()
+      println((p1 ^ exp).coefficients.toList(exp/2))
+      val t2 = System.currentTimeMillis()
+      println(t2 - t1)
+    }
   }
 
   val precision = 0
@@ -47,7 +42,7 @@ object ScalaFFT {
   private def pad(vector: Array[LargeNumber], size: Int) =
     vector ++ Array.fill(size - vector.length)(LargeNumber(0.0))
 
-  def fft(a: Array[C], level: Int = 0): Array[C] = {
+  def fft(a: Array[C]): Array[C] = {
     val n = a.length
     if(a.length == 1) a
     else {
@@ -59,16 +54,16 @@ object ScalaFFT {
       val halfUp = Math.ceil(n/2.0).toInt
       val halfDown = n/2
 
-      val a0: Array[C] = Array.fill(halfUp)(null)
-      val a1: Array[C] = Array.fill(halfDown)(null)
+      val a0: Array[C] = Array.fill(halfUp)(C(0,0))
+      val a1: Array[C] = Array.fill(halfDown)(C(0,0))
       for(i <- 0 until halfUp){
         a0(i) = a(i*2)
       }
       for(i <- 0 until halfDown){
         a1(i) = a(i*2 + 1)
       }
-      val y0 = fft(a0, level + 1)
-      val y1 = fft(a1, level + 1)
+      val y0 = fft(a0)
+      val y1 = fft(a1)
       val y: Array[C] = Array.fill(n)(null)
       for(k <- 0 until halfDown){
         omega = FFTUtil.round(omega, 5)

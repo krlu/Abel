@@ -1,4 +1,4 @@
-package org.bu.abel.algebraicStructures.rings
+package org.bu.abel.algops.rings
 
 import org.apache.commons.math3.linear.{MatrixUtils, RealMatrix}
 

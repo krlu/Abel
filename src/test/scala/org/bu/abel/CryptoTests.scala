@@ -1,5 +1,6 @@
 package org.bu.abel
 
+import org.bu.abel.algops.rings.IntegerRing
 import org.bu.abel.basics._
 import org.bu.abel.encryption._
 import org.bu.abel.factorization.Integer.{GetAllFactors, PollardP1, PollardRho, PrimeFactorization}
@@ -7,6 +8,7 @@ import org.bu.abel.rng.{BlumBlumShub, NaorReingold}
 import org.scalatest.{FlatSpec, Matchers}
 
 class CryptoTests extends FlatSpec with Matchers {
+
   "Euclidean Algorithm" should "compute correct values" in {
     val (gcd, _) = GCD(614,513)
     assert(gcd == 1)
@@ -17,32 +19,29 @@ class CryptoTests extends FlatSpec with Matchers {
     assert(ExtendedGCD(9, 16) == (-7,4))
     assert(MultiGCD(Seq(6L, 9L, 15L, 21L)).get == 3)
   }
+
   "Exponentiation Algorithm" should "compute correct values" in {
-    assert(FastExp(1, 0) == 1)
-    assert(FastExp(2, 0) == 1)
-    assert(FastExp(300, 0) == 1)
+    val Z = IntegerRing()
+    assert(Z.pow(1, 0) == 1)
+    assert(Z.pow(2, 0) == 1)
+    assert(Z.pow(300, 0) == 1)
 
-    assert(FastExp(1, 1) == 1)
-    assert(FastExp(1, 2) == 1)
-    assert(FastExp(1, 300) == 1)
+    assert(Z.pow(1, 1) == 1)
+    assert(Z.pow(1, 2) == 1)
+    assert(Z.pow(1, 300) == 1)
 
-    assert(FastExp(2,1) == 2)
-    assert(FastExp(2,2) == 4)
-    assert(FastExp(2,3) == 8)
-    assert(FastExp(2,4) == 16)
+    assert(Z.pow(2,1) == 2)
+    assert(Z.pow(2,2) == 4)
+    assert(Z.pow(2,3) == 8)
+    assert(Z.pow(2,4) == 16)
 
-    assert(FastExp(0,1) == 0)
-    assert(FastExp(0,2) == 0)
-    assert(FastExp(0,110) == 0)
+    assert(Z.pow(0,1) == 0)
+    assert(Z.pow(0,2) == 0)
+    assert(Z.pow(0,110) == 0)
 
-    assert(FastExp(1,0) == 1)
-    assert(FastExp(2,0) == 1)
-    assert(FastExp(3,0) == 1)
-
-//    assert(FastExp(2,-1) == 0.5)
-//    assert(FastExp(2,-2) == 0.25)
-//    assert(FastExp(2,-3) == 0.125)
-//    assert(Math.abs(FastExp(Math.sqrt(2).toLong, 2) - 2) < 0.00000004)
+    assert(Z.pow(1,0) == 1)
+    assert(Z.pow(2,0) == 1)
+    assert(Z.pow(3,0) == 1)
 
     assert(FastExpWithMod(15688)(3, Phi(15688) -1) == 10459)
   }

@@ -1,9 +1,10 @@
 package org.bu.abel.types.polynomials
 
-import org.bu.abel.algebraicStructures.fields.Real
-import org.bu.abel.basics.{LargeNumber, MultiGCD}
+import org.bu.abel.algops.fields.Real
+import org.bu.abel.basics.MultiGCD
 import org.bu.abel.factorization.polynomial.Kronecker
 import org.bu.abel._
+import org.bu.abel.types.LargeNumber
 
 /**
   * Finite polynomial with real coefficients
@@ -25,20 +26,11 @@ sealed class RealPolynomial(coeffs: LargeNumber*) extends Polynomial[LargeNumber
   def + (scalar: LargeNumber): RealPolynomial = RealPolynomial.create((this add scalar).coefficients:_*)
   def - (other: RealPolynomial): RealPolynomial = RealPolynomial.create((this sub other).coefficients:_*)
   def - (scalar:LargeNumber): RealPolynomial = RealPolynomial.create((this sub scalar).coefficients:_*)
-  def * (other: RealPolynomial): RealPolynomial = {
-    RealPolynomial.create((this mult other).coefficients: _*)
-//    RealPolynomial.create(ScalaFFT.multiply(this.coefficients.toArray, other.coefficients.toArray):_*)
-  }
+  def * (other: RealPolynomial): RealPolynomial = RealPolynomial.create((this mult other).coefficients: _*)
+
   def * (scalar: LargeNumber): RealPolynomial = RealPolynomial.create((this scale scalar).coefficients:_*)
   def * (other: Double): RealPolynomial = this * LargeNumber(other)
-  def ^(exp: Int): RealPolynomial = expBySquaring(RealPolynomial.one, this, exp)
-
-  private def expBySquaring(currentVal: RealPolynomial, base: RealPolynomial, exp: Long): RealPolynomial = exp match {
-    case 0 => currentVal
-    case 1 => currentVal * base
-    case y if y%2 == 0 => expBySquaring(currentVal, base * base, exp/2)
-    case _ => expBySquaring(currentVal * base, base, exp - 1)
-  }
+  def ^(exp: Int): RealPolynomial = RealPolynomial.create((this pow exp).coefficients:_*)
 
   def unary_- : RealPolynomial = RealPolynomial.create(this.invert.coefficients:_*)
 

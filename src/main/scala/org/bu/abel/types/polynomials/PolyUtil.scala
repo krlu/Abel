@@ -4,7 +4,7 @@ import cc.redberry.rings.Integers.Integers
 import cc.redberry.rings.bigint.BigInteger
 import cc.redberry.rings.poly.PolynomialMethods
 import cc.redberry.rings.scaladsl.{UnivariatePolynomial, UnivariateRing}
-import org.bu.abel.basics.LargeNumber
+import org.bu.abel.types.LargeNumber
 
 object PolyUtil {
 

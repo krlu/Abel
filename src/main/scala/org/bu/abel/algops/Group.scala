@@ -1,4 +1,4 @@
-package org.bu.abel.algebraicStructures
+package org.bu.abel.algops
 
 trait Group[T]{
   val zero: T

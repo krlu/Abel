@@ -1,8 +1,6 @@
 package org.bu.abel
 
-import org.apache.commons.math3.complex.Complex
-import org.bu.abel.basics.LargeNumber
-import org.bu.abel.types.{C, Q}
+import org.bu.abel.types.{C, LargeNumber, Q}
 import org.scalatest.{FlatSpec, Matchers}
 
 class NumbersTest extends FlatSpec with Matchers{

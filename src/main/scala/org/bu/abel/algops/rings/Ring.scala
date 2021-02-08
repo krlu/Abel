@@ -1,6 +1,6 @@
-package org.bu.abel.algebraicStructures.rings
+package org.bu.abel.algops.rings
 
-import org.bu.abel.algebraicStructures.Group
+import org.bu.abel.algops.Group
 
 trait Ring[T] extends Group[T]{
   val one: T

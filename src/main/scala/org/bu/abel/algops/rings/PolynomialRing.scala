@@ -1,4 +1,4 @@
-package org.bu.abel.algebraicStructures.rings
+package org.bu.abel.algops.rings
 
 import org.bu.abel.types.polynomials.{Polynomial, RealPolynomial}
 

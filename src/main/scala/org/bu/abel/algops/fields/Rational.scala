@@ -1,4 +1,4 @@
-package org.bu.abel.algebraicStructures.fields
+package org.bu.abel.algops.fields
 
 import org.bu.abel.types.Q
 

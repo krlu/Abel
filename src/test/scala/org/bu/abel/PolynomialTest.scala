@@ -1,6 +1,6 @@
 package org.bu.abel
 
-import org.bu.abel.basics.LargeNumber
+import org.bu.abel.types.LargeNumber
 import org.bu.abel.types.polynomials.{PolyUtil, RealPolynomial}
 import org.scalatest.{FlatSpec, Matchers}
 

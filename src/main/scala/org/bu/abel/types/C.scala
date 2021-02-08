@@ -1,7 +1,6 @@
 package org.bu.abel.types
 
-import org.bu.abel.algebraicStructures.fields.Complex
-import org.bu.abel.basics.LargeNumber
+import org.bu.abel.algops.fields.Complex
 
 /**
   * Class representing a C number, denoted by C - symbol for set of C numbers

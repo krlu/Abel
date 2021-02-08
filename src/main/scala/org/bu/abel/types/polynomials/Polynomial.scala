@@ -1,7 +1,6 @@
 package org.bu.abel.types.polynomials
 
-import org.bu.abel.Multiplication
-import org.bu.abel.algebraicStructures.rings.{PolynomialRing, Ring}
+import org.bu.abel.algops.rings.{PolynomialRing, Ring}
 
 /**
   * Generalization of a finite Polynomial
@@ -80,7 +79,7 @@ class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) extends (T =
     * @param exp - A non-negative integer
     * @return exponent of a polynomial two the power of some
     */
-  protected[abel] def pow(exp: Int): Polynomial[T, U] = {
+  protected[abel] def pow(exp: Long): Polynomial[T, U] = {
     require(exp >= 0)
     val pr = new PolynomialRing[T,U](ring)
     pr.pow(this, exp)

@@ -1,4 +1,4 @@
-package org.bu.abel.basics
+package org.bu.abel.types
 
 import ch.obermuhlner.math.big.BigFloat
 
@@ -6,6 +6,8 @@ import ch.obermuhlner.math.big.BigFloat
   * Scala Wrapper for Big Floats, enables natural arithmetic expressions
   * @param value - BigFloat from BigMath library
   */
+// TODO: needs unit testing
+// TODO: Underlying BigMath library is slow, may want to use a different library
 class LargeNumber(val value: BigFloat) {
   def + (other: LargeNumber): LargeNumber = LargeNumber(this.value.add(other.value))
   def - (other: LargeNumber): LargeNumber = LargeNumber(this.value.subtract(other.value))
@@ -59,7 +61,6 @@ class LargeNumber(val value: BigFloat) {
   override def toString: String = value.toString
 }
 
-// TODO: LargeNumber needs unit testing!!!
 object LargeNumber{
   /**
     * Rounds to nearest whole number
@@ -93,6 +94,6 @@ object LargeNumber{
   }
   def sqrt(value: LargeNumber): LargeNumber = LargeNumber(BigFloat.sqrt(value.value))
   def apply(value: BigFloat): LargeNumber = new LargeNumber(value)
-  def fromString(value: String, precision: Int = 100 ): LargeNumber = new LargeNumber(BigFloat.context(precision).valueOf(value))
+  def fromString(value: String, precision: Int = 100): LargeNumber = new LargeNumber(BigFloat.context(precision).valueOf(value))
   def apply(value: Double, precision: Int = 100): LargeNumber = new LargeNumber(BigFloat.context(precision).valueOf(value))
 }

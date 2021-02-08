@@ -1,7 +1,6 @@
 package org.bu.abel
 
-import org.bu.abel.basics.LargeNumber
-import org.bu.abel.types.C
+import org.bu.abel.types.{C, LargeNumber}
 object FFTUtil{
 
   def round(value: C, decimal: Int): C = {

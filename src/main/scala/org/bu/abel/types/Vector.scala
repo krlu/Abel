@@ -1,6 +1,6 @@
 package org.bu.abel.types
 
-import org.bu.abel.algebraicStructures.fields.Field
+import org.bu.abel.algops.fields.Field
 
 class Vector[T, F <: Field[T]](val elements: T*)(implicit val field: F){
 

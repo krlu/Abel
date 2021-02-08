@@ -1,6 +1,6 @@
-package org.bu.abel.algebraicStructures.fields
+package org.bu.abel.algops.fields
 
-import org.bu.abel.basics.LargeNumber
+import org.bu.abel.types.LargeNumber
 
 class Real extends Field[LargeNumber]{
   lazy val zero: LargeNumber = LargeNumber(0.0)
