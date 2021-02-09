@@ -1,6 +1,7 @@
 package org.bu.abel.types
 
-import org.bu.abel.basics.GCD
+import org.bu.abel.basics.GCDUtil
+import org.bu.abel.basics.GCDUtil.gcd
 
 /**
   * Class representing a rational number, denoted by Q - symbol for set of rationals
@@ -9,7 +10,7 @@ import org.bu.abel.basics.GCD
   */
 case class Q(private val n: Int, private val d: Int) {
 
-  private val gcd = GCD(n, d)._1.toInt
+  private val gcd = GCDUtil.gcd(n, d)._1.toInt
   val numerator: Int = n/gcd
   val denominator: Int = d/gcd
 
@@ -20,13 +21,13 @@ case class Q(private val n: Int, private val d: Int) {
     f(a.numerator * b.denominator, b.numerator * a.denominator)
     val numer =  f(a.numerator * b.denominator, b.numerator * a.denominator)
     val denom = a.denominator * b.denominator
-    val gcd = GCD(numer, denom)._1.toInt
+    val gcd = GCDUtil.gcd(numer, denom)._1.toInt
     Q(numer/gcd, denom/gcd)
   }
   def *(other: Q): Q = {
     val numer = numerator * other.numerator
     val denom = denominator * other.denominator
-    val gcd = GCD(numer, denom)._1.toInt
+    val gcd = GCDUtil.gcd(numer, denom)._1.toInt
     Q(numer/gcd, denom/gcd)
   }
   def *(x: Int):  Q = Q(numerator * x, denominator)

@@ -33,7 +33,7 @@ object ObliviousTransferWithFactorization extends ObliviousTransfer{
     */
   private def generateRandomRelPrime(n: Long): Long ={
     var number = ((Math.random() * n).toLong + 1) % n
-    while(GCD(number, n)._1 != 1)
+    while(GCDUtil.gcd(number, n)._1 != 1)
       number = ((Math.random() * n).toLong + 1) % n
     number
   }
@@ -106,7 +106,7 @@ protected class FindPQ(n: Long) extends (Long => Option[(Long, Long)]){
         val y1 = roots(1)
         val prod1 = ((x1 - y1) % n + n ) % n
         val prod2 = ((x1 + y1) % n + n ) % n
-        return Some((GCD(prod1, n)._1,GCD(prod2, n)._1))
+        return Some((GCDUtil.gcd(prod1, n)._1,GCDUtil.gcd(prod2, n)._1))
       }
     }
     None

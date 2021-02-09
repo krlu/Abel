@@ -1,6 +1,7 @@
 package org.bu.abel
 
-import org.bu.abel.types.polynomials.{PolyUtil, RealPolynomial}
+import org.bu.abel.factorization.FactorUtil
+import org.bu.abel.types.polynomials.RealPolynomial
 import org.bu.abel.factorization.polynomial.{Kronecker, NewtonsMethod, SquareFreeFactorization}
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -90,7 +91,7 @@ class PolyFactorizationTest extends FlatSpec with Matchers{
     var product = RealPolynomial.one
     for(i <- 0 until totalFactors){
       product = product * factors(i)
-      assert(PolyUtil.factorRealPolynomial(product) == factors.take(i+1).toSet)
+      assert(FactorUtil.primeFactorization(product).toSet == factors.take(i+1).toSet)
     }
   }
   private def comparePolys(p1: RealPolynomial, p2: RealPolynomial): Boolean =

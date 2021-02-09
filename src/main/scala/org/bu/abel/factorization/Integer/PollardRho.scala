@@ -26,7 +26,7 @@ object PollardRho extends (Long => Long){
     while(d == 1){
       x = g(x)
       y = g(g(y))
-      d = GCD(Math.abs(x-y),n)._1
+      d = GCDUtil.gcd(Math.abs(x-y),n)._1
     }
     if(d == n) 1 else d
   }

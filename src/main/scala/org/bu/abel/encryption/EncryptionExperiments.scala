@@ -48,7 +48,7 @@ object EncryptionExperiments{
   }
 
   private def RSABob(p: Int, q: Int, g: Int): Unit ={
-    require(IsPrime(p), IsPrime(q))
+    require(PrimeUtil.isPrime(p), PrimeUtil.isPrime(q))
     val n = p*q
     println(s"Bob sends n = $n and g = $g")
   }

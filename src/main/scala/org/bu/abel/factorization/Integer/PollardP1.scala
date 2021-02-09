@@ -15,9 +15,9 @@ object PollardP1 extends ((Long, Long, Int) => Long){
     var lowerBound = 0L
     var upperBound = Long.MaxValue
     while((g >= n || g <= 1) && attempts <= maxAttempts){
-      val M: Long = PrimesLessThanN(beta).map{ q => Z.pow(q,largestExpLessThan(q,n))}.product
-      val a = choose(RelPrimesLessThanN(n).iterator)
-      g = GCD(zModN.pow(a, M)-1, n)._1
+      val M: Long = PrimeUtil.primesLessThanN(beta).map{ q => Z.pow(q,largestExpLessThan(q,n))}.product
+      val a = choose(PrimeUtil.relPrimesLessThanN(n).iterator)
+      g = GCDUtil.gcd(zModN.pow(a, M)-1, n)._1
       if(g >= n)
         upperBound = Math.min(upperBound, beta)
       if(g <= 1)

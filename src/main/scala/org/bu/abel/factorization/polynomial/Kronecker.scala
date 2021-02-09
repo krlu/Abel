@@ -1,10 +1,10 @@
 package org.bu.abel.factorization.polynomial
 
 import org.apache.commons.math3.linear.{Array2DRowRealMatrix, ArrayRealVector, LUDecomposition}
-import org.bu.abel.types.polynomials.RealPolynomial
 import org.bu.abel.combinationList
-import org.bu.abel.factorization.Integer.GetAllFactors
+import org.bu.abel.factorization.FactorUtil
 import org.bu.abel.types.LargeNumber
+import org.bu.abel.types.polynomials.RealPolynomial
 
 import scala.collection.immutable
 
@@ -32,7 +32,7 @@ object Kronecker extends PolynomialFactorizationAlgo {
       remainder = r
     }
     else {
-      val factorSets: immutable.List[List[Long]] = range.map(i => p(LargeNumber(i)).value.toLong).map(GetAllFactors(_).toList).toList
+      val factorSets: immutable.List[List[Long]] = range.map(i => p(LargeNumber(i)).value.toLong).map(FactorUtil.getAllFactors(_).toList).toList
       var combos: Seq[List[Long]] = combinationList(factorSets)
       while ((remainder != RealPolynomial.zero || factor == RealPolynomial(-1) || factor == RealPolynomial.one) && combos.nonEmpty) {
         val x: Seq[Double] = combos.head.map(_.toDouble)

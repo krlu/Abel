@@ -1,12 +1,13 @@
-package org.bu.abel.types.polynomials
+package org.bu.abel.factorization.polynomial
 
 import cc.redberry.rings.Integers.Integers
 import cc.redberry.rings.bigint.BigInteger
 import cc.redberry.rings.poly.PolynomialMethods
 import cc.redberry.rings.scaladsl.{UnivariatePolynomial, UnivariateRing}
 import org.bu.abel.types.LargeNumber
+import org.bu.abel.types.polynomials.RealPolynomial
 
-object PolyUtil {
+object PolyFactorUtil {
 
   def GCD(p1: RealPolynomial, p2: RealPolynomial): RealPolynomial = {
     val p3: UnivariatePolynomial[BigInteger] = toRingsPoly(p1)

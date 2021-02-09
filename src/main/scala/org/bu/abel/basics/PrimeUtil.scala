@@ -2,14 +2,14 @@ package org.bu.abel.basics
 import org.bu.abel._
 import org.bu.abel.algops.rings.IntegerModN
 
-/**
-  * Using Sieve of Eratosthenes
-  */
-object PrimesLessThanN extends (Long => Seq[Long]){
-  override def apply(n: Long): Seq[Long] = {
+object PrimeUtil{
+  /**
+    * Using Sieve of Eratosthenes
+    */
+  def primesLessThanN(n: Long): Seq[Long] = {
     var primes: Seq[Long] = (2 until n.toInt).toList.map(_.toLong)
     for(i <- 2 to Math.floor(Math.sqrt(n.toInt)).toInt){
-      if(IsPrime(i)){
+      if(isPrime(i)){
         for(j <- i*2 to n.toInt by i){
           primes = primes.filter(_ != j)
         }
@@ -17,36 +17,29 @@ object PrimesLessThanN extends (Long => Seq[Long]){
     }
     primes
   }
-}
 
-/**
-  * The totient function
-  */
-object Phi extends (Long => Int){
-  override def apply(n: Long): Int = RelPrimesLessThanN(n).size
-}
+  /**
+    * The totient function - returns number of integers less than n and relatively prime to n
+    */
+  def phi(n: Long): Int = relPrimesLessThanN(n).size
 
-object RelPrimesLessThanN extends (Long => Seq[Long]){
-  override def apply(n: Long): Seq[Long] = {
+  def relPrimesLessThanN(n: Long): Seq[Long] = {
     var primes: Seq[Long] = (1 until n.toInt).toList.map(_.toLong)
     for(i <- 2 to n.toInt){
-      if(GCD(i, n.toInt)._1 != 1)
+      if(GCDUtil.gcd(i, n.toInt)._1 != 1)
         primes = primes.filter(_ != i)
     }
     primes
   }
-}
 
-object IsPrime extends (Long => Boolean){
-  override def apply(n: Long): Boolean = {
+  def isPrime(n: Long): Boolean = {
+    if(n < 0) return isPrime(-n)
     if(n == 1) return false
     for(i <- 2 to Math.floor(Math.sqrt(n.toInt)).toInt)
       if(n % i == 0) return false
     true
   }
-}
 
-object MillerRabin extends ((Long, Int) => Boolean){
   /**
     * Probability MillerRabin test is correct
     *
@@ -54,7 +47,7 @@ object MillerRabin extends ((Long, Int) => Boolean){
     * @param repetitions - probability MillerRabin is correct = Math.pow((1/4),repetitions)
     * @return true if and only if if MillerRabin test deems value is prime
     */
-  override def apply(n: Long, repetitions: Int): Boolean = {
+  def millerRabin(n: Long, repetitions: Int): Boolean = {
     require(n > 3 && repetitions < n-3 && repetitions > 0)
     if (n % 2 == 0)
       false

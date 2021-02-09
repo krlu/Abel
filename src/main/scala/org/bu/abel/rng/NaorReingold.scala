@@ -2,10 +2,11 @@ package org.bu.abel.rng
 
 import org.bu.abel._
 import org.bu.abel.algops.rings.IntegerModN
-import org.bu.abel.basics.{PrimesLessThanN, RelPrimesLessThanN}
+import org.bu.abel.basics.PrimeUtil
+
 
 class NaorReingold(n: Int) extends (Int => Int){
-  private val primes = PrimesLessThanN(Math.pow(2, n).toInt)
+  private val primes = PrimeUtil.primesLessThanN(Math.pow(2, n).toInt)
   val p: Long = choose(primes.iterator)
   val q: Long = choose(primes.iterator)
   val N: Long = p*q
@@ -16,7 +17,7 @@ class NaorReingold(n: Int) extends (Int => Int){
     Seq(ai0, ai1)
   }
   val zModN: IntegerModN = IntegerModN(N)
-  val g: Long = zModN.pow(choose(RelPrimesLessThanN(N).iterator),2)
+  val g: Long = zModN.pow(choose(PrimeUtil.relPrimesLessThanN(N).iterator),2)
 
   override def apply(queryValue: Int): Int = {
     val binaryList = toBinaryWithPadding(n, queryValue)

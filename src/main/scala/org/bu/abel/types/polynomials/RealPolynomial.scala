@@ -1,9 +1,9 @@
 package org.bu.abel.types.polynomials
 
-import org.bu.abel.algops.fields.Real
-import org.bu.abel.basics.MultiGCD
-import org.bu.abel.factorization.polynomial.Kronecker
 import org.bu.abel._
+import org.bu.abel.algops.fields.Real
+import org.bu.abel.basics.GCDUtil
+import org.bu.abel.factorization.polynomial.Kronecker
 import org.bu.abel.types.LargeNumber
 
 /**
@@ -64,7 +64,7 @@ sealed class RealPolynomial(coeffs: LargeNumber*) extends Polynomial[LargeNumber
   }
 
   def reduceCoeffs: (RealPolynomial, RealPolynomial) = {
-    val x = MultiGCD(this.coefficients.filter(x => x != 0).map(_.abs.value.toLong)).getOrElse(1L).toInt
+    val x = GCDUtil.multigcd(this.coefficients.filter(x => x != 0).map(_.abs.value.toLong)).getOrElse(1L).toInt
     val divisor = RealPolynomial(x)
     ((this/divisor)._1, divisor)
   }

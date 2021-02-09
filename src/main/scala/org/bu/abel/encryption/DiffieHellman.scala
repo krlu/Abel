@@ -1,7 +1,7 @@
 package org.bu.abel.encryption
 
 import org.bu.abel.algops.rings.IntegerRing
-import org.bu.abel.basics.IsPrime
+import org.bu.abel.basics.PrimeUtil
 
 /**
   * @param g - generator
@@ -9,7 +9,7 @@ import org.bu.abel.basics.IsPrime
   */
 class DiffieHellman(g: Long, p: Long) extends ((DHUser, DHUser) => Unit){
   val Z: IntegerRing = IntegerRing()
-  require(IsPrime(p) && g < p && p > 0 && g > 0)
+  require(PrimeUtil.isPrime(p) && g < p && p > 0 && g > 0)
   /**
     * @param alice - User to send a key
     * @param bob - User to receive a Key

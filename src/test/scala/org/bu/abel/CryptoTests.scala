@@ -3,21 +3,22 @@ package org.bu.abel
 import org.bu.abel.algops.rings.{IntegerModN, IntegerRing}
 import org.bu.abel.basics._
 import org.bu.abel.encryption._
-import org.bu.abel.factorization.Integer.{GetAllFactors, PollardP1, PollardRho, PrimeFactorization}
+import org.bu.abel.factorization.FactorUtil
+import org.bu.abel.factorization.Integer.{PollardP1, PollardRho, PrimeFactorization}
 import org.bu.abel.rng.{BlumBlumShub, NaorReingold}
 import org.scalatest.{FlatSpec, Matchers}
 
 class CryptoTests extends FlatSpec with Matchers {
 
   "Euclidean Algorithm" should "compute correct values" in {
-    val (gcd, _) = GCD(614,513)
+    val (gcd, _) = GCDUtil.gcd(614,513)
     assert(gcd == 1)
-    assert(ExtendedGCD(614, 513) == (-193, 231))
-    assert(ExtendedGCD(5, 7) == (3,-2))
-    assert(ExtendedGCD(5, 15) == (1,0))
-    assert(ExtendedGCD(10, 15) == (-1,1))
-    assert(ExtendedGCD(9, 16) == (-7,4))
-    assert(MultiGCD(Seq(6L, 9L, 15L, 21L)).get == 3)
+    assert(GCDUtil.extendedgcd(614, 513) == (-193, 231))
+    assert(GCDUtil.extendedgcd(5, 7) == (3,-2))
+    assert(GCDUtil.extendedgcd(5, 15) == (1,0))
+    assert(GCDUtil.extendedgcd(10, 15) == (-1,1))
+    assert(GCDUtil.extendedgcd(9, 16) == (-7,4))
+    assert(GCDUtil.multigcd(Seq(6L, 9L, 15L, 21L)).get == 3)
   }
 
   "Exponentiation Algorithm" should "compute correct values" in {
@@ -43,14 +44,14 @@ class CryptoTests extends FlatSpec with Matchers {
     assert(Z.pow(2,0) == 1)
     assert(Z.pow(3,0) == 1)
 
-    assert(IntegerModN(15688).pow(3, Phi(15688) -1) == 10459)
+    assert(IntegerModN(15688).pow(3, PrimeUtil.phi(15688) -1) == 10459)
   }
 
   "Prime Finder" should "Finder Primes" in {
-    assert(PrimesLessThanN(4) == List(2,3))
-    assert(PrimesLessThanN(6) == List(2,3,5))
-    assert(PrimesLessThanN(30) == List(2, 3, 5, 7, 11, 13, 17, 19, 23, 29))
-    assert(PrimesLessThanN(100) ==
+    assert(PrimeUtil.primesLessThanN(4) == List(2,3))
+    assert(PrimeUtil.primesLessThanN(6) == List(2,3,5))
+    assert(PrimeUtil.primesLessThanN(30) == List(2, 3, 5, 7, 11, 13, 17, 19, 23, 29))
+    assert(PrimeUtil.primesLessThanN(100) ==
       List(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97))
   }
 
@@ -70,9 +71,9 @@ class CryptoTests extends FlatSpec with Matchers {
     assert(ModInverse(2,3) == 2)
     assert(ModInverse(3,11) == 4)
 
-    val inv = ModInverse(3313, Phi(4187))
+    val inv = ModInverse(3313, PrimeUtil.phi(4187))
     val zModN = IntegerModN(4187)
-    for(i <- RelPrimesLessThanN(4187)) {
+    for(i <- PrimeUtil.relPrimesLessThanN(4187)) {
       val power = zModN.pow(i, 3313)
       val original = zModN.pow(power, inv)
       assert(original == i)
@@ -87,10 +88,10 @@ class CryptoTests extends FlatSpec with Matchers {
   }
 
   "Get All Factors" should "find all possible factors" in {
-    assert(GetAllFactors(9) == Seq(1,3,9))
-    assert(GetAllFactors(12) == Seq(1,2,3,4,6,12))
-    assert(GetAllFactors(32) == Seq(1,2,4,8,16,32))
-    assert(GetAllFactors(729) == Seq(1,3,9,27,81,243,729))
+    assert(FactorUtil.getAllFactors(9) == Seq(1,3,9))
+    assert(FactorUtil.getAllFactors(12) == Seq(1,2,3,4,6,12))
+    assert(FactorUtil.getAllFactors(32) == Seq(1,2,4,8,16,32))
+    assert(FactorUtil.getAllFactors(729) == Seq(1,3,9,27,81,243,729))
   }
 
   "Baby Step Giant Step" should "compute discrete Log" in {
@@ -100,14 +101,14 @@ class CryptoTests extends FlatSpec with Matchers {
     assert(DiscreteLog(18)(3,6).isEmpty)
     assert(DiscreteLog(15)(2,5).isEmpty)
 
-    for(i <- RelPrimesLessThanN(4187)) {
+    for(i <- PrimeUtil.relPrimesLessThanN(4187)) {
       val power = IntegerModN(4187).pow(i, 3313)
       val logs = AllDiscreteLogs(4187)(i, power)
       assert(logs.contains(3313))
     }
     val p = 857
     val pRoots = PrimitiveRoots(p)
-    for(i <- RelPrimesLessThanN(p)){
+    for(i <- PrimeUtil.relPrimesLessThanN(p)){
       val power = IntegerModN(p).pow(i, 33)
       val logs = AllDiscreteLogs(p)(2, power)
       if(logs.size > 1)
@@ -147,9 +148,9 @@ class CryptoTests extends FlatSpec with Matchers {
 
   "Miller Rabin" should "correctly verify primes" in {
     for(_ <- 1 to 10)
-      Seq(30949, 30983, 31013, 31019, 31039, 31051, 31063, 43541).foreach{ p => assert(MillerRabin(p, 10))}
-    Set(31053, 31065, 31067, 31077, 31083, 31093, 31127, 31127, 35259).foreach{ p => assert(!MillerRabin(p, 10))}
-    assert(!MillerRabin(1027485, 1))
+      Seq(30949, 30983, 31013, 31019, 31039, 31051, 31063, 43541).foreach{ p => assert(PrimeUtil.millerRabin(p, 10))}
+    Set(31053, 31065, 31067, 31077, 31083, 31093, 31127, 31127, 35259).foreach{ p => assert(!PrimeUtil.millerRabin(p, 10))}
+    assert(!PrimeUtil.millerRabin(1027485, 1))
   }
 
   "Naor Reingold" should "randomly generate binary bits" in {

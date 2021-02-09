@@ -1,7 +1,8 @@
 package org.bu.abel
 
+import org.bu.abel.factorization.polynomial.PolyFactorUtil
 import org.bu.abel.types.LargeNumber
-import org.bu.abel.types.polynomials.{PolyUtil, RealPolynomial}
+import org.bu.abel.types.polynomials.RealPolynomial
 import org.scalatest.{FlatSpec, Matchers}
 
 class PolynomialTest extends FlatSpec with Matchers{
@@ -153,11 +154,11 @@ class PolynomialTest extends FlatSpec with Matchers{
       val p1 = randomIntegerPoly
       val p2 = randomIntegerPoly
       val p3 = randomIntegerPoly
-      val gcdWithin = PolyUtil.GCD(p1, p2)
+      val gcdWithin = PolyFactorUtil.GCD(p1, p2)
       val n = ((Math.random() - 0.5) * 100).toInt
       val a = p1 * p3 * n
       val b = p2 * p3 * n
-      val gcd = PolyUtil.GCD(a, b)
+      val gcd = PolyFactorUtil.GCD(a, b)
       assert(gcd == p3 * gcdWithin * n || gcd == p3 * gcdWithin * n * -1)
     }
   }
