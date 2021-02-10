@@ -10,5 +10,6 @@ class Complex extends Field[C] {
   override def mult(a: C, b: C): C = a * b
   override def div(a: C, b: C): C = a/b
   override def eq(a: C, b: C): Boolean = a == b
+  override def remainder(a: C, b: C): C = C(0,0)
 }
 object Complex{ def apply(): Complex = new Complex() }

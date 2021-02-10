@@ -12,7 +12,12 @@ class LargeNumber(val value: BigFloat) {
   def + (other: LargeNumber): LargeNumber = LargeNumber(this.value.add(other.value))
   def - (other: LargeNumber): LargeNumber = LargeNumber(this.value.subtract(other.value))
   def * (other: LargeNumber): LargeNumber = LargeNumber(this.value.multiply(other.value))
-  def / (other: LargeNumber): LargeNumber = LargeNumber(this.value.divide(other.value))
+  def / (other: LargeNumber): LargeNumber = {
+    val quotient = LargeNumber(this.value.divide(other.value))
+    if(LargeNumber.abs(quotient) < LargeNumber(0.0000000000000000000000000001))
+      LargeNumber(0.0)
+    else quotient
+  }
   def ^ (other: LargeNumber): LargeNumber = LargeNumber(this.value.pow(other.value))
   def < (other: LargeNumber): Boolean = this.value.isLessThan(other.value)
   def > (other: LargeNumber): Boolean = this.value.isGreaterThan(other.value)

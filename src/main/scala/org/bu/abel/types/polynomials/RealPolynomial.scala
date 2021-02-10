@@ -11,7 +11,7 @@ import org.bu.abel.types.LargeNumber
   * Supports division and modular arithmetic
   * @param coeffs - input coefficients
   */
-sealed class RealPolynomial(coeffs: LargeNumber*) extends Polynomial[LargeNumber, Real](coeffs:_*)(ring = Real()){
+sealed class RealPolynomial(coeffs: LargeNumber*) extends Polynomial[LargeNumber, Real](coeffs:_*)(field = Real()){
 
   lazy val factors: Seq[RealPolynomial] = Kronecker(this)
   lazy val isSquareFree: Boolean = factors.size == factors.toSet.size
@@ -37,30 +37,8 @@ sealed class RealPolynomial(coeffs: LargeNumber*) extends Polynomial[LargeNumber
   // functions supporting division
   def % (other: RealPolynomial): RealPolynomial = (this/other)._2
   def / (other: RealPolynomial): (RealPolynomial, RealPolynomial) = {
-    val zeroPoly = RealPolynomial.zero
-    require(other != zeroPoly)
-    var quotient = zeroPoly
-    var remainder = RealPolynomial.create(coeffs:_*)
-    if(this.coefficients.isEmpty) return (other, zeroPoly)
-    while(remainder.degree >= other.degree) {
-      var divisionIndex = 0
-      var rLeadCoeff = remainder.coefficients.reverse(divisionIndex)
-      val otherLeadCoeff = other.leadingCoeff
-      // inner while loop to enforce integer division
-      while(rLeadCoeff.abs < otherLeadCoeff.abs){
-        divisionIndex += 1
-        if(divisionIndex + other.degree > remainder.degree)
-          return (quotient, remainder)
-        rLeadCoeff = remainder.coefficients.reverse(divisionIndex)
-      }
-      val tempVal = (RealPolynomial.create(ring.zero, ring.one) ^ (remainder.degree - divisionIndex - other.degree))*
-        RealPolynomial.create(ring.div(rLeadCoeff - (rLeadCoeff % otherLeadCoeff),otherLeadCoeff))
-      if(tempVal == zeroPoly)
-        return (quotient, remainder)
-      remainder = RealPolynomial.create((remainder - (tempVal * other)).coefficients:_*)
-      quotient = RealPolynomial.create((quotient + tempVal).coefficients:_*)
-    }
-    (quotient, remainder)
+    val (quotient, remainder) = this div other
+    (RealPolynomial.create(quotient.coefficients:_*), RealPolynomial.create(remainder.coefficients:_*))
   }
 
   def reduceCoeffs: (RealPolynomial, RealPolynomial) = {
@@ -70,13 +48,13 @@ sealed class RealPolynomial(coeffs: LargeNumber*) extends Polynomial[LargeNumber
   }
 
   override def toString(): String =
-    if(this.coefficients == Seq(ring.zero)) "0"
+    if(this.coefficients == Seq(field.zero)) "0"
     else {
       var toReturn = Array.empty[String]
       coefficients.reverse.indices.foreach{ i =>
         val coeffStr = {
           val tempStr = coefficients(i) match {
-            case c if c == ring.zero || ((c == ring.one || c == ring.inverse(ring.one))&& i != 0) => ""
+            case c if c == field.zero || ((c == field.one || c == field.inverse(field.one))&& i != 0) => ""
             case c => s"${c.abs}"
           }
           val tempStr2 = removeTrailingZeroes(removeLeadingZeroes(tempStr))

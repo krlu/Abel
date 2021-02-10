@@ -1,22 +1,24 @@
 package org.bu.abel.types.polynomials
 
-import org.bu.abel.algops.rings.{PolynomialRing, Ring}
+import org.bu.abel.algops.HasOrdering
+import org.bu.abel.algops.fields.Field
+import org.bu.abel.algops.rings.PolynomialRing
 
 /**
   * Generalization of a finite Polynomial
   * Supports addition, subtraction, multiplication, exponentiation
   * @param coeffs - coefficients for polynomial
-  * @param ring - Algebraic Ring that governs set T of values
+  * @param field - Algebraic Ring that governs set T of values
   * @tparam T - Type bound must support Ring structure
   * @tparam U - Type bound must extend Ring[T]
   */
-class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) extends (T => T){
+class Polynomial[T, U <: Field[T] with HasOrdering[T]](coeffs: T*)(implicit val field: U) extends (T => T){
 
   private type PolyType = Polynomial[T, U]
 
   lazy val coefficients: Seq[T] =
-    if(coeffs.isEmpty || coeffs.forall(ring.eq(_, ring.zero))) Seq(ring.zero)
-    else coeffs.reverse.dropWhile(ring.eq(_, ring.zero)).reverse
+    if(coeffs.isEmpty || coeffs.forall(field.eq(_, field.zero))) Seq(field.zero)
+    else coeffs.reverse.dropWhile(field.eq(_, field.zero)).reverse
   lazy val degree: Int = coefficients.size - 1
   val leadingCoeff: T = coefficients.reverse.head
 
@@ -26,10 +28,10 @@ class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) extends (T =
     * @return p(x) - output value belonging to T with structure Ring[T]
     */
   override def apply(x: T): T = coefficients.indices.map{ i =>
-    ring.mult(coefficients(i),ring.pow(x, i))
-  }.reduce((a, b) => ring.add(a, b))
+    field.mult(coefficients(i),field.pow(x, i))
+  }.reduce((a, b) => field.add(a, b))
 
-  protected[abel] def invert : Polynomial[T, U] = Polynomial[T,U](this.coefficients.map(ring.inverse):_*)(ring)
+  protected[abel] def invert : Polynomial[T, U] = Polynomial[T,U](this.coefficients.map(field.inverse):_*)(field)
 
   /**
     * Addition operation
@@ -37,10 +39,10 @@ class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) extends (T =
     * @return the sum of two polynomials
     */
   protected[abel] def add(other: Polynomial[T, U]): Polynomial[T, U] =
-    Polynomial[T, U](this.coefficients.zipAll(other.coefficients, ring.zero, ring.zero)
-      .map{case(a,b) => ring.add(a,b)}:_*)(ring)
+    Polynomial[T, U](this.coefficients.zipAll(other.coefficients, field.zero, field.zero)
+      .map{case(a,b) => field.add(a,b)}:_*)(field)
 
-  protected[abel]  def add(scalar: T): Polynomial[T, U] = this add Polynomial[T, U](scalar)(ring)
+  protected[abel]  def add(scalar: T): Polynomial[T, U] = this add Polynomial[T, U](scalar)(field)
 
   /**
     * Subtraction operation
@@ -48,11 +50,11 @@ class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) extends (T =
     * @return the difference between two polynomials
     */
   protected[abel]  def sub(other: Polynomial[T, U]): Polynomial[T, U] =
-    Polynomial[T, U](this.coefficients.zipAll(other.coefficients, ring.zero, ring.zero)
-      .map{case(a,b) => ring.sub(a,b)}:_*)(ring)
+    Polynomial[T, U](this.coefficients.zipAll(other.coefficients, field.zero, field.zero)
+      .map{case(a,b) => field.sub(a,b)}:_*)(field)
 
 
-  protected[abel]  def sub(scalar: T): Polynomial[T, U] = this sub Polynomial[T, U](scalar)(ring)
+  protected[abel]  def sub(scalar: T): Polynomial[T, U] = this sub Polynomial[T, U](scalar)(field)
 
   /**
     * multiplication operation, computed using distributive property of rings
@@ -60,19 +62,48 @@ class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) extends (T =
     * @return the product of two polynomials
     */
   protected[abel] def mult(other: Polynomial[T, U]): Polynomial[T, U] = {
-    if(this.coefficients.isEmpty || other.coefficients.isEmpty) return Polynomial[T, U](ring.zero)(ring)
+    if(this.coefficients.isEmpty || other.coefficients.isEmpty) return Polynomial[T, U](field.zero)(field)
     coefficients.indices.map{ i =>
-      val newCoeffs = (0 until i).map(_ => ring.zero) ++ other.coefficients.map(c => ring.mult(c,coefficients(i)))
-      Polynomial[T, U](newCoeffs:_*)(ring)
+      val newCoeffs = (0 until i).map(_ => field.zero) ++ other.coefficients.map(c => field.mult(c,coefficients(i)))
+      Polynomial[T, U](newCoeffs:_*)(field)
     }.reduce((p1, p2) => p1 add p2)
   }
+
+  protected[abel] def div (other: Polynomial[T, U]): (Polynomial[T, U], Polynomial[T, U]) = {
+    val zeroPoly = Polynomial(field.zero)(field)
+    require(other != zeroPoly)
+    var quotient = zeroPoly
+    var remainder = Polynomial(coeffs:_*)(field)
+    if(this.coefficients.isEmpty) return (other, zeroPoly)
+    while(remainder.degree >= other.degree) {
+      var divisionIndex = 0
+      var rLeadCoeff = remainder.coefficients.reverse(divisionIndex)
+      val otherLeadCoeff = other.leadingCoeff
+      // inner while loop to enforce integer division
+      while(field.compare(abs(rLeadCoeff),abs(otherLeadCoeff)) < 0){
+        divisionIndex += 1
+        if(divisionIndex + other.degree > remainder.degree)
+          return (quotient, remainder)
+        rLeadCoeff = remainder.coefficients.reverse(divisionIndex)
+      }
+      val factor = (Polynomial(field.zero, field.one)(field) pow (remainder.degree - divisionIndex - other.degree)) mult
+        Polynomial(field.div(field.sub(rLeadCoeff,field.remainder(rLeadCoeff,otherLeadCoeff)),otherLeadCoeff))(field)
+      if(factor == zeroPoly)
+        return (quotient, remainder)
+      remainder = remainder sub (factor mult other)
+      quotient = quotient add factor
+    }
+    (quotient, remainder)
+  }
+
+  def abs(a: T): T = if(field.compare(a, field.zero) < 0) field.inverse(a) else a
 
   /**
     * Multiplies all coefficients in polynomial by a scalar value under Ring[T]
     * @param scalar - lives with the set T
     * @return a new scaled Polynomial
     */
-  protected[abel]  def scale(scalar: T): Polynomial[T, U] = Polynomial(this.coeffs.map(c => ring.mult(c, scalar)):_*)(ring)
+  protected[abel]  def scale(scalar: T): Polynomial[T, U] = Polynomial(this.coeffs.map(c => field.mult(c, scalar)):_*)(field)
 
   /**
     * Exponentiation operation, computed by recursively by squaring
@@ -81,7 +112,7 @@ class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) extends (T =
     */
   protected[abel] def pow(exp: Long): Polynomial[T, U] = {
     require(exp >= 0)
-    val pr = new PolynomialRing[T,U](ring)
+    val pr = new PolynomialRing[T,U](field)
     pr.pow(this, exp)
   }
 
@@ -113,18 +144,18 @@ class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) extends (T =
       case poly: Polynomial[T, U] =>
         poly.coefficients.indices.map { i =>
           val c = poly.coefficients(i)
-          Polynomial[T,U](c)(ring) mult (this pow i)
+          Polynomial[T,U](c)(field) mult (this pow i)
         }.reduce((p1, p2) => p1 add p2)
       case _ => throw new IllegalArgumentException("input is not a polynomial!!")
     }
   }
 
   override def toString(): String =
-    if(this.coefficients == Seq(ring.zero)) "0.0"
+    if(this.coefficients == Seq(field.zero)) "0.0"
     else {
       coefficients.indices.map { i =>
         val coeffStr = coefficients(i) match {
-          case c if c == ring.zero || ((c == ring.one || c == ring.inverse(ring.one)) && i != ring.zero) => ""
+          case c if c == field.zero || ((c == field.one || c == field.inverse(field.one)) && i != field.zero) => ""
           case c => s"($c)"
         }
         val expStr = i match {
@@ -138,5 +169,5 @@ class Polynomial[T, U <: Ring[T]](coeffs: T*)(implicit val ring: U) extends (T =
 }
 
 protected[abel] object Polynomial{
-  def apply[T, U <: Ring[T]](coeffs: T*)(ring: U): Polynomial[T,U] = new Polynomial[T, U](coeffs:_*)(ring)
+  def apply[T, U <: Field[T] with HasOrdering[T]](coeffs: T*)(field: U): Polynomial[T,U] = new Polynomial[T, U](coeffs:_*)(field)
 }
