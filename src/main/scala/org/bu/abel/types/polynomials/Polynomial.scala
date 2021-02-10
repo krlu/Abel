@@ -2,7 +2,7 @@ package org.bu.abel.types.polynomials
 
 import org.bu.abel.algops.HasOrdering
 import org.bu.abel.algops.fields.Field
-import org.bu.abel.algops.rings.PolynomialRing
+import org.bu.abel.algops.rings.{OrderedPolynomialRing, PolynomialRing}
 
 /**
   * Generalization of a finite Polynomial
@@ -12,12 +12,14 @@ import org.bu.abel.algops.rings.PolynomialRing
   * @tparam T - Type bound must support Ring structure
   * @tparam U - Type bound must extend Ring[T]
   */
-class Polynomial[T, U <: Field[T] with HasOrdering[T]](coeffs: T*)(implicit val field: U) extends (T => T){
+class Polynomial[T, U <: Field[T]](coeffs: T*)(implicit val field: U) extends (T => T){
 
   private type PolyType = Polynomial[T, U]
 
   lazy val coefficients: Seq[T] =
-    if(coeffs.isEmpty || coeffs.forall(field.eq(_, field.zero))) Seq(field.zero)
+    if(coeffs.isEmpty || coeffs.forall(field.eq(_, field.zero))) {
+      Seq(field.zero)
+    }
     else coeffs.reverse.dropWhile(field.eq(_, field.zero)).reverse
   lazy val degree: Int = coefficients.size - 1
   val leadingCoeff: T = coefficients.reverse.head
@@ -69,34 +71,8 @@ class Polynomial[T, U <: Field[T] with HasOrdering[T]](coeffs: T*)(implicit val 
     }.reduce((p1, p2) => p1 add p2)
   }
 
-  protected[abel] def div (other: Polynomial[T, U]): (Polynomial[T, U], Polynomial[T, U]) = {
-    val zeroPoly = Polynomial(field.zero)(field)
-    require(other != zeroPoly)
-    var quotient = zeroPoly
-    var remainder = Polynomial(coeffs:_*)(field)
-    if(this.coefficients.isEmpty) return (other, zeroPoly)
-    while(remainder.degree >= other.degree) {
-      var divisionIndex = 0
-      var rLeadCoeff = remainder.coefficients.reverse(divisionIndex)
-      val otherLeadCoeff = other.leadingCoeff
-      // inner while loop to enforce integer division
-      while(field.compare(abs(rLeadCoeff),abs(otherLeadCoeff)) < 0){
-        divisionIndex += 1
-        if(divisionIndex + other.degree > remainder.degree)
-          return (quotient, remainder)
-        rLeadCoeff = remainder.coefficients.reverse(divisionIndex)
-      }
-      val factor = (Polynomial(field.zero, field.one)(field) pow (remainder.degree - divisionIndex - other.degree)) mult
-        Polynomial(field.div(field.sub(rLeadCoeff,field.remainder(rLeadCoeff,otherLeadCoeff)),otherLeadCoeff))(field)
-      if(factor == zeroPoly)
-        return (quotient, remainder)
-      remainder = remainder sub (factor mult other)
-      quotient = quotient add factor
-    }
-    (quotient, remainder)
-  }
+  protected[abel] def div (other: Polynomial[T, U]): (Polynomial[T, U], Polynomial[T, U]) = ???
 
-  def abs(a: T): T = if(field.compare(a, field.zero) < 0) field.inverse(a) else a
 
   /**
     * Multiplies all coefficients in polynomial by a scalar value under Ring[T]
@@ -112,7 +88,7 @@ class Polynomial[T, U <: Field[T] with HasOrdering[T]](coeffs: T*)(implicit val 
     */
   protected[abel] def pow(exp: Long): Polynomial[T, U] = {
     require(exp >= 0)
-    val pr = new PolynomialRing[T,U](field)
+    val pr = PolynomialRing[T,U](field)
     pr.pow(this, exp)
   }
 
@@ -169,5 +145,5 @@ class Polynomial[T, U <: Field[T] with HasOrdering[T]](coeffs: T*)(implicit val 
 }
 
 protected[abel] object Polynomial{
-  def apply[T, U <: Field[T] with HasOrdering[T]](coeffs: T*)(field: U): Polynomial[T,U] = new Polynomial[T, U](coeffs:_*)(field)
+  def apply[T, U <: Field[T]](coeffs: T*)(field: U): Polynomial[T,U] = new Polynomial[T, U](coeffs:_*)(field)
 }

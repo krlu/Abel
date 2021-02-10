@@ -11,7 +11,7 @@ import org.bu.abel.types.LargeNumber
   * Supports division and modular arithmetic
   * @param coeffs - input coefficients
   */
-sealed class RealPolynomial(coeffs: LargeNumber*) extends Polynomial[LargeNumber, Real](coeffs:_*)(field = Real()){
+sealed class RealPolynomial(coeffs: LargeNumber*) extends OrderedPolynomial[LargeNumber, Real](coeffs:_*)(field = Real()){
 
   lazy val factors: Seq[RealPolynomial] = Kronecker(this)
   lazy val isSquareFree: Boolean = factors.size == factors.toSet.size
@@ -82,7 +82,9 @@ sealed class RealPolynomial(coeffs: LargeNumber*) extends Polynomial[LargeNumber
 }
 
 object RealPolynomial{
-  def apply(coefficients: Double*) = new RealPolynomial(coefficients.map(LargeNumber(_)):_*)
+  def apply(coefficients: Double*) = {
+    new RealPolynomial(coefficients.map(LargeNumber(_)):_*)
+  }
   def create(coefficients: LargeNumber*): RealPolynomial = new RealPolynomial(coefficients:_*)
   def zero: RealPolynomial = RealPolynomial(0.0)
   def one: RealPolynomial = RealPolynomial(1.0)

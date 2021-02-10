@@ -3,7 +3,7 @@ package org.bu.abel.types.polynomials
 import org.bu.abel.algops.fields.Rational
 import org.bu.abel.types.Q
 
-class RationalPolynomial(coeffs: Q*) extends Polynomial[Q, Rational](coeffs:_*)(field = Rational()){
+class RationalPolynomial(coeffs: Q*) extends OrderedPolynomial[Q, Rational](coeffs:_*)(field = Rational()){
 
   lazy val derivative = RationalPolynomial(coefficients.indices.map{ i => coefficients(i)*i}.drop(1):_*)
   lazy val antiDerivative =
