@@ -67,11 +67,11 @@ class CryptoTests extends FlatSpec with Matchers {
   }
 
   "Mod Inverse" should "compute mod inverse" in {
-    assert(ModInverse(5,8) == 5)
-    assert(ModInverse(2,3) == 2)
-    assert(ModInverse(3,11) == 4)
+    assert(IntegerModN.modInverse(5,8) == 5)
+    assert(IntegerModN.modInverse(2,3) == 2)
+    assert(IntegerModN.modInverse(3,11) == 4)
 
-    val inv = ModInverse(3313, PrimeUtil.phi(4187))
+    val inv = IntegerModN.modInverse(3313, PrimeUtil.phi(4187))
     val zModN = IntegerModN(4187)
     for(i <- PrimeUtil.relPrimesLessThanN(4187)) {
       val power = zModN.pow(i, 3313)

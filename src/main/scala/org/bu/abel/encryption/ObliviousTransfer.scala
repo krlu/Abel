@@ -59,7 +59,7 @@ protected class ObliviousTransferWithDiscreteLog(modulus: Int) extends Oblivious
       val i = choose(Set(0, 1).iterator)
       val x = choose(elements.iterator)
       val bi = fastExpWithMod.pow(g, x)
-      val biInv = (c * ModInverse(bi, modulus)) % modulus
+      val biInv = (c * IntegerModN.modInverse(bi, modulus)) % modulus
       val B = Map(i -> bi, (1 - i) -> biInv)
 
       // alice

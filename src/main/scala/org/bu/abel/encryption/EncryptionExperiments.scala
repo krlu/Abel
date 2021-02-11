@@ -11,14 +11,18 @@ object EncryptionExperiments{
     println("************************************ RSA Experiment******************************************")
 
     println("Encrypting Message as Alice")
+    val (nAlice, m, gAlice) = (4187, 3313, 321)
     println("Let n = 4187, g = 3313, message = 321")
-    RSAAlice(4187, 3313, 321)
+    println(s"Alice sends m^g mod n = ${IntegerModN(nAlice).pow(m,gAlice)}")
     println()
 
     println("Sending Public Key as Bob")
-    RSABob(73, 79, 5)
+    val (p, q, gBob) = (73, 79, 5)
+    require(PrimeUtil.isPrime(p), PrimeUtil.isPrime(q))
+    val nBob = p*q
+    println(s"Bob sends n = $nBob and g = $gBob")
     println("Decrypting Message from Alice")
-    RSADecrypt(73 * 79, 5, 3560, 72 * 78, Bob)
+    RSADecrypt(p * q, 5, 3560, 72 * 78, Bob)
     println()
 
     println("Breaking RSA as Eve")
@@ -31,7 +35,7 @@ object EncryptionExperiments{
     ElGamalAlice(857, 125, 100)
     println("Decrypting Message from Bob")
     val g_ab = IntegerModN(857).pow(674, 100)
-    val g_ab_inv = ModInverse(g_ab, 857)
+    val g_ab_inv = IntegerModN.modInverse(g_ab, 857)
     println(s"Alice computes g^(-ab) = $g_ab_inv and m = ${g_ab_inv * 120 % 857}")
     println()
 
@@ -43,18 +47,8 @@ object EncryptionExperiments{
     ElGamalEve(1559, 569, 1372, 575, 471)
   }
 
-  private def RSAAlice(n: Int, g: Int, m: Int): Unit = {
-    println(s"Alice sends m^g = ${IntegerModN(n).pow(m,g)}")
-  }
-
-  private def RSABob(p: Int, q: Int, g: Int): Unit ={
-    require(PrimeUtil.isPrime(p), PrimeUtil.isPrime(q))
-    val n = p*q
-    println(s"Bob sends n = $n and g = $g")
-  }
-
   private def RSADecrypt(n: Int, g: Int, y: Int, phi: Int, person: Person): Unit ={
-    val  g_inv= ModInverse(g, phi)
+    val  g_inv = IntegerModN.modInverse(g, phi)
     val name = person match {
       case Alice => throw new IllegalArgumentException("Cannot pass alice to this method!")
       case Bob => "Bob"
@@ -82,7 +76,7 @@ object EncryptionExperiments{
     println(s"Verifying that $g^${log.get} = ${IntegerModN(p).pow(g, log.get)}")
     val g_ab = IntegerModN(p).pow(g_b, a)
     println(s"g^ab = $g_ab")
-    val g_ab_inv = ModInverse(g_ab, p)
+    val g_ab_inv = IntegerModN.modInverse(g_ab, p)
     println(s"g^(-ab) = $g_ab_inv")
     println(s"m = ${g_ab_inv * m_g_ab % p}")
   }
