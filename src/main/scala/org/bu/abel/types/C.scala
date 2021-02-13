@@ -28,6 +28,7 @@ class C(val re: LargeNumber, val im: LargeNumber) {
   }
   def ^(e: Int): C = Complex().pow(this, e)
   def ^(c: C): C = C.exp((C.log(this) * c))
+  def unary_- : C = C(-re, - im)
 
   override def equals(other: Any): Boolean = other match {
     case c: C => this.re == c.re && this.im == c.im

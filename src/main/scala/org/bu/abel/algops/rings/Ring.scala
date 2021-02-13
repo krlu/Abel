@@ -9,6 +9,7 @@ trait Ring[T] extends Group[T]{
 
   @scala.annotation.tailrec
   private def expBySquaring(currentVal: T, base: T, exp: Long): T = exp match {
+    case y if y < 0 => throw new IllegalArgumentException("cannot exponentiate with negative number over a ring!")
     case 0 => currentVal
     case 1 => mult(currentVal, base)
     case y if y%2 == 0 => expBySquaring(currentVal, mult(base, base), exp/2)

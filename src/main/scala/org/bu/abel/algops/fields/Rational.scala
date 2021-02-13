@@ -7,7 +7,6 @@ class Rational extends Field[Q] with HasOrdering[Q]{
   override val zero: Q = Q(0,1)
   override val one: Q = Q(1,1)
   override def mult(a: Q, b: Q): Q = a * b
-  override def div(a: Q, b: Q): Q = a/b
   override def add(a: Q, b: Q): Q = a + b
   override def sub(a: Q, b: Q): Q = a - b
   override def eq(a: Q, b: Q): Boolean = a == b
@@ -18,5 +17,7 @@ class Rational extends Field[Q] with HasOrdering[Q]{
     val bothDenoms = t1.denominator * t2.denominator
     (t1.numerator * bothDenoms).compareTo(t2.numerator * bothDenoms)
   }
+
+  override def multInv(a: Q): Q = Q(a.denominator, a.numerator)
 }
 object Rational{ def apply(): Rational = new Rational() }
