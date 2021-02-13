@@ -1,6 +1,8 @@
 package org.bu.abel.basics
 import org.bu.abel._
 import org.bu.abel.algops.rings.IntegerModN
+import org.bu.abel.factorization.FactorUtil
+import org.bu.abel.types.polynomials.{Polynomial, RealPolynomial}
 
 object PrimeUtil{
   /**
@@ -30,6 +32,11 @@ object PrimeUtil{
         primes = primes.filter(_ != i)
     }
     primes
+  }
+
+  def isPrime(p: RealPolynomial): Boolean = {
+    val factors = FactorUtil.primeFactorization(p)
+    factors.size == 1
   }
 
   def isPrime(n: Long): Boolean = {

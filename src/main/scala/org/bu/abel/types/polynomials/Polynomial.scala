@@ -1,8 +1,7 @@
 package org.bu.abel.types.polynomials
 
-import org.bu.abel.algops.HasOrdering
 import org.bu.abel.algops.fields.Field
-import org.bu.abel.algops.rings.{OrderedPolynomialRing, PolynomialRing}
+import org.bu.abel.algops.rings.PolynomialRing
 
 /**
   * Generalization of a finite Polynomial
@@ -70,9 +69,6 @@ class Polynomial[T, U <: Field[T]](coeffs: T*)(implicit val field: U) extends (T
       Polynomial[T, U](newCoeffs:_*)(field)
     }.reduce((p1, p2) => p1 add p2)
   }
-
-  protected[abel] def div (other: Polynomial[T, U]): (Polynomial[T, U], Polynomial[T, U]) = ???
-
 
   /**
     * Multiplies all coefficients in polynomial by a scalar value under Ring[T]

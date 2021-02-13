@@ -23,14 +23,15 @@ sealed class RealPolynomial(coeffs: LargeNumber*) extends OrderedPolynomial[Larg
 
   // wrappers for the arithmetic functions from Polynomial superclass
   def + (other: RealPolynomial): RealPolynomial = RealPolynomial.create((this add other).coefficients:_*)
-  def + (scalar: LargeNumber): RealPolynomial = RealPolynomial.create((this add scalar).coefficients:_*)
+  def + (scalar: LargeNumber): RealPolynomial = this + RealPolynomial.create(scalar)
+  def + (scalar: Double): RealPolynomial = this + RealPolynomial(scalar)
   def - (other: RealPolynomial): RealPolynomial = RealPolynomial.create((this sub other).coefficients:_*)
-  def - (scalar:LargeNumber): RealPolynomial = RealPolynomial.create((this sub scalar).coefficients:_*)
+  def - (scalar:LargeNumber): RealPolynomial = this - RealPolynomial.create(scalar)
+  def - (scalar: Double): RealPolynomial = this - RealPolynomial(scalar)
   def * (other: RealPolynomial): RealPolynomial = RealPolynomial.create((this mult other).coefficients: _*)
-
   def * (scalar: LargeNumber): RealPolynomial = RealPolynomial.create((this scale scalar).coefficients:_*)
   def * (other: Double): RealPolynomial = this * LargeNumber(other)
-  def ^(exp: Int): RealPolynomial = RealPolynomial.create((this pow exp).coefficients:_*)
+  def ^(exp: Long): RealPolynomial = RealPolynomial.create((this pow exp).coefficients:_*)
 
   def unary_- : RealPolynomial = RealPolynomial.create(this.invert.coefficients:_*)
 
@@ -82,7 +83,7 @@ sealed class RealPolynomial(coeffs: LargeNumber*) extends OrderedPolynomial[Larg
 }
 
 object RealPolynomial{
-  def apply(coefficients: Double*) = {
+  def apply(coefficients: Double*): RealPolynomial = {
     new RealPolynomial(coefficients.map(LargeNumber(_)):_*)
   }
   def create(coefficients: LargeNumber*): RealPolynomial = new RealPolynomial(coefficients:_*)

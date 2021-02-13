@@ -1,6 +1,10 @@
 package org.bu.abel.basics
 
+import org.bu.abel.factorization.polynomial.PolyFactorUtil
+import org.bu.abel.types.polynomials.RealPolynomial
+
 object GCDUtil{
+
   def gcd(m: Long, n: Long): (Long, List[(Long, Long)]) = euclideanAlgo(m, n)
   private def euclideanAlgo(m: Long, n: Long): (Long, List[(Long, Long)]) = {
     if(m%n == 0) return (n, List((m/n, m%n)))

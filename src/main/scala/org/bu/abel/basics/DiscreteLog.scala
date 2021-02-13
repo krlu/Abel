@@ -11,7 +11,7 @@ protected class DiscreteLog(modulus: Long) extends ((Long, Long) => Option[Long]
     require(base > 0 && value > 0)
     val m = Math.ceil(Math.sqrt(modulus)).toLong
     val powerOf: Map[Int, Long] = (0 to m.toInt).map(i => i -> zModN.pow(base, i)).toMap
-    val C = zModN.pow(zModN.inverse(base), m) // (b ^-1)^m
+    val C = zModN.pow(IntegerModN.modInverse(base, modulus), m) // (b ^-1)^m
     var y = value
     for(i <- 0 until m.toInt) {
       for(j <- powerOf.keys){
@@ -37,7 +37,7 @@ protected class AllDiscreteLogs(modulus: Long) extends ((Long, Long) => Seq[Long
     var logs = Seq.empty[Long]
     val m = Math.ceil(Math.sqrt(modulus)).toLong
     val powerOf: Map[Int, Long] = (0 to m.toInt).map(i => i -> zModN.pow(base, i)).toMap
-    val C = zModN.pow(zModN.inverse(base), m) // (b ^-1)^m
+    val C = zModN.pow(IntegerModN.modInverse(base, modulus), m) // (b ^-1)^m
     var y = value
     for(i <- 0 until m.toInt) {
       for(j <- powerOf.keys){

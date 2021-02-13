@@ -1,8 +1,9 @@
 package org.bu.abel
 
+import org.bu.abel.basics.PrimeUtil
 import org.bu.abel.factorization.FactorUtil
 import org.bu.abel.types.polynomials.RealPolynomial
-import org.bu.abel.factorization.polynomial.{Kronecker, NewtonsMethod, SquareFreeFactorization}
+import org.bu.abel.factorization.polynomial.{Kronecker, NewtonsMethod, PolyFactorUtil, SquareFreeFactorization}
 import org.scalatest.{FlatSpec, Matchers}
 
 class PolyFactorizationTest extends FlatSpec with Matchers{
@@ -94,6 +95,15 @@ class PolyFactorizationTest extends FlatSpec with Matchers{
       assert(FactorUtil.primeFactorization(product).toSet == factors.take(i+1).toSet)
     }
   }
+
+  "Prime Finder" should "identify if Polynomial is Prime" in {
+    val x = RealPolynomial(0,1)
+    val p1 = (x^2) + 1
+    val p2 = (x^2) - 1
+    assert(PrimeUtil.isPrime(p1))
+    assert(!PrimeUtil.isPrime(p2))
+  }
+
   private def comparePolys(p1: RealPolynomial, p2: RealPolynomial): Boolean =
     p1.coefficients.head > p2.coefficients.head
 }
