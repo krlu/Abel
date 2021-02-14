@@ -1,6 +1,6 @@
 package org.bu.abel.basics
 import org.bu.abel._
-import org.bu.abel.algops.rings.IntegerModN
+import org.bu.abel.algops.fields.IntegerModN
 import org.bu.abel.factorization.FactorUtil
 import org.bu.abel.types.polynomials.{Polynomial, RealPolynomial}
 

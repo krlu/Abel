@@ -165,6 +165,8 @@ class PolynomialTest extends FlatSpec with Matchers{
 
   "A RealPolynomial" should "Parse a string input construction" in {
     val p1 = RealPolynomial(-16,-24,-4,10,6,1)
+    val str0 = "9x^2+x+9"
+    assert(RealPolynomial.parse(str0) == RealPolynomial(9,1,9))
     val str1 = "x^5 + 6x^4 + 10x^3 - 4x^2 - 24x - 16"
     assert(RealPolynomial.parse(str1) == p1)
     val str2 = "+x^5 + 6x^4 + 10x^3 - 4x^2 - 24x - 16"

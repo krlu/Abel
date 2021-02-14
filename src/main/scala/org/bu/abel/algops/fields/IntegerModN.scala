@@ -1,9 +1,7 @@
-package org.bu.abel.algops.rings
+package org.bu.abel.algops.fields
 
 import org.bu.abel.algops.HasOrdering
-import org.bu.abel.algops.fields.Field
 import org.bu.abel.basics.GCDUtil
-import org.bu.abel.types.polynomials.Polynomial
 
 class IntegerModN(modulus: Long) extends Field[Long] with HasOrdering[Long]{
 

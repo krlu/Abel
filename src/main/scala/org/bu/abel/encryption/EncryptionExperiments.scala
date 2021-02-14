@@ -1,6 +1,6 @@
 package org.bu.abel.encryption
 
-import org.bu.abel.algops.rings.IntegerModN
+import org.bu.abel.algops.fields.IntegerModN
 import org.bu.abel.basics._
 import org.bu.abel.factorization.Integer.PollardRho
 

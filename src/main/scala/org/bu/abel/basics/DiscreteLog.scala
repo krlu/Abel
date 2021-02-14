@@ -1,6 +1,6 @@
 package org.bu.abel.basics
 
-import org.bu.abel.algops.rings.IntegerModN
+import org.bu.abel.algops.fields.IntegerModN
 
 
 /**Computes Discrete Log using Baby Step Giant step algorithm*/

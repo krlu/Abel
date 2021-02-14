@@ -1,6 +1,6 @@
 package org.bu.abel.factorization.Integer
 
-import org.bu.abel.algops.rings.IntegerModN
+import org.bu.abel.algops.fields.IntegerModN
 import org.bu.abel.basics._
 
 object PollardRho extends (Long => Long){

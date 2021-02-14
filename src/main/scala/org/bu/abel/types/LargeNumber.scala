@@ -1,6 +1,7 @@
 package org.bu.abel.types
 
 import ch.obermuhlner.math.big.BigFloat
+import org.apache.commons.math3.fraction.BigFraction
 
 /**
   * Scala Wrapper for Big Floats, enables natural arithmetic expressions
@@ -67,6 +68,15 @@ class LargeNumber(val value: BigFloat) {
 }
 
 object LargeNumber{
+  def main(args: Array[String]): Unit = {
+    var a = LargeNumber(1234)
+    for(_ <- 1 to 10){
+      a = a^(-1)
+      val frac = new BigFraction(a.value.toDouble, 0.00000002D, 10000)
+      println(a.value.toDouble, frac)
+    }
+  }
+
   /**
     * Rounds to nearest whole number
     * @param value - in large number

@@ -96,7 +96,9 @@ object RealPolynomial{
       val coeffsAndExp: Seq[(Double, Int)] = tokens.map { token =>
         if (token.contains("x")) {
           val subTokens = token.split("x")
-          if (subTokens(0).isEmpty)
+          if(subTokens.isEmpty)
+            (1.0, 1)
+          else if (subTokens(0).isEmpty)
             (1.0, subTokens(1).replace("^", "").toInt)
           else if (subTokens.length == 1)
             (subTokens(0).toDouble, 1)

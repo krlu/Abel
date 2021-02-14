@@ -1,7 +1,7 @@
 package org.bu.abel.rng
 
 import org.bu.abel._
-import org.bu.abel.algops.rings.IntegerModN
+import org.bu.abel.algops.fields.IntegerModN
 import org.bu.abel.basics.PrimeUtil
 
 class BlumBlumShub(p: Long, q: Long){

@@ -1,7 +1,8 @@
 package org.bu.abel.factorization.Integer
 
 import org.bu.abel._
-import org.bu.abel.algops.rings.{IntegerModN, IntegerRing}
+import org.bu.abel.algops.fields.IntegerModN
+import org.bu.abel.algops.rings.IntegerRing
 import org.bu.abel.basics._
 
 object PollardP1 extends ((Long, Long, Int) => Long){

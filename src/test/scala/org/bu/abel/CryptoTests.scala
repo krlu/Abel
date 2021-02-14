@@ -1,6 +1,7 @@
 package org.bu.abel
 
-import org.bu.abel.algops.rings.{IntegerModN, IntegerRing}
+import org.bu.abel.algops.fields.IntegerModN
+import org.bu.abel.algops.rings.IntegerRing
 import org.bu.abel.basics._
 import org.bu.abel.encryption._
 import org.bu.abel.factorization.FactorUtil

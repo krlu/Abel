@@ -1,23 +1,21 @@
 package org.bu.abel.algops.fields
 
-import org.bu.abel.types.polynomials.Polynomial
+import org.bu.abel.types.polynomials.{Polynomial, RealPolynomial}
 
-class PolynomialModP[T,U <: Field[T]](modulus: Polynomial[T,U], field: U) extends Field[Polynomial[T,U]]{
+class PolynomialModP[T,U <: Field[T]](modulus: RealPolynomial, field: Real) extends Field[RealPolynomial]{
 
-  override val one: Polynomial[T, U] = Polynomial[T,U](field.one)(field)
-  override val zero: Polynomial[T, U] = Polynomial[T,U](field.zero)(field)
+  override val one: RealPolynomial = RealPolynomial.create(field.one)
+  override val zero: RealPolynomial = RealPolynomial.create(field.zero)
 
-  override def mult(a: Polynomial[T,U], b: Polynomial[T,U]): Polynomial[T,U] = mod(mod(a) mult mod(b))
-  override def inverse(a: Polynomial[T,U]): Polynomial[T,U] = mod(a.invert)
-  override def add(a: Polynomial[T,U], b: Polynomial[T,U]): Polynomial[T,U] = mod(mod(a) add mod(b))
-  override def sub(a: Polynomial[T,U], b: Polynomial[T,U]): Polynomial[T,U] = mod(mod(a) sub mod(b))
-  override def eq(a: Polynomial[T,U], b: Polynomial[T,U]): Boolean = mod(a) == mod(b)
+  override def mult(a: RealPolynomial, b: RealPolynomial): RealPolynomial = mod(mod(a) * mod(b))
+  override def inverse(a: RealPolynomial): RealPolynomial = mod(-a)
+  override def add(a: RealPolynomial, b: RealPolynomial): RealPolynomial = mod(mod(a) + mod(b))
+  override def sub(a: RealPolynomial, b: RealPolynomial): RealPolynomial = mod(mod(a) - mod(b))
+  override def eq(a: RealPolynomial, b: RealPolynomial): Boolean = mod(a) == mod(b)
 
-  def mod(value: Polynomial[T,U]): Polynomial[T,U] = ???
+  def mod(value: RealPolynomial): RealPolynomial = remainder(value, modulus)
 
-  override def div(a: Polynomial[T, U], b: Polynomial[T, U]): Polynomial[T, U] = ???
+  override def remainder(a: RealPolynomial, b: RealPolynomial): RealPolynomial = a % b
 
-  override def remainder(a: Polynomial[T, U], b: Polynomial[T, U]): Polynomial[T, U] = ???
-
-  override def multInv(a: Polynomial[T, U]): Polynomial[T, U] = ???
+  override def multInv(a: RealPolynomial): RealPolynomial = ???
 }

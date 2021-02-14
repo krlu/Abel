@@ -1,6 +1,6 @@
 package org.bu.abel.basics
 
-import org.bu.abel.algops.rings.IntegerModN
+import org.bu.abel.algops.fields.IntegerModN
 
 
 protected class NthRoot(modulus: Long) extends ((Long, Long) => Seq[Long]){
