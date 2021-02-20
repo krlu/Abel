@@ -93,6 +93,12 @@ object LargeNumber{
       else integerTerm + 1
     }
   }
+
+  def roundDown(value: LargeNumber): LargeNumber = {
+    val splitStr = value.value.toString.split("\\.").toList
+    if(splitStr.size == 1) value
+    else LargeNumber.fromString(splitStr.head)
+  }
   def abs(value: LargeNumber): LargeNumber = LargeNumber(BigFloat.abs(value.value))
   def exp(value: LargeNumber): LargeNumber = LargeNumber(BigFloat.exp(value.value))
   def ln(value: LargeNumber): LargeNumber = LargeNumber(BigFloat.log(value.value))

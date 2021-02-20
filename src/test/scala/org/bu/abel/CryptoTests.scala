@@ -7,6 +7,7 @@ import org.bu.abel.encryption._
 import org.bu.abel.factorization.FactorUtil
 import org.bu.abel.factorization.Integer.{PollardP1, PollardRho, PrimeFactorization}
 import org.bu.abel.rng.{BlumBlumShub, NaorReingold}
+import org.bu.abel.types.LargeNumber
 import org.scalatest.{FlatSpec, Matchers}
 
 class CryptoTests extends FlatSpec with Matchers {
@@ -20,6 +21,14 @@ class CryptoTests extends FlatSpec with Matchers {
     assert(GCDUtil.extendedgcd(10, 15) == (-1,1))
     assert(GCDUtil.extendedgcd(9, 16) == (-7,4))
     assert(GCDUtil.multigcd(Seq(6L, 9L, 15L, 21L)).get == 3)
+    val m = LargeNumber.fromString("205891132094649")
+    val n = LargeNumber.fromString("137260754729766")
+    val (largeGcd1, _) = GCDUtil.gcd(n,m)
+    val (largeGcd2, _) = GCDUtil.gcd(m,n)
+    assert(largeGcd1 == largeGcd2)
+    assert(largeGcd1 == LargeNumber.fromString("68630377364883"))
+    assert(m/largeGcd1 == 3)
+    assert(n/largeGcd1 == 2)
   }
 
   "Exponentiation Algorithm" should "compute correct values" in {

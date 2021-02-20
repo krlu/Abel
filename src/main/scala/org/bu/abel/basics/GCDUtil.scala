@@ -1,10 +1,19 @@
 package org.bu.abel.basics
 
-import org.bu.abel.factorization.polynomial.PolyFactorUtil
-import org.bu.abel.types.polynomials.RealPolynomial
+import org.bu.abel.types.LargeNumber
 
 object GCDUtil{
 
+  def gcd(m: LargeNumber, n: LargeNumber): (LargeNumber, List[(LargeNumber, LargeNumber)]) = euclideanAlgo2(m, n)
+
+  private def euclideanAlgo2(m: LargeNumber, n: LargeNumber): (LargeNumber, List[(LargeNumber, LargeNumber)]) = {
+    if(m%n == 0){
+       (n, List((m/n, LargeNumber(0))))
+    }else{
+      val (gcd, list) = euclideanAlgo2(n, m%n)
+      (gcd, (List((LargeNumber.roundDown(m/n), m%n)) ++ list))
+    }
+  }
   def gcd(m: Long, n: Long): (Long, List[(Long, Long)]) = euclideanAlgo(m, n)
   private def euclideanAlgo(m: Long, n: Long): (Long, List[(Long, Long)]) = {
     if(m%n == 0) return (n, List((m/n, m%n)))

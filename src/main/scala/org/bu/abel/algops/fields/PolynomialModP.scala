@@ -1,6 +1,6 @@
 package org.bu.abel.algops.fields
 
-import org.bu.abel.types.polynomials.{Polynomial, RealPolynomial}
+import org.bu.abel.types.polynomials.RealPolynomial
 
 class PolynomialModP[T,U <: Field[T]](modulus: RealPolynomial, field: Real) extends Field[RealPolynomial]{
 
