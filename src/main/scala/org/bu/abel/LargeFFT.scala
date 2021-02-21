@@ -1,20 +1,9 @@
 package org.bu.abel
 
 import org.bu.abel.types.{C, LargeNumber}
-import org.bu.abel.types.polynomials.RealPolynomial
 
+// TODO: performance may be slow due to LargeNumber
 object LargeFFT {
-
-  // Note: performance is slow due to BigFloatLibrary
-  def main(args: Array[String]): Unit = {
-    val p1 = RealPolynomial(1,1,1)
-    for(exp <- 1000 to 1000) {
-      val t1 = System.currentTimeMillis()
-      println((p1 ^ exp).coefficients.toList(exp/2))
-      val t2 = System.currentTimeMillis()
-      println(t2 - t1)
-    }
-  }
 
   val precision = 0
 

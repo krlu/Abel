@@ -19,12 +19,6 @@ object PolyFactorUtil {
     RealPolynomial.create(coeffs.map(_.intValue().toDouble).map(LargeNumber(_)):_*)
   }
 
-  def factorRealPolynomial(p: RealPolynomial): Set[RealPolynomial] = {
-    val ringsP = toRingsPoly(p)
-    val x = PolynomialMethods.Factor(ringsP)
-    (0 until x.size()).map(x.get).map (toAbelPoly).toSet
-  }
-
   protected[abel] def toAbelPoly(p: UnivariatePolynomial[BigInteger]): RealPolynomial =
     RealPolynomial.create((0 until p.size()).map(i => LargeNumber(p.get(i).intValue())):_*)
 

@@ -69,7 +69,7 @@ class LargeNumber(val value: BigFloat) {
 
 object LargeNumber{
   def main(args: Array[String]): Unit = {
-    var a = LargeNumber(1234)
+    var a = LargeNumber(0.99999999999)
     for(_ <- 1 to 10){
       a = a^(-1)
       val frac = new BigFraction(a.value.toDouble, 0.00000002D, 10000)
